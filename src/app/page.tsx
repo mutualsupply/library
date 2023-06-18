@@ -12,26 +12,27 @@ export default function Page() {
   return (
     <>
       {/* <Header /> */}
-      <div className="text-4xl text-yellow-500">~~~~~~~~~</div>
       {isLoading && <div>Loading...</div>}
       {isError && <div>Err</div>}
       {/* <div className="break-words">{JSON.stringify(data, undefined, 2)}</div> */}
-      {data?.map((pr) => (
-        <Link key={pr.id} href={`/pulls/${pr.id}`}>
-          <div className="border-[1px] border-dashed border-red-600 p-1">
-            <div className="font-bold">{pr.title}</div>
-            {pr?.labels?.map((label, index) => (
-              <span
-                key={`${label.id}-${index}`}
-                style={{ backgroundColor: `#${label.color}` }}
-                className="inline-block px-2 py-1 rounded-lg"
-              >
-                {label.name}
-              </span>
-            ))}
-          </div>
-        </Link>
-      ))}
+      <div className="flex flex-col gap-3">
+        {data?.map((pr) => (
+          <Link key={pr.id} href={`/pulls/${pr.id}`}>
+            <div className="border-[1px] border-dashed border-red-600 p-1">
+              <div className="font-bold">{pr.title}</div>
+              {pr?.labels?.map((label, index) => (
+                <span
+                  key={`${label.id}-${index}`}
+                  style={{ backgroundColor: `#${label.color}` }}
+                  className="inline-block px-2 py-1 rounded-lg"
+                >
+                  {label.name}
+                </span>
+              ))}
+            </div>
+          </Link>
+        ))}
+      </div>
     </>
   );
 }
