@@ -6,10 +6,8 @@ import { getPulls } from "../services/api";
 
 export default function Page() {
   const { data, isLoading, isError, isSuccess, error } = useQuery({
-    queryKey: ["getPulls2"],
+    queryKey: ["getPulls"],
     queryFn: getPulls,
-    retry: false,
-    cacheTime: 0,
   });
   return (
     <>
