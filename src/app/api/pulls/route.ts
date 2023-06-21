@@ -1,31 +1,17 @@
 import { NextResponse } from "next/server";
-import { Octokit } from "octokit";
-
-const OWNER = "mutualsupply";
-const REPO = "site";
-
-const octokit = new Octokit({
-  auth: process.env.NEXT_PUBLIC_GITHUB_TOKEN,
-});
+import octokit, { GITHUB_OWNER, GITHUB_REPO } from "../../../services/octokit";
 
 export async function GET() {
   try {
     const { data } = await octokit.rest.pulls.list({
-      owner: OWNER,
-      repo: REPO,
+      owner: GITHUB_OWNER,
+      repo: GITHUB_REPO,
     });
     return NextResponse.json(data);
   } catch (e) {
-    console.error(e);
-    return NextResponse.json({ success: false });
+    return NextResponse.json(
+      { error: "Could not get pull requests" },
+      { status: 400 }
+    );
   }
-  // const res = await fetch("https://data.mongodb-api.com/...", {
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //     "API-Key": process.env.DATA_API_KEY,
-  //   },
-  // });
-  // const data = await res.json();
-
-  // return NextResponse.json({ data });
 }
