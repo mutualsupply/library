@@ -5,28 +5,29 @@ export const isDev = () => process.env.NODE_ENV === "development";
 export const isProd = () => process.env.NODE_ENV === "production";
 
 interface Env {
-  alchemyKey: string;
-  walletConnectId: string;
-  githubToken: string;
-  githubAppId: string;
-  githubPrivateKey: string;
-  githubClientSecret: string;
+  NEXT_PUBLIC_ALCHEMY_KEY: string;
+  NEXT_PUBLIC_WALLETCONNECT_ID: string;
+  GITHUB_TOKEN: string;
+  GITHUB_APP_ID: string;
+  GITHUB_PRIVATE_KEY: string;
+  GITHUB_CLIENT_SECRET: string;
 }
 
 const env: Env = {
-  alchemyKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY as string,
-  walletConnectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_ID as string,
-  githubToken: process.env.GITHUB_TOKEN as string,
-  githubAppId: process.env.GITHUB_APP_ID as string,
-  githubPrivateKey: process.env.GITHUB_PRIVATE_KEY as string,
-  githubClientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+  NEXT_PUBLIC_ALCHEMY_KEY: process.env.NEXT_PUBLIC_ALCHEMY_KEY as string,
+  NEXT_PUBLIC_WALLETCONNECT_ID: process.env
+    .NEXT_PUBLIC_WALLET_CONNECT_ID as string,
+  GITHUB_TOKEN: process.env.GITHUB_TOKEN as string,
+  GITHUB_APP_ID: process.env.GITHUB_APP_ID as string,
+  GITHUB_PRIVATE_KEY: process.env.GITHUB_PRIVATE_KEY as string,
+  GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET as string,
 };
 
 // the following keys are used to authenticate github using our Github App creds
 const prodOnlyKeys: Array<keyof typeof env> = [
-  "githubAppId",
-  "githubPrivateKey",
-  "githubClientSecret",
+  "GITHUB_APP_ID",
+  "GITHUB_PRIVATE_KEY",
+  "GITHUB_CLIENT_SECRET",
 ];
 
 let requiredKeys: Array<keyof typeof env> = [];

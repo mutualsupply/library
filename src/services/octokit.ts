@@ -14,11 +14,11 @@ if (isDev()) {
 } else {
   // app client for production
   const app = new App({
-    appId: env.githubAppId,
-    privateKey: env.githubPrivateKey,
+    appId: env.GITHUB_APP_ID,
+    privateKey: env.GITHUB_PRIVATE_KEY,
     oauth: {
-      clientId: env.githubAppId,
-      clientSecret: env.githubClientSecret,
+      clientId: env.GITHUB_APP_ID,
+      clientSecret: env.GITHUB_CLIENT_SECRET,
     },
   });
   octokit = app.octokit;

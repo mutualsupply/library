@@ -9,13 +9,13 @@ import env from "./services/env";
 
 const { chains } = configureChains(
   [mainnet, optimism, arbitrum, goerli, sepolia],
-  [alchemyProvider({ apiKey: env.alchemyKey }), publicProvider()]
+  [alchemyProvider({ apiKey: env.NEXT_PUBLIC_ALCHEMY_KEY }), publicProvider()]
 );
 
 export const config = createConfig(
   getDefaultConfig({
-    alchemyId: env.alchemyKey,
-    walletConnectProjectId: env.walletConnectId,
+    alchemyId: env.NEXT_PUBLIC_ALCHEMY_KEY,
+    walletConnectProjectId: env.NEXT_PUBLIC_WALLETCONNECT_ID,
     appName: "Mutual Supply",
     autoConnect: true,
     chains,
