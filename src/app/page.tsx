@@ -5,7 +5,7 @@ import Link from "next/link";
 import { getPulls } from "../services/api";
 
 export default function Page() {
-  const { data, isLoading, isError, isSuccess, error } = useQuery({
+  const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: ["getPulls"],
     queryFn: getPulls,
   });

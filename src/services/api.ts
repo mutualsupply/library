@@ -1,12 +1,12 @@
 import { Endpoints } from "@octokit/types";
 import axios from "axios";
 
-const instance = axios.create({
+const http = axios.create({
   baseURL: "/api",
 });
 
 export const getPulls = () =>
-  instance
+  http
     .get<Endpoints["GET /repos/{owner}/{repo}/pulls"]["response"]["data"]>(
       "/pulls"
     )
