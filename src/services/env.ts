@@ -23,7 +23,7 @@ const env: Env = {
   GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET as string,
 };
 
-// the following keys are used to authenticate github using our Github App creds
+// the following keys are used to authenticate github using our Github App credentials
 const prodOnlyKeys: Array<keyof typeof env> = [
   "GITHUB_APP_ID",
   "GITHUB_PRIVATE_KEY",
