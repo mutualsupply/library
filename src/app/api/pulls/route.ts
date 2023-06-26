@@ -9,6 +9,7 @@ export async function GET() {
     });
     return NextResponse.json(data);
   } catch (e) {
+    console.error(e);
     return NextResponse.json(
       { error: "Could not get pull requests" },
       { status: 400 }
