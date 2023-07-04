@@ -23,6 +23,7 @@
     "clsx": "^1.2.1",
     "connectkit": "^1.4.0",
     "next": "^13.4.5",
+    "next-mdx-remote": "^4.4.1",
     "octokit": "^2.0.22",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

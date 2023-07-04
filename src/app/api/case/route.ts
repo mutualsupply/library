@@ -6,7 +6,11 @@ export async function GET() {
   try {
     const dir = path.join(process.cwd(), "src/markdown");
     const filenames = fs.readdirSync(dir);
-    return NextResponse.json(filenames);
+    const data = filenames.map((filename) => ({
+      filename,
+      slug: filename.replace(".mdx", ""),
+    }));
+    return NextResponse.json(data);
   } catch (e) {
     console.error(e);
     return NextResponse.json(

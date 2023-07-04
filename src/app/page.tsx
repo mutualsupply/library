@@ -9,7 +9,7 @@ import { getCases } from "../services/api";
 
 export default function Page() {
   const { data, isLoading, isError, isSuccess } = useQuery({
-    queryKey: ["getPulls"],
+    queryKey: ["getCases"],
     queryFn: getCases,
   });
   return (
@@ -38,9 +38,11 @@ export default function Page() {
           </Button>
         </Link>
       </div>
-      <div>
-        {data?.map((name) => (
-          <div key={name}>{name}</div>
+      <div className={cn("flex", "flex-col")}>
+        {data?.map((caseFile) => (
+          <Link key={caseFile.slug} href={`/case/${caseFile.slug}`}>
+            {caseFile.slug}
+          </Link>
         ))}
       </div>
     </div>
