@@ -1,10 +1,10 @@
 "use client";
 
-import { ArrowLeftIcon, PlusIcon } from "@radix-ui/react-icons";
+import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { cn } from "utils";
-import { Button } from "../components/ui/button";
+import CaseStudyButton from "../components/CaseStudyButton";
 import { getCases } from "../services/api";
 
 export default function Page() {
@@ -24,24 +24,35 @@ export default function Page() {
           </Link>
         </span>
         <Link href={"new-case-study"}>
-          <Button
-            variant={"outline"}
-            className={cn(
-              "text-sm",
-              "flex",
-              "items-center",
-              "gap-1",
-              "uppercase"
-            )}
-          >
-            <PlusIcon /> new case study
-          </Button>
+          <CaseStudyButton />
         </Link>
       </div>
-      <div className={cn("flex", "flex-col")}>
-        {data?.map((caseFile) => (
-          <Link key={caseFile.slug} href={`/case/${caseFile.slug}`}>
-            {caseFile.slug}
+      <div className={cn("flex", "flex-col", "mt-6")}>
+        {data?.map((caseFile, index) => (
+          <Link
+            key={caseFile.slug}
+            href={`/case/${caseFile.slug}`}
+            className={cn(
+              "hover:underline",
+              "p-4",
+              "items-center",
+              "inline-flex",
+              "gap-4",
+              "relative"
+            )}
+          >
+            <span className={cn("text-lg")}>{index + 1}</span>
+            <span className={cn("text-3xl")}>{caseFile.slug}</span>
+            {(index + 1) % 2 === 0 && (
+              <div
+                className={cn(
+                  "absolute",
+                  "inset-0",
+                  "bg-primary",
+                  "opacity-20"
+                )}
+              />
+            )}
           </Link>
         ))}
       </div>
