@@ -1,43 +1,36 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import { getPulls } from "../services/api";
+import { AiOutlinePlus } from "react-icons/ai";
+import { TfiArrowLeft } from "react-icons/tfi";
+import { cn } from "utils";
+import { Button } from "../components/ui/button";
 
 export default function Page() {
-  const { data, isLoading, isError, isSuccess } = useQuery({
-    queryKey: ["getPulls"],
-    queryFn: getPulls,
-  });
   return (
-    <>
-      {isLoading && <div>Loading...</div>}
-      {isError && (
-        <div className="text-center text-red-700">
-          Could not get pull requests
-        </div>
-      )}
-      {isSuccess && (
-        <div className="flex flex-col gap-3">
-          {data?.map((pr) => (
-            <Link key={pr.id} href={`/pulls/${pr.id}`}>
-              <div className="border-[1px] border-dashed border-red-600 p-1">
-                <div className="font-bold">{pr.title}</div>
-                {pr?.labels?.map((label, index) => (
-                  <span
-                    key={`${label.id}-${index}`}
-                    style={{ backgroundColor: `#${label.color}` }}
-                    className="inline-block px-2 py-1 rounded-lg"
-                  >
-                    {label.name}
-                  </span>
-                ))}
-              </div>
-            </Link>
-          ))}
-          {data?.length === 0 && <div>No prs</div>}
-        </div>
-      )}
-    </>
+    <div>
+      <div className={cn("flex", "justify-between", "items-center", "mt-2")}>
+        <span className={cn("border-b", "border-black")}>
+          <Link
+            href={""}
+            className={cn("flex", "items-center", "gap-1", "text-sm")}
+          >
+            <TfiArrowLeft size={14} /> Resources
+          </Link>
+        </span>
+        <Button
+          variant={"outline"}
+          className={cn(
+            "text-sm",
+            "flex",
+            "items-center",
+            "gap-1",
+            "uppercase"
+          )}
+        >
+          <AiOutlinePlus size={14} /> new case study
+        </Button>
+      </div>
+    </div>
   );
 }

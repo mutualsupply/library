@@ -1,4 +1,4 @@
-import { objectKeys } from "../helpers/arrays";
+import { objectKeys } from "../lib/utils";
 
 export const isDev = () => process.env.NODE_ENV === "development";
 // prod here is considered to be any deployed environment (previews, staging, production, etc)
