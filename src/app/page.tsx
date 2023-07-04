@@ -32,24 +32,28 @@ export default function Page() {
           <Link
             key={caseFile.slug}
             href={`/case/${caseFile.slug}`}
-            className={cn(
-              "hover:underline",
-              "p-4",
-              "items-center",
-              "inline-flex",
-              "gap-4",
-              "relative"
-            )}
+            className={cn("p-6", "relative", "hover:underline", "group")}
           >
-            <span className={cn("text-lg")}>{index + 1}</span>
-            <span className={cn("text-3xl")}>{caseFile.slug}</span>
+            <div
+              className={cn(
+                "z-20",
+                "inline-flex",
+                "gap-4",
+                "items-center",
+                "relative",
+                "group-hover:underline"
+              )}
+            >
+              <span className={cn("text-sm")}>{index + 1}</span>
+              <span className={cn("text-3xl")}>{caseFile.slug}</span>
+            </div>
             {(index + 1) % 2 === 0 && (
               <div
                 className={cn(
                   "absolute",
                   "inset-0",
-                  "bg-primary",
-                  "opacity-20"
+                  "bg-[#D1E9FA]",
+                  "opacity-40"
                 )}
               />
             )}
