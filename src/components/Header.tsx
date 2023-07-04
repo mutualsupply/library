@@ -7,7 +7,9 @@ import Logo from "./icons/Logo";
 export function Header() {
   return (
     <div className="flex items-center justify-between p-4">
-      <Logo />
+      <Link href={"/"}>
+        <Logo />
+      </Link>
       <Nav />
       <JoinButton />
     </div>

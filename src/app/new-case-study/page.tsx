@@ -37,13 +37,13 @@ const LeftPane = () => {
       <AccordionItem value="item-1">
         <AccordionTrigger>Best Practices Guide</AccordionTrigger>
         <AccordionContent>
-          Yes. It adheres to the WAI-ARIA design pattern.
+          Let me tell you about these best practices
         </AccordionContent>
       </AccordionItem>
       <AccordionItem value="item-2">
         <AccordionTrigger>Case Studies In Progress</AccordionTrigger>
         <AccordionContent>
-          Yes. It adheres to the WAI-ARIA design pattern.
+          Here are some case studies that are happening already
         </AccordionContent>
       </AccordionItem>
     </Accordion>
