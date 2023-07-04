@@ -31,7 +31,9 @@ export default function RootLayout({
         )}
       >
         <Providers>
-          <Header />
+          <div className={cn("mb-4")}>
+            <Header />
+          </div>
           {children}
         </Providers>
       </body>
