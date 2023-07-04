@@ -5,12 +5,12 @@ import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { cn } from "utils";
 import { Button } from "../components/ui/button";
-import { getPulls } from "../services/api";
+import { getCases } from "../services/api";
 
 export default function Page() {
   const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: ["getPulls"],
-    queryFn: getPulls,
+    queryFn: getCases,
   });
   return (
     <div>
@@ -37,6 +37,11 @@ export default function Page() {
             <PlusIcon /> new case study
           </Button>
         </Link>
+      </div>
+      <div>
+        {data?.map((name) => (
+          <div key={name}>{name}</div>
+        ))}
       </div>
     </div>
   );

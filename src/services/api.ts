@@ -11,3 +11,6 @@ export const getPulls = () =>
       "/pulls"
     )
     .then((res) => res.data);
+
+export const getCases = () =>
+  http.get<Array<string>>("/cases").then((res) => res.data);
