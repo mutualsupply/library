@@ -6,7 +6,7 @@ import {
   AccordionTrigger,
 } from "../../components/ui/accordion";
 
-import BackLink from "../../components/backLink";
+import BackLink from "../../components/BackLink";
 const NewCaseStudyPage = () => {
   return (
     <div>
