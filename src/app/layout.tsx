@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import localFont from "next/font/local";
 import { cn } from "utils";
-import { Header } from "../components/Header";
+import { Header } from "../components/header";
 import { Providers } from "../components/providers";
 import "../styles/globals.css";
 

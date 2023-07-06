@@ -3,8 +3,8 @@
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { cn } from "utils";
-import BackLink from "../components/BackLink";
-import CreateCaseStudyButton from "../components/CreateCaseStudyButton";
+import BackLink from "../components/backLink";
+import CreateCaseStudyButton from "../components/createCaseStudyButton";
 import { getCases } from "../services/api";
 
 export default function Page() {

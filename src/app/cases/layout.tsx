@@ -1,8 +1,8 @@
 "use client";
 
 import { cn } from "utils";
-import BackLink from "../../components/BackLink";
-import CreateCaseStudyButton from "../../components/CreateCaseStudyButton";
+import BackLink from "../../components/backLink";
+import CreateCaseStudyButton from "../../components/createCaseStudyButton";
 
 export default function CasesLayout({
   children,

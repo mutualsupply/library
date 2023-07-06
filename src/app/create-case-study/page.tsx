@@ -6,16 +6,24 @@ import {
   AccordionTrigger,
 } from "../../components/ui/accordion";
 
-import BackLink from "../../components/BackLink";
+import BackLink from "../../components/backLink";
 const NewCaseStudyPage = () => {
   return (
     <div>
       <BackLink href={"/"}>Library</BackLink>
-      <div className={cn("grid", "grid-cols-8", "gap-x-4", "mt-4")}>
-        <div className={cn("col-span-2")}>
+      <div
+        className={cn(
+          "grid",
+          "gap-x-4",
+          "mt-4",
+          "grid-cols-1",
+          "md:grid-cols-8"
+        )}
+      >
+        <div className={cn("md:col-span-2")}>
           <LeftPane />
         </div>
-        <div className={cn("col-span-6")}>
+        <div className={cn("md:col-span-6", "mt-6", "md:mt-0")}>
           <CreateNewCaseStudy />
         </div>
       </div>

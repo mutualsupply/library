@@ -1,10 +1,11 @@
 "use client";
 
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
-import { ChevronDownIcon } from "@radix-ui/react-icons";
 import * as React from "react";
 
 import { cn } from "utils";
+import Add from "../icons/Add";
+import Minus from "../icons/Minus";
 
 const Accordion = AccordionPrimitive.Root;
 
@@ -28,13 +29,14 @@ const AccordionTrigger = React.forwardRef<
     <AccordionPrimitive.Trigger
       ref={ref}
       className={cn(
-        "flex flex-1 items-center justify-between py-4 text-lg font-medium transition-all hover:underline [&[data-state=open]>svg]:rotate-180 p-3",
+        "flex flex-1 items-center justify-between py-4 text-lg font-medium transition-all hover:underline [&[data-state=open]>svg]:rotate-180 p-3 group",
         className
       )}
       {...props}
     >
       {children}
-      <ChevronDownIcon className="w-4 h-4 transition-transform duration-200 shrink-0 text-muted-foreground" />
+      <Add className={cn("group-data-[state=open]:hidden")} />
+      <Minus className={cn("group-data-[state=closed]:hidden")} />
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ));
