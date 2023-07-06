@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { cn } from "utils";
 import {
   Accordion,
@@ -7,18 +6,11 @@ import {
   AccordionTrigger,
 } from "../../components/ui/accordion";
 
-import { ArrowLeftIcon } from "@radix-ui/react-icons";
+import BackLink from "../../components/BackLink";
 const NewCaseStudyPage = () => {
   return (
     <div>
-      <span className={cn("border-b", "border-black", "inline-block")}>
-        <Link
-          href={"/"}
-          className={cn("flex", "items-center", "gap-1", "text-sm")}
-        >
-          <ArrowLeftIcon /> Library
-        </Link>
-      </span>
+      <BackLink href={"/"}>Library</BackLink>
       <div className={cn("grid", "grid-cols-8", "gap-x-4", "mt-4")}>
         <div className={cn("col-span-2")}>
           <LeftPane />
