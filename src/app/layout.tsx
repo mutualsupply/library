@@ -1,13 +1,13 @@
 import { Metadata } from "next";
 import localFont from "next/font/local";
 import { cn } from "utils";
-import { Header } from "../components/Header";
-import { Providers } from "../components/Providers";
+import Header from "../components/header";
+import Providers from "../components/providers";
 import "../styles/globals.css";
 
 export const metadata: Metadata = {
   title: "Mutual Supply",
-  description: "Mutual supplication",
+  description: "Mutual Supply",
 };
 const aeonikFono = localFont({
   src: "../../public/fonts/AeonikFonoTRIAL-Light.woff2",

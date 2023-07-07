@@ -8,9 +8,7 @@ import { config } from "../wagmi";
 
 const queryClient = new QueryClient();
 
-export function Providers({ children }: { children: React.ReactNode }) {
-  // const [mounted, setMounted] = React.useState(false);
-  // React.useEffect(() => setMounted(true), []);
+export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <WagmiConfig config={config}>
