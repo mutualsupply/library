@@ -36,9 +36,7 @@ const LeftPane = () => {
     <Accordion type="multiple" className={cn("flex", "flex-col", "gap-8")}>
       <AccordionItem value="item-1">
         <AccordionTrigger>Best Practices Guide</AccordionTrigger>
-        <AccordionContent>
-          Let me tell you about these best practices
-        </AccordionContent>
+        <AccordionContent>~ Mutually supply with us please ~</AccordionContent>
       </AccordionItem>
       <AccordionItem value="item-2">
         <AccordionTrigger>Case Studies In Progress</AccordionTrigger>
