@@ -40,11 +40,11 @@ export default function Page() {
               <div
                 key={`loader-${index}`}
                 className={cn(
-                  "bg-[#f5f5f4]",
+                  "bg-[hsl(60,5%,96%)]",
                   "animate-pulse",
                   "h-[84px]",
                   "w-full",
-                  { "bg-[#D1E9FA]": (index + 1) % 2 === 0 }
+                  { "bg-tertiary": (index + 1) % 2 === 0 }
                 )}
               />
             ))}
@@ -55,7 +55,7 @@ export default function Page() {
             <Link
               key={caseFile.slug}
               href={`/cases/${caseFile.slug}`}
-              className={cn("p-6", "relative", "hover:underline", "group")}
+              className={cn("p-6", "relative", "group", "hover:text-primary")}
             >
               <div
                 className={cn(
@@ -64,21 +64,14 @@ export default function Page() {
                   "gap-4",
                   "items-center",
                   "relative",
-                  "group-hover:underline"
+                  "group-hover:text-primary"
                 )}
               >
                 <span className={cn("text-sm")}>{index + 1}</span>
                 <span className={cn("text-3xl")}>{caseFile.slug}</span>
               </div>
               {(index + 1) % 2 === 0 && (
-                <div
-                  className={cn(
-                    "absolute",
-                    "inset-0",
-                    "bg-[#D1E9FA]",
-                    "opacity-40"
-                  )}
-                />
+                <div className={cn("absolute", "inset-0", "bg-tertiary/25")} />
               )}
             </Link>
           ))}

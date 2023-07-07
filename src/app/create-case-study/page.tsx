@@ -52,6 +52,8 @@ const LeftPane = () => {
         <AccordionTrigger>Case Studies In Progress</AccordionTrigger>
         <AccordionContent>
           <Link
+            rel="noopener noreferrer"
+            target="_blank"
             href={"https://github.com/mutualsupply/site/pulls"}
             className={cn(
               "inline-flex",

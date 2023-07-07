@@ -25,11 +25,9 @@ const AccordionItem = React.forwardRef<
         "w-full",
         "h-full",
         "inset-0",
-        "bg-primary",
-        "opacity-40",
         "group-data-[state=open]:block",
         "hidden",
-        "bg-[#D1E9FA]"
+        "bg-tertiary/25"
       )}
     />
   </AccordionPrimitive.Item>
