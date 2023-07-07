@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import localFont from "next/font/local";
 import { cn } from "utils";
 import Header from "../components/Header";
-import Providers from "../components/Providers";
+import Providers from "../components/RootProviders";
 import "../styles/globals.css";
 
 export const metadata: Metadata = {
