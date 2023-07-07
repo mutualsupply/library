@@ -27,3 +27,7 @@ export function shortenAddress(address?: Hex, chars = 4): string {
   }
   return `${parsed.substring(0, chars + 2)}...${parsed.substring(42 - chars)}`;
 }
+
+export const alphabet = "abcdefghijklmnopqrstuvwxyz"
+  .split("")
+  .map((char) => char.toUpperCase());

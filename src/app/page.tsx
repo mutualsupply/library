@@ -2,7 +2,9 @@
 
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
+import { useState } from "react";
 import { cn } from "utils";
+import AlphaToggle from "../components/AlphaToggle";
 import BackLink from "../components/BackLink";
 import CreateCaseStudyButton from "../components/CreateCaseStudyButton";
 import { getCases } from "../services/api";
@@ -12,11 +14,24 @@ export default function Page() {
     queryKey: ["getCases"],
     queryFn: getCases,
   });
+  const [selectedChar, setSelectedChar] = useState<undefined | Array<string>>();
   return (
     <div>
       <div className={cn("flex", "justify-between", "items-center")}>
         <BackLink href={"https://mutual.supply"}>Resources</BackLink>
         <CreateCaseStudyButton />
+      </div>
+      <div className={cn("mt-4")}>
+        <AlphaToggle
+          selected={selectedChar}
+          onClick={(char) => {
+            if (selectedChar?.includes(char)) {
+              setSelectedChar(selectedChar.filter((c) => c !== char));
+            } else {
+              setSelectedChar([...(selectedChar ?? []), char]);
+            }
+          }}
+        />
       </div>
       <div className={cn("flex", "flex-col", "mt-6")}>
         {isLoading && (
