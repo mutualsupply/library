@@ -26,6 +26,8 @@ export default function RootLayout({
           "p-8",
           "min-h-[calc(100dvh)]",
           "font-sans",
+          "flex",
+          "flex-col",
           aeonikFono.variable
         )}
       >
