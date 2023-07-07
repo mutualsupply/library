@@ -31,3 +31,29 @@ export function shortenAddress(address?: Hex, chars = 4): string {
 export const alphabet = "abcdefghijklmnopqrstuvwxyz"
   .split("")
   .map((char) => char.toUpperCase());
+
+export function fuzzyFilter<T, K extends keyof T>(
+  query: string,
+  items: Array<T>,
+  key: K
+) {
+  query = query.toLowerCase();
+  return items.filter(function (item) {
+    if (typeof item[key] === "string") {
+      var itemLower = (item[key] as string).toLowerCase();
+
+      var j = 0;
+      for (var i = 0; i < itemLower.length; i++) {
+        if (itemLower[i] === query[j]) {
+          j++;
+        }
+
+        if (j === query.length) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  });
+}

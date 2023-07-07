@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useState } from "react";
-import { cn } from "utils";
+import { cn, fuzzyFilter } from "utils";
 import AlphaToggle from "../components/AlphaToggle";
 import BackLink from "../components/BackLink";
 import CreateCaseStudyButton from "../components/CreateCaseStudyButton";
@@ -51,7 +51,12 @@ export default function Page() {
           </div>
         )}
         {!isLoading &&
-          data?.map((caseFile, index) => (
+          data &&
+          fuzzyFilter(
+            selectedChar ? selectedChar.join("") : "",
+            data,
+            "filename"
+          ).map((caseFile, index) => (
             <Link
               key={caseFile.slug}
               href={`/cases/${caseFile.slug}`}
