@@ -15,7 +15,13 @@ export default function CasesLayout({
         <BackLink href={"/"}>Library</BackLink>
         <CreateCaseStudyButton />
       </div>
-      <div className={cn("max-w-full", "prose", "mt-6")}>{children}</div>
+      <div className={cn("my-4")}>LABELS HERE</div>
+      <div className={cn("grid", "grid-cols-8")}>
+        <div className={cn("col-span-2")}></div>
+        <div className={cn("max-w-full", "prose", "col-span-6")}>
+          {children}
+        </div>
+      </div>
     </div>
   );
 }
