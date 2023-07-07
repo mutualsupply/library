@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 
 const CreateCaseStudyButton = () => {
   return (
-    <Link href={"create-case-study"}>
+    <Link href={"/create-case-study"}>
       <Button
         variant={"outline"}
         className={cn("text-sm", "flex", "items-center", "gap-1", "uppercase")}

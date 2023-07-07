@@ -5,12 +5,11 @@ const http = axios.create({
   baseURL: "/api",
 });
 
+export type GithubPullResponse =
+  Endpoints["GET /repos/{owner}/{repo}/pulls"]["response"]["data"];
+
 export const getPulls = () =>
-  http
-    .get<Endpoints["GET /repos/{owner}/{repo}/pulls"]["response"]["data"]>(
-      "/pulls"
-    )
-    .then((res) => res.data);
+  http.get<GithubPullResponse>("/pulls").then((res) => res.data);
 
 export const getCases = () =>
   http
