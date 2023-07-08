@@ -1,4 +1,5 @@
 import { alphabet, cn } from "utils";
+import { Button } from "./ui/button";
 
 interface AlphaToggleProps {
   onClick: (char: string) => void;
@@ -7,18 +8,20 @@ interface AlphaToggleProps {
 
 export default function AlphaToggle({ onClick, selected }: AlphaToggleProps) {
   return (
-    <div className={cn("flex", "items-center", "gap-3")}>
+    <div className={cn("flex", "items-center", "gap-3", "flex-wrap")}>
       {alphabet.map((char) => (
-        <button
+        <Button
+          variant={"outlineWhite"}
+          size={"xs"}
           key={char}
           onClick={() => onClick(char)}
-          className={cn("border", "border-black", "px-2", {
+          className={cn({
             [cn("bg-primary", "text-white", "border-transparent")]:
               selected?.includes(char),
           })}
         >
           {char}
-        </button>
+        </Button>
       ))}
     </div>
   );

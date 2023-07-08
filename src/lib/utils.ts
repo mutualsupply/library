@@ -33,8 +33,8 @@ export const alphabet = "abcdefghijklmnopqrstuvwxyz"
   .map((char) => char.toUpperCase());
 
 export function fuzzyFilter<T, K extends keyof T>(
-  query: string,
   items: Array<T>,
+  query: string,
   key: K
 ) {
   query = query.toLowerCase();
@@ -56,4 +56,8 @@ export function fuzzyFilter<T, K extends keyof T>(
 
     return false;
   });
+}
+
+export function jsonify(anything: any) {
+  return JSON.stringify(anything, null, 2);
 }

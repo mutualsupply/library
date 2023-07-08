@@ -13,6 +13,10 @@ const aeonikFono = localFont({
   src: "../../public/fonts/AeonikFonoTRIAL-Light.woff2",
   variable: "--font-aeonik-fono",
 });
+const aspekta = localFont({
+  src: "../../public/fonts/AspektaVF.woff2",
+  variable: "--font-aspekta",
+});
 
 export default function RootLayout({
   children,
@@ -28,7 +32,8 @@ export default function RootLayout({
           "font-sans",
           "flex",
           "flex-col",
-          aeonikFono.variable
+          aeonikFono.variable,
+          aspekta.variable
         )}
       >
         <Providers>

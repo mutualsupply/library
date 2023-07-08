@@ -1,7 +1,8 @@
-"use client";
-
-import { MDXRemote } from "next-mdx-remote";
-import React from "react";
+import { cn } from "utils";
+import BackLink from "../../../components/BackLink";
+import CreateCaseStudyButton from "../../../components/CreateCaseStudyButton";
+import RemoteMDX from "../../../components/RemoteMDX";
+import { getCases } from "../../page";
 
 async function getPage(slug: string) {
   const res = await fetch("http://localhost:3000/api/remote-case/" + slug);
@@ -13,10 +14,79 @@ async function getPage(slug: string) {
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const slug = params.slug;
+  const cases = await getCases();
   const { source } = await getPage(slug);
   return (
-    <React.Fragment>
-      <MDXRemote {...(source as any)} />
-    </React.Fragment>
+    <div className={cn("grow", "flex", "flex-col")}>
+      <div className={cn("flex", "justify-between", "items-center")}>
+        <BackLink href={"/"}>Library</BackLink>
+        <CreateCaseStudyButton />
+      </div>
+      <div className={cn("my-4")}>LABELS HERE</div>
+      <div className={cn("grid", "grid-cols-12", "grow")}>
+        <div className={cn("col-span-2")}>
+          {cases.map((c) => (
+            <div key={c.slug}>{c.filename}</div>
+          ))}
+        </div>
+        <div
+          className={cn(
+            "max-w-full",
+            "prose",
+            "col-span-10",
+            "relative",
+            "grow",
+            "grid",
+            "grid-cols-12"
+          )}
+        >
+          <div className={cn("z-10", "relative", "p-8", "col-span-9")}>
+            <RemoteMDX source={source} />
+          </div>
+          <div className={cn("col-span-3", "relative")}>
+            <div
+              className={cn(
+                "border",
+                "border-tertiary",
+                "p-3",
+                "relative",
+                "left-[34px]"
+              )}
+            >
+              <div className={cn("grid", "md:grid-cols-6", "grid-cols-1")}>
+                <div className={cn("col-span-2")}>AUTHOR:</div>
+                <div
+                  className={cn(
+                    "underline",
+                    "col-span-4",
+                    "font-aspekta",
+                    "font-light"
+                  )}
+                >
+                  NAME
+                </div>
+              </div>
+              <div className={cn("grid", "grid-cols-6")}>
+                <div className={cn("col-span-2")}>CREATED:</div>
+                <div className={cn("col-span-4", "font-aspekta", "font-light")}>
+                  {new Date().toDateString()}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className={cn(
+              "absolute",
+              "inset-0",
+              "w-[calc(100%+32px)]",
+              "h-[calc(100%+32px)]",
+              "bg-gradient-to-t",
+              "from-tertiary/50",
+              "to-transparent"
+            )}
+          />
+        </div>
+      </div>
+    </div>
   );
 }

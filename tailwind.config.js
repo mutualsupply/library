@@ -20,6 +20,7 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ["var(--font-aeonik-fono)", ...fontFamily.sans],
+        aspekta: ["var(--font-aspekta)", ...fontFamily.sans],
       },
       colors: {
         border: "hsl(var(--border))",

@@ -2,6 +2,8 @@ import fs from "fs";
 import { NextResponse } from "next/server";
 import path from "path";
 
+export const TEST_LABELS = ["wow", "amazing"];
+
 export async function GET() {
   const filenamesToIgnore = ["layout.tsx"];
   try {
@@ -12,6 +14,7 @@ export async function GET() {
     const cases = filenames.map((filename) => ({
       filename,
       slug: filename,
+      labels: TEST_LABELS,
     }));
     return NextResponse.json(cases);
   } catch (e) {
