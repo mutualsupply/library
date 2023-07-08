@@ -1,4 +1,5 @@
 import fs from "fs";
+import { serialize } from "next-mdx-remote/serialize";
 import path from "path";
 import { randomInclusive } from "utils";
 const marked = require("marked");
@@ -9,6 +10,21 @@ const TEST_CASES = [
   "How not to do it",
   "Just cool",
 ];
+
+export function getCases() {
+  const dir = path.join(process.cwd(), "src/markdown");
+  const filenames = fs.readdirSync(dir);
+  return filenames.map((filename) => getCase(dir, filename));
+}
+
+export async function getCaseFromSlug(slug: string) {
+  const filename = `${slug}.mdx`;
+  const caseFile = getCase(path.join(process.cwd(), "src/markdown"), filename);
+  const serialized = await serialize(caseFile.source, {
+    parseFrontmatter: true,
+  });
+  return { ...caseFile, serialized };
+}
 
 export function getCase(pathToMarkdownDir: string, filename: string) {
   const source = fs
