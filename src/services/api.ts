@@ -15,8 +15,3 @@ export const getCases = () =>
   http
     .get<Array<{ filename: string; slug: string }>>("/case")
     .then((res) => res.data);
-
-export const getMDXSource = (slug: string) =>
-  http
-    .get<{ source: string }>(`/case/markdown/${slug}`)
-    .then((res) => res.data);

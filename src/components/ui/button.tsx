@@ -1,9 +1,8 @@
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-import { ConnectKitButton } from "connectkit";
 import * as React from "react";
 
-import { cn, shortenAddress } from "utils";
+import { cn } from "utils";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
@@ -55,19 +54,4 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 );
 Button.displayName = "Button";
 
-const ConnectButton = () => {
-  return (
-    <ConnectKitButton.Custom>
-      {({ isConnected, isConnecting, show, hide, address, ensName, chain }) => {
-        const displayName = ensName || shortenAddress(address);
-        return (
-          <Button onClick={show}>
-            {isConnected ? displayName : "Connect"}
-          </Button>
-        );
-      }}
-    </ConnectKitButton.Custom>
-  );
-};
-
-export { Button, buttonVariants, ConnectButton };
+export { Button, buttonVariants };

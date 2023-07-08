@@ -1,10 +1,10 @@
 "use client";
 
 import { cn } from "utils";
-import BackLink from "../../components/BackLink";
-import CreateCaseStudyButton from "../../components/CreateCaseStudyButton";
+import BackLink from "../../../components/BackLink";
+import CreateCaseStudyButton from "../../../components/CreateCaseStudyButton";
 
-export default function CasesLayout({
+export default function RemoteCaseLayout({
   children,
 }: {
   children: React.ReactNode;
