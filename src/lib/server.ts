@@ -1,6 +1,14 @@
 import fs from "fs";
 import path from "path";
+import { randomInclusive } from "utils";
 const marked = require("marked");
+
+const TEST_CASES = [
+  "User Interaction",
+  "Buttons",
+  "How not to do it",
+  "Just cool",
+];
 
 export function getCase(pathToMarkdownDir: string, filename: string) {
   const source = fs
@@ -13,7 +21,11 @@ export function getCase(pathToMarkdownDir: string, filename: string) {
     slug,
     source,
     title: parsed.title,
-    labels: ["wow", "amazing"],
+    labels: [
+      TEST_CASES[randomInclusive(TEST_CASES.length - 1)],
+      TEST_CASES[randomInclusive(TEST_CASES.length - 1)],
+      TEST_CASES[randomInclusive(TEST_CASES.length - 1)],
+    ],
   };
 }
 

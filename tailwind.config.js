@@ -59,6 +59,9 @@ module.exports = {
         tertiary: {
           DEFAULT: "hsl(var(--tertiary))",
         },
+        g: {
+          DEFAULT: "hsl(var(--g))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

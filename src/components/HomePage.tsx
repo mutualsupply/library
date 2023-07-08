@@ -6,11 +6,11 @@ import { Case } from "../lib/interfaces";
 import AlphaToggle from "./AlphaToggle";
 import LabelFilter from "./LabelFilter";
 
-interface HomeSearchProps {
+interface HomeProps {
   cases: Array<Case>;
 }
 
-export function HomeSearch({ cases }: HomeSearchProps) {
+export function HomePage({ cases }: HomeProps) {
   const [selectedChar, setSelectedChar] = useState<undefined | Array<string>>();
   const [selectedLabel, setSelectedLabel] = useState<
     undefined | Array<string>

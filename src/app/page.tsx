@@ -2,7 +2,7 @@ import { use } from "react";
 import { cn } from "utils";
 import BackLink from "../components/BackLink";
 import CreateCaseStudyButton from "../components/CreateCaseStudyButton";
-import { HomeSearch } from "../components/HomeSearch";
+import { HomePage } from "../components/HomePage";
 import { getCases } from "../lib/api";
 
 export default function Page() {
@@ -13,7 +13,7 @@ export default function Page() {
         <BackLink href={"https://mutual.supply"}>Resources</BackLink>
         <CreateCaseStudyButton />
       </div>
-      <HomeSearch cases={data} />
+      <HomePage cases={data} />
     </div>
   );
 }

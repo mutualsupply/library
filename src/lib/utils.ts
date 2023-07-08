@@ -61,3 +61,7 @@ export function fuzzyFilter<T, K extends keyof T>(
 export function jsonify(anything: any) {
   return JSON.stringify(anything, null, 2);
 }
+
+export function randomInclusive(max: number) {
+  return Math.floor(Math.random() * (max + 1));
+}
