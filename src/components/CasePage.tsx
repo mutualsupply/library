@@ -57,7 +57,9 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
                     >
                       <Link
                         href={`/case/${c.slug}`}
-                        className={cn("hover:text-primary")}
+                        className={cn({
+                          "hover:text-primary": c.slug !== caseStudy.slug,
+                        })}
                       >
                         {c.title}
                       </Link>
