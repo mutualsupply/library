@@ -90,7 +90,11 @@ interface DraftCaseStudyProps {
 
 const DraftCaseStudy = ({ pull }: DraftCaseStudyProps) => {
   return (
-    <Link href={pull.html_url} className={cn("p-4", "border")}>
+    <Link
+      target={"_blank"}
+      href={pull.html_url}
+      className={cn("p-4", "border")}
+    >
       <div className={cn("underline", "font-aspekta", "font-light")}>
         {pull.title}
       </div>

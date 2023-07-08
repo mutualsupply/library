@@ -1,3 +1,5 @@
+import { MDXRemoteSerializeResult } from "next-mdx-remote";
+
 export interface Case {
   filename: string;
   slug: string;
@@ -7,5 +9,5 @@ export interface Case {
 }
 
 export interface CaseSource extends Case {
-  serialized: string;
+  serialized: MDXRemoteSerializeResult;
 }
