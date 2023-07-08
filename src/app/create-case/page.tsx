@@ -1,5 +1,6 @@
 "use client";
 
+import { signIn, useSession } from "next-auth/react";
 import { cn } from "utils";
 import {
   Accordion,
@@ -12,6 +13,7 @@ import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import BackLink from "../../components/BackLink";
+import { Button } from "../../components/ui/button";
 import { GithubPullResponse, getPulls } from "../../lib/api";
 const NewCaseStudyPage = () => {
   return (
@@ -104,10 +106,27 @@ const DraftCaseStudy = ({ pull }: DraftCaseStudyProps) => {
 };
 
 const CreateNewCaseStudy = () => {
+  const { data: session } = useSession();
+  if (session) {
+    return (
+      <div>
+        <div className={cn("text-4xl", "text-center", "text-primary")}>
+          Create a New Case Study
+        </div>
+        <div></div>
+      </div>
+    );
+  }
+
   return (
     <div>
-      <div className={cn("text-4xl", "text-center", "text-primary")}>
-        Create a New Case Study
+      <div className={cn("text-center")}>
+        Please login to create a case study
+      </div>
+      <div className={cn("flex", "justify-center", "mt-4")}>
+        <Button variant={"outline"} onClick={() => signIn()}>
+          login with github
+        </Button>
       </div>
     </div>
   );
