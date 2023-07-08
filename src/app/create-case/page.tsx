@@ -12,7 +12,7 @@ import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import BackLink from "../../components/BackLink";
-import { GithubPullResponse, getPulls } from "../../services/api";
+import { GithubPullResponse, getPulls } from "../../lib/api";
 const NewCaseStudyPage = () => {
   return (
     <div>
@@ -91,7 +91,9 @@ interface DraftCaseStudyProps {
 const DraftCaseStudy = ({ pull }: DraftCaseStudyProps) => {
   return (
     <Link href={pull.html_url} className={cn("p-4", "border")}>
-      <div className={cn("underline")}>{pull.title}</div>
+      <div className={cn("underline", "font-aspekta", "font-light")}>
+        {pull.title}
+      </div>
       <div className={cn("text-primary", "mt-2")}>{pull.user?.login}</div>
     </Link>
   );

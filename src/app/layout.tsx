@@ -12,10 +12,13 @@ export const metadata: Metadata = {
 const aeonikFono = localFont({
   src: "../../public/fonts/AeonikFonoTRIAL-Light.woff2",
   variable: "--font-aeonik-fono",
+  weight: "300",
+  style: "normal",
 });
 const aspekta = localFont({
   src: "../../public/fonts/AspektaVF.woff2",
   variable: "--font-aspekta",
+  style: "normal",
 });
 
 export default function RootLayout({

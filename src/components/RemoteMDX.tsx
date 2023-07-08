@@ -3,7 +3,7 @@
 import { MDXRemote } from "next-mdx-remote";
 import { cn } from "utils";
 
-export default function RemoteMDX(props: any) {
+export default function RemoteMDX({ serialized }: any) {
   return (
     <MDXRemote
       components={{
@@ -16,7 +16,7 @@ export default function RemoteMDX(props: any) {
           </h2>
         ),
       }}
-      {...(props.source as any)}
+      {...(serialized as any)}
     />
   );
 }

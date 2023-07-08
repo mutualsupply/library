@@ -1,21 +1,14 @@
+import { use } from "react";
 import { cn } from "utils";
 import BackLink from "../../../components/BackLink";
 import CreateCaseStudyButton from "../../../components/CreateCaseStudyButton";
 import RemoteMDX from "../../../components/RemoteMDX";
-import { getCases } from "../../page";
+import { getCaseSource, getCases } from "../../../lib/api";
 
-async function getPage(slug: string) {
-  const res = await fetch("http://localhost:3000/api/remote-case/" + slug);
-  if (!res.ok) {
-    throw new Error("Failed to fetch case");
-  }
-  return res.json();
-}
-
-export default async function Page({ params }: { params: { slug: string } }) {
+export default function Page({ params }: { params: { slug: string } }) {
   const slug = params.slug;
-  const cases = await getCases();
-  const { source } = await getPage(slug);
+  const cases = use(getCases());
+  const { serialized } = use(getCaseSource(slug));
   return (
     <div className={cn("grow", "flex", "flex-col")}>
       <div className={cn("flex", "justify-between", "items-center")}>
@@ -41,7 +34,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
           )}
         >
           <div className={cn("z-10", "relative", "p-8", "col-span-9")}>
-            <RemoteMDX source={source} />
+            <RemoteMDX serialized={serialized} />
           </div>
           <div className={cn("col-span-3", "relative")}>
             <div

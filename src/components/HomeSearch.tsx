@@ -2,19 +2,20 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { cn, fuzzyFilter } from "utils";
+import { Case } from "../lib/interfaces";
 import AlphaToggle from "./AlphaToggle";
 import LabelFilter from "./LabelFilter";
 
 interface HomeSearchProps {
-  data: Array<{ filename: string; slug: string; labels: Array<string> }>;
+  cases: Array<Case>;
 }
 
-export function HomeSearch({ data }: HomeSearchProps) {
+export function HomeSearch({ cases }: HomeSearchProps) {
   const [selectedChar, setSelectedChar] = useState<undefined | Array<string>>();
   const [selectedLabel, setSelectedLabel] = useState<
     undefined | Array<string>
   >();
-  const uniqueLabels = new Set<string>(data.flatMap((d) => d.labels));
+  const uniqueLabels = new Set<string>(cases.flatMap((d) => d.labels));
   const labelFilterItems = Array.from(uniqueLabels).map((label) => ({
     key: label,
     title: label,
@@ -35,7 +36,7 @@ export function HomeSearch({ data }: HomeSearchProps) {
   };
 
   const filteredData = useMemo(() => {
-    const labelFilteredData = data.filter((d) => {
+    const labelFilteredData = cases.filter((d) => {
       if (selectedLabel) {
         return selectedLabel.every((label) => d.labels.includes(label));
       }
@@ -44,9 +45,9 @@ export function HomeSearch({ data }: HomeSearchProps) {
     return fuzzyFilter(
       labelFilteredData,
       selectedChar ? selectedChar.join("") : "",
-      "filename"
+      "title"
     );
-  }, [selectedLabel, selectedChar, data]);
+  }, [selectedLabel, selectedChar, cases]);
 
   return (
     <>
@@ -64,7 +65,7 @@ export function HomeSearch({ data }: HomeSearchProps) {
         {filteredData.map((caseFile, index) => (
           <Link
             key={caseFile.slug}
-            href={`/remote-case/${caseFile.slug}`}
+            href={`/case/${caseFile.slug}`}
             className={cn("p-6", "relative", "group", "hover:text-primary")}
           >
             <div
@@ -78,7 +79,7 @@ export function HomeSearch({ data }: HomeSearchProps) {
               )}
             >
               <span className={cn("text-sm")}>{index + 1}</span>
-              <span className={cn("text-3xl")}>{caseFile.slug}</span>
+              <span className={cn("text-3xl")}>{caseFile.title}</span>
             </div>
             {(index + 1) % 2 === 0 && (
               <div className={cn("absolute", "inset-0", "bg-tertiary/25")} />

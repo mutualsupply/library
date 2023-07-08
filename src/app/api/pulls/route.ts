@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import octokit, { GITHUB_OWNER, GITHUB_REPO } from "../../../services/octokit";
+import octokit, { GITHUB_OWNER, GITHUB_REPO } from "../../../lib/octokit";
 
 export async function GET() {
   try {

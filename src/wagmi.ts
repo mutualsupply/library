@@ -5,7 +5,7 @@ import { configureChains, createConfig } from "wagmi";
 import { arbitrum, goerli, mainnet, optimism, sepolia } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
-import env from "./services/env";
+import env from "./lib/env";
 
 const { chains } = configureChains(
   [mainnet, optimism, arbitrum, goerli, sepolia],

@@ -6,7 +6,7 @@ import Logo from "./icons/Logo";
 
 export default function Header() {
   return (
-    <div className="flex items-center justify-between p-4">
+    <div className="flex items-center justify-between py-4">
       <Link href={"/"}>
         <Logo />
       </Link>

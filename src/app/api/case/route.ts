@@ -1,21 +1,16 @@
 import fs from "fs";
 import { NextResponse } from "next/server";
 import path from "path";
-
-export const TEST_LABELS = ["wow", "amazing"];
+import { Case } from "../../../lib/interfaces";
+import { getCase } from "../../../lib/server";
 
 export async function GET() {
-  const filenamesToIgnore = ["layout.tsx"];
   try {
-    const dir = path.join(process.cwd(), "src/app/cases");
-    const filenames = fs
-      .readdirSync(dir)
-      .filter((filename) => !filenamesToIgnore.includes(filename));
-    const cases = filenames.map((filename) => ({
-      filename,
-      slug: filename,
-      labels: TEST_LABELS,
-    }));
+    const dir = path.join(process.cwd(), "src/markdown");
+    const filenames = fs.readdirSync(dir);
+    const cases: Array<Case> = filenames.map((filename) =>
+      getCase(dir, filename)
+    );
     return NextResponse.json(cases);
   } catch (e) {
     console.error(e);

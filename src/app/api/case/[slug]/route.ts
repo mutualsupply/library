@@ -1,8 +1,7 @@
-import fs from "fs";
 import { serialize } from "next-mdx-remote/serialize";
 import { NextResponse } from "next/server";
 import path from "path";
-import { TEST_LABELS } from "../../case/route";
+import { getCase } from "../../../../lib/server";
 
 export async function GET(
   request: Request,
@@ -14,10 +13,15 @@ export async function GET(
 ) {
   try {
     const { slug } = params;
-    const dir = path.join(process.cwd(), "src/remote-markdown", `${slug}.mdx`);
-    const caseFile = fs.readFileSync(dir);
-    const source = await serialize(caseFile, { parseFrontmatter: true });
-    return NextResponse.json({ source, slug, labels: TEST_LABELS });
+    const filename = `${slug}.mdx`;
+    const caseFile = getCase(
+      path.join(process.cwd(), "src/markdown"),
+      filename
+    );
+    const serialized = await serialize(caseFile.source, {
+      parseFrontmatter: true,
+    });
+    return NextResponse.json({ ...caseFile, serialized });
   } catch (e) {
     console.error(e);
     return NextResponse.json(
