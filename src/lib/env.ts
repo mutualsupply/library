@@ -32,8 +32,13 @@ if (typeof window === "undefined") {
 }
 
 keysToValidate.forEach((key) => {
+  const missingKeys = [];
   if (!env[key]) {
-    throw new Error(`Missing required environment variable: ${key}`);
+    missingKeys.push(key);
+  }
+
+  if (missingKeys.length > 0) {
+    throw new Error(`Missing environment variables: ${missingKeys.join(", ")}`);
   }
 });
 
