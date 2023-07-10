@@ -20,6 +20,11 @@ const aspekta = localFont({
   variable: "--font-aspekta",
   style: "normal",
 });
+const otBrut = localFont({
+  src: "../../public/fonts/OTBrut-Regular.woff2",
+  variable: "--font-ot-brut",
+  style: "normal",
+});
 
 export default function RootLayout({
   children,
@@ -36,7 +41,8 @@ export default function RootLayout({
           "flex",
           "flex-col",
           aeonikFono.variable,
-          aspekta.variable
+          aspekta.variable,
+          otBrut.variable
         )}
       >
         <Providers>

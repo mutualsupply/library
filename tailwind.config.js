@@ -21,6 +21,7 @@ module.exports = {
       fontFamily: {
         sans: ["var(--font-aeonik-fono)", ...fontFamily.sans],
         aspekta: ["var(--font-aspekta)", ...fontFamily.sans],
+        otBrut: ["var(--font-ot-brut)", ...fontFamily.sans],
       },
       colors: {
         border: "hsl(var(--border))",

@@ -8,7 +8,9 @@ export default function RemoteMDX({ serialized }: any) {
     <MDXRemote
       components={{
         h1: ({ children }) => (
-          <h1 className={cn("text-primary")}>{children}</h1>
+          <h1 className={cn("text-primary", "font-otBrut", "text-6xl")}>
+            {children}
+          </h1>
         ),
         h2: ({ children }) => (
           <h2 className={cn("text-black", "font-aspekta", "font-light")}>

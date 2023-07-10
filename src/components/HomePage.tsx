@@ -75,7 +75,9 @@ export function HomePage({ cases }: HomeProps) {
               )}
             >
               <span className={cn("text-sm")}>{index + 1}</span>
-              <span className={cn("text-3xl")}>{caseFile.title}</span>
+              <span className={cn("text-4xl", "font-otBrut")}>
+                {caseFile.title}
+              </span>
             </div>
             {(index + 1) % 2 === 0 && (
               <div className={cn("absolute", "inset-0", "bg-tertiary/25")} />
