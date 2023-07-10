@@ -10,11 +10,21 @@
     "format": "rome format . --write"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.1.1",
     "@mdx-js/loader": "^2.3.0",
     "@mdx-js/react": "^2.3.0",
+    "@milkdown/core": "^7.2.4",
+    "@milkdown/ctx": "^7.2.4",
+    "@milkdown/plugin-upload": "^7.2.4",
+    "@milkdown/preset-commonmark": "^7.2.4",
+    "@milkdown/prose": "^7.2.4",
+    "@milkdown/react": "^7.2.4",
+    "@milkdown/theme-nord": "^7.2.4",
+    "@milkdown/transformer": "^7.2.4",
     "@next/mdx": "^13.4.6",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-icons": "^1.3.0",
+    "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-slot": "^1.0.2",
     "@tanstack/react-query": "^4.29.14",
     "class-variance-authority": "^0.6.1",
@@ -27,10 +37,12 @@
     "octokit": "^2.0.22",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.45.1",
     "tailwind-merge": "^1.13.2",
     "tailwindcss-animate": "^1.0.6",
     "viem": "^1.0.6",
-    "wagmi": "~1.2.0"
+    "wagmi": "~1.2.0",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@octokit/types": "^10.0.0",

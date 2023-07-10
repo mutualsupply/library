@@ -10,6 +10,9 @@ const nextConfig = {
   experimental: {
     mdxRs: true,
   },
+  images: {
+    domains: ["avatars.githubusercontent.com"],
+  },
 };
 
 const withMDX = require("@next/mdx")({
