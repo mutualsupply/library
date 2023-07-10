@@ -29,19 +29,21 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
     return uniqueLetters.sort();
   }, [cases, selectedLabel]);
   const labelFilterItems = getCaseLabelItems(cases);
+  const onLabelFilterClick = (label: string) => {
+    if (selectedLabel?.includes(label)) {
+      setSelectedLabel(selectedLabel.filter((l) => l !== label));
+    } else {
+      setSelectedLabel((selectedLabel || []).concat(label));
+    }
+  };
   return (
     <>
       <div className={cn("my-5")}>
         <LabelFilter
           items={labelFilterItems}
           selected={selectedLabel}
-          onClick={(label) => {
-            if (selectedLabel?.includes(label)) {
-              setSelectedLabel(selectedLabel.filter((l) => l !== label));
-            } else {
-              setSelectedLabel((selectedLabel || []).concat(label));
-            }
-          }}
+          onClick={onLabelFilterClick}
+          onClearClick={() => setSelectedLabel(undefined)}
         />
       </div>
       <div className={cn("grid", "grid-cols-12", "grow")}>
@@ -55,7 +57,8 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
                   "px-3",
                   "py-2",
                   "text-xl",
-                  "inline-block"
+                  "inline-block",
+                  "font-otBrut"
                 )}
               >
                 {letter}

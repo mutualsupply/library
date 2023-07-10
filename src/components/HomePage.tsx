@@ -52,6 +52,7 @@ export function HomePage({ cases }: HomeProps) {
           items={getCaseLabelItems(cases)}
           selected={selectedLabel}
           onClick={onLabelFilterClick}
+          onClearClick={() => setSelectedLabel(undefined)}
         />
       </div>
       <div className={cn("my-10")}>
