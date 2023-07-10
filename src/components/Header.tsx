@@ -1,14 +1,19 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { cn } from "utils";
-import Logo from "./icons/Logo";
 
 export default function Header() {
   return (
     <div className="flex items-center justify-between py-4">
       <Link href={"/"}>
-        <Logo />
+        <Image
+          src={"/images/apple.gif"}
+          alt={"s/o blackboard"}
+          width={64}
+          height={64}
+        />
       </Link>
       <Nav />
       <button className={cn("uppercase", "hidden", "md:block")}>join</button>
