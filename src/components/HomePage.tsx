@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { cn, fuzzyFilter } from "utils";
+import { getCaseLabelItems } from "../lib/client";
 import { Case } from "../lib/interfaces";
 import AlphaToggle from "./AlphaToggle";
 import LabelFilter from "./LabelFilter";
@@ -15,11 +16,6 @@ export function HomePage({ cases }: HomeProps) {
   const [selectedLabel, setSelectedLabel] = useState<
     undefined | Array<string>
   >();
-  const uniqueLabels = new Set<string>(cases.flatMap((d) => d.labels));
-  const labelFilterItems = Array.from(uniqueLabels).map((label) => ({
-    key: label,
-    title: label,
-  }));
   const onAlphaToggleClick = (char: string) => {
     if (selectedChar?.includes(char)) {
       setSelectedChar(selectedChar.filter((c) => c !== char));
@@ -53,7 +49,7 @@ export function HomePage({ cases }: HomeProps) {
     <>
       <div className={cn("mt-5")}>
         <LabelFilter
-          items={labelFilterItems}
+          items={getCaseLabelItems(cases)}
           selected={selectedLabel}
           onClick={onLabelFilterClick}
         />

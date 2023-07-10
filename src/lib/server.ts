@@ -45,7 +45,7 @@ export function getCase(pathToMarkdownDir: string, filename: string) {
   };
 }
 
-export default function parseMarkdown(source: string) {
+export function parseMarkdown(source: string) {
   const tokens = marked.lexer(source);
   const heading = tokens.find(
     (token: any) => token.type === "heading" && token.depth === 1

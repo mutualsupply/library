@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useMemo, useState } from "react";
 import { cn } from "utils";
+import { getCaseLabelItems } from "../lib/client";
 import { Case, CaseSource } from "../lib/interfaces";
 import LabelFilter from "./LabelFilter";
 import RemoteMDX from "./RemoteMDX";
@@ -12,21 +14,34 @@ interface CaseProps {
 }
 
 export default function CasePage({ cases, caseStudy }: CaseProps) {
-  const firstLetterOfTitles = Array.from(
-    new Set(cases.map((c) => c.title[0].toUpperCase()))
-  ).sort();
-  const uniqueLabels = new Set<string>(cases.flatMap((d) => d.labels));
-  const labelFilterItems = Array.from(uniqueLabels).map((label) => ({
-    key: label,
-    title: label,
-  }));
+  const [selectedLabel, setSelectedLabel] = useState<undefined | Array<string>>(
+    caseStudy.labels
+  );
+  const firstLetterOfTitles = useMemo(() => {
+    const selectedCases = cases.filter((caseStudy) => {
+      if (!selectedLabel || selectedLabel.length === 0) {
+        return true;
+      }
+      return caseStudy.labels.some((label) => selectedLabel.includes(label));
+    });
+    const firstLetters = selectedCases.map((c) => c.title[0].toUpperCase());
+    const uniqueLetters = Array.from(new Set(firstLetters));
+    return uniqueLetters.sort();
+  }, [cases, selectedLabel]);
+  const labelFilterItems = getCaseLabelItems(cases);
   return (
     <>
       <div className={cn("my-5")}>
         <LabelFilter
           items={labelFilterItems}
-          selected={undefined}
-          onClick={() => {}}
+          selected={selectedLabel}
+          onClick={(label) => {
+            if (selectedLabel?.includes(label)) {
+              setSelectedLabel(selectedLabel.filter((l) => l !== label));
+            } else {
+              setSelectedLabel((selectedLabel || []).concat(label));
+            }
+          }}
         />
       </div>
       <div className={cn("grid", "grid-cols-12", "grow")}>

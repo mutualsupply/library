@@ -14,11 +14,11 @@ export default function LabelFilter({
 }: LabelFilterProps) {
   return (
     <div className={cn("flex", "items-center", "flex-wrap", "gap-2")}>
-      {items.map((item) => (
+      {items.map((item, index) => (
         <Button
           variant={"outlineWhite"}
           size={"xs"}
-          key={item.key}
+          key={`label-${item.key}-${index}`}
           className={cn(
             "rounded-sm",
             "uppercase",

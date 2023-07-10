@@ -15,7 +15,7 @@ export default function Page({ params }: { params: { slug: string } }) {
         <BackLink href={"/"}>Library</BackLink>
         <CreateCaseStudyButton />
       </div>
-      <CasePage caseStudy={{ ...caseStudy }} cases={cases} />
+      <CasePage caseStudy={caseStudy} cases={cases} />
     </div>
   );
 }
