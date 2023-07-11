@@ -2,22 +2,22 @@
 
 # dependencies
 
-/node_modules
-/.pnp
+node_modules
+.pnp
 .pnp.js
 
 # testing
 
-/coverage
+coverage
 
 # next.js
 
-/.next/
+.next
 /out/
 
 # production
 
-/build
+build
 
 # misc
 
