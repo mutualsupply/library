@@ -6,6 +6,7 @@ specifiers:
   '@mdx-js/react': ^2.3.0
   '@milkdown/core': ^7.2.4
   '@milkdown/ctx': ^7.2.4
+  '@milkdown/plugin-listener': ^7.2.4
   '@milkdown/plugin-upload': ^7.2.4
   '@milkdown/preset-commonmark': ^7.2.4
   '@milkdown/prose': ^7.2.4
@@ -53,6 +54,7 @@ dependencies:
   '@mdx-js/react': 2.3.0_react@18.2.0
   '@milkdown/core': 7.2.4_xz64mxkk44m4jnro5645bsclui
   '@milkdown/ctx': 7.2.4
+  '@milkdown/plugin-listener': 7.2.4_ao7sa5tvukxmwmxedcwcmmijya
   '@milkdown/plugin-upload': 7.2.4_ao7sa5tvukxmwmxedcwcmmijya
   '@milkdown/preset-commonmark': 7.2.4_ao7sa5tvukxmwmxedcwcmmijya
   '@milkdown/prose': 7.2.4
@@ -793,6 +795,24 @@ packages:
     resolution: {integrity: sha512-TpVGz7iNo6wAVcIiJ4KQmp1pfiY4ok3bye6xntbZ0tCIIsRiu5BI3/uO1H/pIv/v7OP+Yp5Q5t0aC67x8sY2rg==}
     dependencies:
       tslib: 2.6.0
+    dev: false
+
+  /@milkdown/plugin-listener/7.2.4_ao7sa5tvukxmwmxedcwcmmijya:
+    resolution: {integrity: sha512-Yes3zB3hOGPEsY8hdv9wNs0G1iwq29E3QkuNPn8pbPA92ak9funb93Rzcen8dU954MwmkE3lIt+2+1/ANejRVQ==}
+    peerDependencies:
+      '@milkdown/core': ^7.2.0
+      '@milkdown/ctx': ^7.2.0
+      '@milkdown/prose': ^7.2.0
+    dependencies:
+      '@milkdown/core': 7.2.4_xz64mxkk44m4jnro5645bsclui
+      '@milkdown/ctx': 7.2.4
+      '@milkdown/prose': 7.2.4
+      '@milkdown/utils': 7.2.4_ao7sa5tvukxmwmxedcwcmmijya
+      '@types/lodash.debounce': 4.0.7
+      lodash.debounce: 4.0.8
+      tslib: 2.6.0
+    transitivePeerDependencies:
+      - '@milkdown/transformer'
     dev: false
 
   /@milkdown/plugin-upload/7.2.4_ao7sa5tvukxmwmxedcwcmmijya:
@@ -2055,6 +2075,16 @@ packages:
     resolution: {integrity: sha512-drE6uz7QBKq1fYqqoFKTDRdFCPHd5TCub75BM+D+cMx7NU9hUz7SESLfC2fSCXVFMO5Yj8sOWHuGqPgjc+fz0Q==}
     dependencies:
       '@types/node': 17.0.45
+    dev: false
+
+  /@types/lodash.debounce/4.0.7:
+    resolution: {integrity: sha512-X1T4wMZ+gT000M2/91SYj0d/7JfeNZ9PeeOldSNoE/lunLeQXKvkmIumI29IaKMotU/ln/McOIvgzZcQ/3TrSA==}
+    dependencies:
+      '@types/lodash': 4.14.195
+    dev: false
+
+  /@types/lodash/4.14.195:
+    resolution: {integrity: sha512-Hwx9EUgdwf2GLarOjQp5ZH8ZmblzcbTBC2wtQWNKARBSxM9ezRIAUpeDTgoQRAFB0+8CNWXVA9+MaSOzOF3nPg==}
     dev: false
 
   /@types/marked/5.0.0:
@@ -3922,6 +3952,10 @@ packages:
   /lodash.castarray/4.4.0:
     resolution: {integrity: sha512-aVx8ztPv7/2ULbArGJ2Y42bG1mEQ5mGjpdvrbJcJFU3TbYybe+QlLS4pst9zV52ymy2in1KpFPiZnAOATxD4+Q==}
     dev: true
+
+  /lodash.debounce/4.0.8:
+    resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
+    dev: false
 
   /lodash.isequal/4.5.0:
     resolution: {integrity: sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==}

@@ -1,3 +1,4 @@
+import { InputHTMLAttributes } from "react";
 import { useFormContext } from "react-hook-form";
 import {
   FormControl,
@@ -8,7 +9,8 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 
-interface TextInputProps {
+interface TextInputProps
+  extends Pick<InputHTMLAttributes<HTMLInputElement>, "type"> {
   name: string;
   label?: string;
   placeholder?: string;
@@ -20,6 +22,7 @@ const TextInput = ({
   label,
   placeholder,
   description,
+  type = "text",
 }: TextInputProps) => {
   const form = useFormContext();
   return (
@@ -30,7 +33,7 @@ const TextInput = ({
         <FormItem>
           {label && <FormLabel>{label}</FormLabel>}
           <FormControl>
-            <Input placeholder={placeholder} {...field} />
+            <Input type={type} placeholder={placeholder} {...field} />
           </FormControl>
           {description && <FormDescription>{description}</FormDescription>}
         </FormItem>

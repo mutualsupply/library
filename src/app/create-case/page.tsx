@@ -14,6 +14,7 @@ import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import BackLink from "../../components/BackLink";
@@ -174,6 +175,7 @@ const formSchema = z.object({
 });
 
 const NewCaseStudyForm = () => {
+  const [markdown, setMarkdown] = useState("");
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -182,7 +184,7 @@ const NewCaseStudyForm = () => {
     },
   });
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    console.log(values, markdown);
   }
   return (
     <Form {...form}>
@@ -193,9 +195,14 @@ const NewCaseStudyForm = () => {
           label="Your Name"
           placeholder="You have a lovely name"
         />
+        <TextInput
+          name="description"
+          label="Description"
+          placeholder="Describe the case study"
+        />
         <div className={cn("flex", "flex-col", "gap-3")}>
           <Label>Additional Markdown</Label>
-          <MilkdownEditorWrapper />
+          <MilkdownEditorWrapper onChange={setMarkdown} />
         </div>
         <div className={cn("flex", "justify-center")}>
           <Button type="submit">Create</Button>
