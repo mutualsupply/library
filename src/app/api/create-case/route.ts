@@ -7,7 +7,7 @@ const run = (cmd: string) => {
 
 const createCaseStudy = (castStudy?: any) => {
   const branchName = `robot/mutual-supply-${Date.now()}`;
-  const dirName = "new-study";
+  const dirName = `/tmp/new-study-${Date.now()}`;
   run(`mkdir ${dirName}`);
   run(`git clone git@github.com:mutualsupply/site.git ${dirName}/site`);
   run(
