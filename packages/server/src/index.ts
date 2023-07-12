@@ -30,7 +30,7 @@ const createCaseStudy = (castStudy?: any) => {
 };
 
 router.get("/", async (ctx, next) => {
-  ctx.body = { message: "~~~" };
+  ctx.body = { message: "do you feel mutual" };
   await next();
 });
 
