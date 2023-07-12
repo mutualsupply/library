@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  apidev:
+    container_name: mutual-api-development
+    build:
+      context: .
+      target: development
+    volumes:
+      - ./:/usr/src/app
+    ports: 
+      - '${PORT}:${PORT}'
+    env_file:
+      - .env
+    command: pnpm dev
+    # command: tail -f /dev/null
+    
+  apiprod:
+    container_name: mutual-api-prod
+    build:
+      context: .
+      target: production
+    ports: 
+      - '${PORT}:${PORT}'
+    env_file:
+      - .env
