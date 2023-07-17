@@ -12,6 +12,11 @@ export async function POST(req: Request) {
         "Must be authenticated to create a case study"
       );
     }
+    if (!session.user?.email) {
+      throw new UnauthenticatedError(
+        "User must have Github public email to publish a case study"
+      );
+    }
     const body = await req.json();
     const parsedBody = caseStudySchema.parse(body);
     const res = await fetch(`${env.SERVER_BASE_URL}/case-study`, {
@@ -19,7 +24,10 @@ export async function POST(req: Request) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(parsedBody),
+      body: JSON.stringify({
+        caseStudy: parsedBody,
+        user: session.user,
+      }),
     });
     if (!res.ok) {
       throw new Error("Could not create case study");
