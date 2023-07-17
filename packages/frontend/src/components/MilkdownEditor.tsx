@@ -1,4 +1,8 @@
 import { Editor, editorViewOptionsCtx, rootCtx } from "@milkdown/core";
+import { clipboard } from "@milkdown/plugin-clipboard";
+import { emoji } from "@milkdown/plugin-emoji";
+import { history, historyKeymap } from "@milkdown/plugin-history";
+import { indent } from "@milkdown/plugin-indent";
 import { listener, listenerCtx } from "@milkdown/plugin-listener";
 import { upload } from "@milkdown/plugin-upload";
 import { commonmark } from "@milkdown/preset-commonmark";
@@ -7,6 +11,7 @@ import { nord } from "@milkdown/theme-nord";
 
 interface MilkdownEditorProps {
   onChange: (value: string) => void;
+  placeholder?: string;
 }
 
 const MilkdownEditor = ({ onChange }: MilkdownEditorProps) => {
@@ -28,13 +33,23 @@ const MilkdownEditor = ({ onChange }: MilkdownEditorProps) => {
           ...prev,
           attributes: {
             class:
-              "border-b border-primary px-3 py-1 outline-none text-sm min-h-[150px] bg-transparent text-base prose max-w-full",
+              "border border-primary px-3 py-1 outline-none text-base min-h-[150px] bg-transparent text-base prose max-w-full",
           },
         }));
         ctx.set(rootCtx, root);
       })
+      .config((ctx) => {
+        ctx.set(historyKeymap.key, {
+          Undo: "Mod-z",
+          Redo: ["Mod-y", "Shift-Mod-z"],
+        });
+      })
+      .use(clipboard)
+      .use(history)
+      .use(emoji)
       .use(listener)
       .use(commonmark)
+      .use(indent)
       .use(upload)
   );
   return <Milkdown />;

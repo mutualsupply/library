@@ -1,33 +1,39 @@
-import child from "child_process";
+import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
+import env from "../../../lib/env";
+import { caseStudySchema } from "../../../lib/schema";
+import { UnauthenticatedError } from "../../../lib/server";
 
-const run = (cmd: string) => {
-  return child.execSync(cmd, { stdio: "inherit" });
-};
-
-const createCaseStudy = (castStudy?: any) => {
-  const branchName = `robot/mutual-supply-${Date.now()}`;
-  const dirName = `/tmp/new-study-${Date.now()}`;
-  run(`mkdir ${dirName}`);
-  run(`git clone git@github.com:mutualsupply/site.git ${dirName}/site`);
-  run(
-    `echo "# MUTUAL SUPPLY\n ## MUTUAL SUPPLY\n ### MUTUAL SUPPLY" > ${dirName}/site/src/markdown/mutual-supply.mdx`
-  );
-  run(`cd ${dirName}/site && git status`);
-  run(`cd ${dirName}/site && git branch ${branchName}`);
-  run(`cd ${dirName}/site && git checkout ${branchName}`);
-  run(`cd ${dirName}/site && git add .`);
-  run(`cd ${dirName}/site && git commit -m 'add a test file'`);
-  run(`cd ${dirName}/site && git push origin ${branchName}`);
-  run(`rm -rf ${dirName}`);
-};
-
-export async function GET() {
+export async function POST(req: Request) {
   try {
-    createCaseStudy();
-    return NextResponse.json({ message: "study created" });
+    const session = await getServerSession();
+    if (!session) {
+      throw new UnauthenticatedError(
+        "Must be authenticated to create a case study"
+      );
+    }
+    const body = await req.json();
+    const parsedBody = caseStudySchema.parse(body);
+    const res = await fetch(`${env.SERVER_BASE_URL}/case-study`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(parsedBody),
+    });
+    if (!res.ok) {
+      throw new Error("Could not create case study");
+    }
+    const responseJson = await res.json();
+    return NextResponse.json(responseJson);
   } catch (e) {
+    if (e instanceof UnauthenticatedError) {
+      return NextResponse.json({ error: e.message }, { status: 401 });
+    }
     console.error(e);
-    return NextResponse.json({ error: "could not do it" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Could not create case study" },
+      { status: 400 }
+    );
   }
 }

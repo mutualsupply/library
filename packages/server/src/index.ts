@@ -1,5 +1,6 @@
 import child from "child_process";
-import Koa from "koa";
+import Koa, { Context } from "koa";
+import bodyParser from "koa-bodyparser";
 import json from "koa-json";
 import logger from "koa-logger";
 import Router from "koa-router";
@@ -29,16 +30,22 @@ const createCaseStudy = (castStudy?: any) => {
   run(`rm -rf ${dirName}`);
 };
 
-router.get("/", async (ctx, next) => {
-  ctx.body = { message: "do you feel mutual" };
+router.get("/status", async (ctx, next) => {
+  ctx.body = { message: "mutual" };
   await next();
 });
 
-router.get("/case-study", async (ctx, next) => {});
+router.post("/case-study", async (ctx: Context, next) => {
+  const caseStudy = ctx.request.body;
+  ctx.body = caseStudy;
+  await next();
+});
 
 app.use(json());
+app.use(bodyParser());
 app.use(logger());
-app.use(router.routes()).use(router.allowedMethods());
+app.use(router.routes());
+app.use(router.allowedMethods());
 
 app.listen(env.PORT, () => {
   console.log(`server is running at ${env.PORT}`);

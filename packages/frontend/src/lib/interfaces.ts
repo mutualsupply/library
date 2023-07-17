@@ -11,3 +11,12 @@ export interface Case {
 export interface CaseSource extends Case {
   serialized: MDXRemoteSerializeResult;
 }
+
+export interface CaseStudy {
+  email: string;
+  name: string;
+  title: string;
+  productDescription: string;
+  industry: string;
+  markdown?: string;
+}

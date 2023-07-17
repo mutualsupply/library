@@ -54,3 +54,9 @@ export function parseMarkdown(source: string) {
     title: heading?.text,
   };
 }
+
+export class UnauthenticatedError extends Error {
+  constructor(msg?: string) {
+    super(msg || "Must be authenticated");
+  }
+}

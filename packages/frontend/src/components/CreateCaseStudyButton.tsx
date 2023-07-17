@@ -10,7 +10,7 @@ const CreateCaseStudyButton = () => {
         variant={"outline"}
         className={cn("text-sm", "flex", "items-center", "gap-1", "uppercase")}
       >
-        <PlusIcon /> new case study
+        <PlusIcon /> submit a report
       </Button>
     </Link>
   );

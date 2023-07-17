@@ -16,19 +16,17 @@ export default function Header() {
         />
       </Link>
       <Nav />
-      <button className={cn("uppercase", "hidden", "md:block")}>join</button>
+      <button className={cn("hidden", "md:block")}>Join</button>
     </div>
   );
 }
 
 const Nav = () => {
   return (
-    <div
-      className={cn("items-center", "gap-10", "uppercase", "hidden", "md:flex")}
-    >
-      <Link href={""}>resources</Link>
-      <Link href={""}>releases</Link>
-      <Link href={""}>about</Link>
+    <div className={cn("items-center", "gap-10", "hidden", "md:flex")}>
+      <Link href={""}>Resources</Link>
+      <Link href={""}>Releases</Link>
+      <Link href={""}>info</Link>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 {
-  "name": "caisson",
+  "name": "mutual-supply",
   "version": "0.0.2",
   "private": true,
   "scripts": {
@@ -15,6 +15,10 @@
     "@mdx-js/react": "^2.3.0",
     "@milkdown/core": "^7.2.4",
     "@milkdown/ctx": "^7.2.4",
+    "@milkdown/plugin-clipboard": "^7.2.4",
+    "@milkdown/plugin-emoji": "^7.2.4",
+    "@milkdown/plugin-history": "^7.2.4",
+    "@milkdown/plugin-indent": "^7.2.4",
     "@milkdown/plugin-listener": "^7.2.4",
     "@milkdown/plugin-upload": "^7.2.4",
     "@milkdown/preset-commonmark": "^7.2.4",
