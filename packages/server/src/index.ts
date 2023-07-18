@@ -5,6 +5,7 @@ import json from "koa-json";
 import logger from "koa-logger";
 import Router from "koa-router";
 import env from "./env";
+import { PostCaseStudyRequestBody } from "./interfaces";
 
 const app = new Koa();
 const router = new Router();
@@ -36,9 +37,19 @@ router.get("/status", async (ctx, next) => {
 });
 
 router.post("/case-study", async (ctx: Context, next) => {
-  const caseStudy = ctx.request.body;
-  ctx.body = caseStudy;
-  await next();
+  const { caseStudy, user } = ctx.request.body as PostCaseStudyRequestBody;
+  if (!user.email) {
+    ctx.status = 401;
+    ctx.body = "User must have an email to publish a case study";
+    ctx.app.emit(
+      "error",
+      new Error("User must have an email to publish a case study"),
+      ctx
+    );
+  } else {
+    ctx.body = { caseStudy, user };
+    await next();
+  }
 });
 
 app.use(json());
