@@ -204,7 +204,9 @@ const CreateNewCaseStudy = () => {
           </div>
         )}
       </div>
-      <div className={cn("my-6", "p-3", "border", "border-dashed")}>
+      <div
+        className={cn("my-6", "p-3", "border", "border-dashed", "text-primary")}
+      >
         Something something about capabilities to save your report as a draft
         and edit it later, etc etc.
       </div>
