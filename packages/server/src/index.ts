@@ -5,7 +5,7 @@ import json from "koa-json";
 import logger from "koa-logger";
 import Router from "koa-router";
 import env from "./env";
-import { PostCaseStudyRequestBody } from "./interfaces";
+import { CaseStudy, GithubUser, PostCaseStudyRequestBody } from "./interfaces";
 
 const app = new Koa();
 const router = new Router();
@@ -14,19 +14,33 @@ const run = (cmd: string) => {
   return child.execSync(cmd, { stdio: "inherit" });
 };
 
-const createCaseStudy = (castStudy?: any) => {
+const createCaseStudy = (user: GithubUser, caseStudy: CaseStudy) => {
+  console.log("writing case study submitted by", user.email);
+
   const branchName = `robot/mutual-supply-${Date.now()}`;
   const dirName = `/tmp/new-study-${Date.now()}`;
   run(`mkdir ${dirName}`);
   run(`git clone git@github.com:mutualsupply/site.git ${dirName}/site`);
-  run(
-    `echo "# MUTUAL SUPPLY\n ## MUTUAL SUPPLY\n ### MUTUAL SUPPLY" > ${dirName}/site/src/markdown/mutual-supply.mdx`
-  );
+  let markdown = `
+    # ${caseStudy.title}
+    ### by ${caseStudy.name} (${caseStudy.email})
+
+    ${caseStudy.productDescription}
+    ${caseStudy.productDescription}
+    ${caseStudy.industry}
+    `;
+  if (caseStudy.markdown) {
+    markdown += caseStudy.markdown;
+  }
+
+  run(`echo "${markdown}" > ${dirName}/site/src/markdown/mutual-supply.mdx`);
   run(`cd ${dirName}/site && git status`);
   run(`cd ${dirName}/site && git branch ${branchName}`);
   run(`cd ${dirName}/site && git checkout ${branchName}`);
   run(`cd ${dirName}/site && git add .`);
-  run(`cd ${dirName}/site && git commit -m 'add a test file'`);
+  run(
+    `cd ${dirName}/site && git commit -m 'testing' --author "${user.name} <${user.email}>" `
+  );
   run(`cd ${dirName}/site && git push origin ${branchName}`);
   run(`rm -rf ${dirName}`);
 };
@@ -47,6 +61,10 @@ router.post("/case-study", async (ctx: Context, next) => {
       ctx
     );
   } else {
+    console.log("got a new case study");
+    console.log(JSON.stringify(user));
+    console.log(JSON.stringify(caseStudy));
+    createCaseStudy(user, caseStudy);
     ctx.body = { caseStudy, user };
     await next();
   }
