@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --exec ts-node src/index.ts",
+    "dev:container": "nodemon --exec ts-node src/index.ts",
+    "dev": "docker compose up apidev",
     "build": "npx tsc",
     "start": "node dist/index.js"
   },

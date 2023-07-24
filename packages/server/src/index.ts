@@ -46,7 +46,7 @@ const createCaseStudy = (user: GithubUser, caseStudy: CaseStudy) => {
 };
 
 router.get("/status", async (ctx, next) => {
-  ctx.body = { message: "mutual" };
+  ctx.body = { message: "~mutual supply~" };
   await next();
 });
 

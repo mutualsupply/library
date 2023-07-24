@@ -1,4 +1,4 @@
-version: '3.4'
+version: "3.4"
 
 services:
   apidev:
@@ -9,19 +9,19 @@ services:
     volumes:
       - ./:/usr/src/app
       - /usr/src/app/node_modules
-    ports: 
-      - '${PORT}:${PORT}'
+    ports:
+      - "${PORT}:${PORT}"
     env_file:
       - .env
-    command: pnpm dev
+    command: "pnpm run dev:container"
     # command: tail -f /dev/null
-    
+
   apiprod:
     container_name: mutual-api-prod
     build:
       context: .
       target: production
-    ports: 
-      - '${PORT}:${PORT}'
+    ports:
+      - "${PORT}:${PORT}"
     env_file:
       - .env
