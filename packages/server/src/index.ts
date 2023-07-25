@@ -41,7 +41,7 @@ const createCaseStudy = (user: GithubUser, caseStudy: CaseStudy) => {
   run(
     `cd ${dirName}/site && git commit -m 'testing' --author "${user.name} <${user.email}>" `
   );
-  run(`cd ${dirName}/site && git push origin ${branchName}`);
+  run(`cd ${dirName}/site && git push origin -u ${branchName}`);
   run(`rm -rf ${dirName}`);
 };
 

@@ -56,8 +56,12 @@ const LeftPane = () => {
     queryFn: getPulls,
   });
   return (
-    <Accordion type="multiple" className={cn("flex", "flex-col", "gap-8")}>
-      <AccordionItem value="item-0">
+    <Accordion
+      type="multiple"
+      className={cn("flex", "flex-col", "gap-8")}
+      defaultValue={["item-0"]}
+    >
+      <AccordionItem value="item-0" defaultValue={"item-0"}>
         <AccordionTrigger>Welcome</AccordionTrigger>
         <AccordionContent>
           <div className={cn("flex", "flex-col", "gap-4")}>
