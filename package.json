@@ -1,39 +1,13 @@
 {
-  "name": "caisson",
-  "version": "0.0.2",
-  "private": true,
+  "name": "mutual-supply",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "rome check .",
-    "format": "rome format . --write"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "pnpm --stream -r run dev"
   },
-  "dependencies": {
-    "@mdx-js/loader": "^2.3.0",
-    "@mdx-js/react": "^2.3.0",
-    "@next/mdx": "^13.4.6",
-    "@tanstack/react-query": "^4.29.14",
-    "@types/mdx": "^2.0.5",
-    "axios": "^1.4.0",
-    "connectkit": "^1.4.0",
-    "next": "^13.4.5",
-    "octokit": "^2.0.22",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "viem": "^1.0.6",
-    "wagmi": "~1.2.0"
-  },
-  "devDependencies": {
-    "@octokit/types": "^10.0.0",
-    "@tailwindcss/typography": "^0.5.9",
-    "@types/node": "^17.0.31",
-    "@types/react": "^18.0.9",
-    "@types/react-dom": "^18.0.3",
-    "autoprefixer": "^10.4.13",
-    "postcss": "^8.4.21",
-    "rome": "12.0.0",
-    "tailwindcss": "^3.2.4",
-    "typescript": "^5.0.4"
-  }
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
