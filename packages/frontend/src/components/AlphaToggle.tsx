@@ -15,10 +15,14 @@ export default function AlphaToggle({ onClick, selected }: AlphaToggleProps) {
           size={"xs"}
           key={`${char}-${index}`}
           onClick={() => onClick(char)}
-          className={cn({
-            [cn("bg-primary", "text-white", "border-transparent")]:
-              selected?.includes(char),
-          })}
+          className={cn(
+            {
+              [cn("bg-primary", "text-white", "border-transparent")]:
+                selected?.includes(char),
+            },
+            "font-aspekta",
+            "font-light"
+          )}
         >
           {char}
         </Button>

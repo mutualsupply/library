@@ -1,5 +1,6 @@
 import { Editor, editorViewOptionsCtx, rootCtx } from "@milkdown/core";
 import { clipboard } from "@milkdown/plugin-clipboard";
+import { cursor } from "@milkdown/plugin-cursor";
 import { emoji } from "@milkdown/plugin-emoji";
 import { history, historyKeymap } from "@milkdown/plugin-history";
 import { indent } from "@milkdown/plugin-indent";
@@ -15,42 +16,48 @@ interface MilkdownEditorProps {
 }
 
 const MilkdownEditor = ({ onChange }: MilkdownEditorProps) => {
-  const { get } = useEditor((root) =>
-    Editor.make()
-      .config(nord)
-      .config((ctx) => {
-        const listener = ctx.get(listenerCtx);
-        listener.markdownUpdated((ctx, markdown, prevMarkdown) => {
-          if (markdown !== prevMarkdown) {
-            if (onChange) {
-              onChange(markdown);
+  useEditor(
+    (root) =>
+      Editor.make()
+        .config((ctx) => {
+          const listener = ctx.get(listenerCtx);
+          listener.markdownUpdated((ctx, markdown, prevMarkdown) => {
+            if (markdown !== prevMarkdown) {
+              if (onChange) {
+                onChange(markdown);
+              }
             }
-          }
-        });
-      })
-      .config((ctx) => {
-        ctx.update(editorViewOptionsCtx, (prev) => ({
-          ...prev,
-          attributes: {
-            class:
-              "border border-primary px-3 py-1 outline-none text-base min-h-[150px] bg-transparent text-base prose max-w-full",
-          },
-        }));
-        ctx.set(rootCtx, root);
-      })
-      .config((ctx) => {
-        ctx.set(historyKeymap.key, {
-          Undo: "Mod-z",
-          Redo: ["Mod-y", "Shift-Mod-z"],
-        });
-      })
-      .use(clipboard)
-      .use(history)
-      .use(emoji)
-      .use(listener)
-      .use(commonmark)
-      .use(indent)
-      .use(upload)
+          });
+
+          ctx.set(historyKeymap.key, {
+            Undo: "Mod-z",
+            Redo: ["Mod-y", "Shift-Mod-z"],
+          });
+
+          ctx.update(editorViewOptionsCtx, (prev) => ({
+            ...prev,
+            attributes: {
+              class:
+                "border border-primary px-3 py-1 outline-none text-base min-h-[150px] bg-transparent text-base prose max-w-full",
+            },
+          }));
+          ctx.set(rootCtx, root);
+
+          ctx.set(historyKeymap.key, {
+            Undo: "Mod-z",
+            Redo: ["Mod-y", "Shift-Mod-z"],
+          });
+        })
+        .config(nord)
+        .use(clipboard)
+        .use(history)
+        .use(emoji)
+        .use(listener)
+        .use(commonmark)
+        .use(indent)
+        .use(upload)
+        .use(cursor),
+    []
   );
   return <Milkdown />;
 };

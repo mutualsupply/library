@@ -16,9 +16,24 @@ const aeonikFono = localFont({
   style: "normal",
 });
 const aspekta = localFont({
-  src: "../../public/fonts/AspektaVF.woff2",
+  src: [
+    {
+      path: "../../public/fonts/Aspekta-300.woff2",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Aspekta-400.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Aspekta-500.woff2",
+      weight: "500",
+      style: "normal",
+    },
+  ],
   variable: "--font-aspekta",
-  style: "normal",
 });
 const otBrut = localFont({
   src: "../../public/fonts/OTBrut-Regular.woff2",
@@ -40,6 +55,7 @@ export default function RootLayout({
           "font-sans",
           "flex",
           "flex-col",
+          "font-light",
           aeonikFono.variable,
           aspekta.variable,
           otBrut.variable

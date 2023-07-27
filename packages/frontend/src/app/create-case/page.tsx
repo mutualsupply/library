@@ -19,10 +19,12 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import BackLink from "../../components/BackLink";
 import { MilkdownEditorWrapper } from "../../components/MilkdownEditor";
+import SelectInput from "../../components/SelectInput";
 import TextInput from "../../components/TextInput";
+import Github from "../../components/icons/Github";
+import Optimism from "../../components/icons/Optimism";
 import { Button } from "../../components/ui/button";
 import { Form } from "../../components/ui/form";
-import { Label } from "../../components/ui/label";
 import { GithubPullResponse, getPulls } from "../../lib/api";
 import { caseStudySchema } from "../../lib/schema";
 
@@ -42,7 +44,7 @@ const NewCaseStudyPage = () => {
         <div className={cn("md:col-span-4")}>
           <LeftPane />
         </div>
-        <div className={cn("md:col-span-8", "mt-6", "md:mt-0")}>
+        <div className={cn("md:col-span-6", "mt-6", "md:mt-0")}>
           <CreateNewCaseStudy />
         </div>
       </div>
@@ -156,65 +158,108 @@ const CreateNewCaseStudy = () => {
       <div className={cn("text-6xl", "text-primary", "font-otBrut", "mb-6")}>
         Submit a Report
       </div>
-      <div className={cn("flex", "flex-col", "gap-6")}>
+      <div className={cn("flex", "flex-col", "gap-6", "font-medium")}>
         <div>
-          Welcom to the MUTUAL research collective. Please read the{" "}
-          <Link href={"/best-practices"}>Best Practices Guide</Link> before
-          submitting your report. All reports are subject to an approval process
-          by the MUTUAL team, based on guidelines outlined in our documentation
+          Welcome to the MUTUAL research collective. Please read the{" "}
+          <Link
+            href={"/best-practices"}
+            className={cn("text-primary", "underline")}
+          >
+            Best Practices Guide
+          </Link>{" "}
+          before submitting your report. All reports are subject to an approval
+          process by the MUTUAL team, based on guidelines outlined in our
+          documentation
         </div>
         <div>
-          Connect your Github to earn provenance as the author of this report.{" "}
-          <Link href={"/how-this-works"}>How this works</Link>
+          Connect your Github account and/or your wallet on Optimism to earn
+          provenance as the author of this report.{" "}
+          <Link
+            href={"/how-this-works"}
+            className={cn("underline", "text-primary")}
+          >
+            How this works
+          </Link>
         </div>
       </div>
-      <div className={cn("mt-6")}>
-        {isLoggedIn && (
-          <div className={cn("flex", "justify-between", "items-center")}>
-            <div className={cn("flex", "items-center", "gap-2")}>
-              <div>
-                Logged in as:{" "}
-                <span className={cn("font-bold", "inline-flex", "gap-1")}>
-                  {session?.user?.name}
-                  {session?.user?.image && (
-                    <Image
-                      src={session.user.image}
-                      height={25}
-                      width={25}
-                      alt={"pfp"}
-                      className={cn("rounded-full")}
-                    />
-                  )}
-                </span>
+      <div className={cn("my-6")}>
+        <div className={cn("flex", "items-center", "gap-8")}>
+          {isLoggedIn && (
+            <div className={cn("flex", "justify-between", "items-center")}>
+              <div className={cn("flex", "flex-col", "items-start")}>
+                <Button
+                  variant={"outline"}
+                  className={cn("inline-flex", "items-center", "gap-3")}
+                >
+                  <Github />
+                  <div className={cn("inline-flex", "gap-1")}>
+                    {session?.user?.image && (
+                      <Image
+                        src={session.user.image}
+                        height={25}
+                        width={25}
+                        alt={"pfp"}
+                        className={cn("rounded-full")}
+                      />
+                    )}
+                    {session?.user?.name && (
+                      <span className={cn("text-black")}>
+                        {session?.user?.name}
+                      </span>
+                    )}
+                  </div>
+                </Button>
               </div>
             </div>
-            <Button variant="outline" onClick={() => signOut()}>
-              logout
-            </Button>
-          </div>
-        )}
-        {!isLoggedIn && (
-          <div>
-            <Button
-              variant={"outline"}
-              onClick={() =>
-                signIn("github", {
-                  callbackUrl: `${window.location.origin}/create-case`,
-                })
-              }
-            >
-              Sign in to Github
-            </Button>
-          </div>
+          )}
+          {!isLoggedIn && (
+            <div>
+              <Button
+                className={cn(
+                  "rounded-sm",
+                  "text-primary",
+                  "inline-flex",
+                  "items-center",
+                  "gap-2"
+                )}
+                variant={"outline"}
+                onClick={() =>
+                  signIn("github", {
+                    callbackUrl: `${window.location.origin}/create-case`,
+                  })
+                }
+              >
+                <Github /> <span>Sign in to Github</span>
+              </Button>
+            </div>
+          )}
+          <Button
+            className={cn(
+              "text-[#FF0420]",
+              "border-[#FF0420]",
+              "inline-flex",
+              "gap-2"
+            )}
+            variant={"outline"}
+          >
+            <Optimism />
+            <div className={cn("text-black")}>Connect to Optimism</div>
+          </Button>
+        </div>
+
+        {isLoggedIn && (
+          <Button
+            variant="link"
+            onClick={() => signOut()}
+            className={cn("p-0")}
+          >
+            Logout
+          </Button>
         )}
       </div>
-      <div
-        className={cn("my-6", "p-3", "border", "border-dashed", "text-primary")}
-      >
-        Something something about capabilities to save your report as a draft
-        and edit it later, etc etc.
+      <div className={cn("max-w-lg")}>
+        <NewCaseStudyForm />
       </div>
-      <NewCaseStudyForm />
     </div>
   );
 };
@@ -231,6 +276,9 @@ const NewCaseStudyForm = () => {
       title: "",
       productDescription: "",
       industry: "",
+      doesUseChain: "",
+      partOfTeam: "",
+      url: "",
     },
   });
   async function onSubmit(values: z.infer<typeof caseStudySchema>) {
@@ -248,29 +296,90 @@ const NewCaseStudyForm = () => {
   }
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className={cn("space-y-4")}>
-        <TextInput name="email" type="email" label="Email" />
-        <TextInput name="name" label="Your Name" />
-        <TextInput name="title" label="Title of the Report" />
-        <TextInput
-          name="productDescription"
-          label="In 1-2 sentences, please briefly outline the main purpose of the product you are analyzing"
-        />
-        <TextInput
-          name="industry"
-          label="In which industry would you place this product?"
-        />
-        <div className={cn("flex", "flex-col", "gap-3")}>
-          <Label>Details</Label>
+      <form onSubmit={form.handleSubmit(onSubmit)} className={cn("space-y-8")}>
+        <Section title="Your information">
+          <TextInput name="email" type="email" label="Email" />
+          <TextInput name="name" label="Your Name" />
+        </Section>
+        <Section title="About the report">
+          <TextInput name="title" label="Title of the Report" />
+          <TextInput
+            name="productDescription"
+            label="In 1-2 sentences, please briefly outline the main purpose of the product you are analyzing"
+          />
+          <TextInput
+            name="industry"
+            label="In which industry would you place this product?"
+          />
+          <SelectInput
+            name="doesUseChain"
+            label="Does this experience utilize blockchain technology?"
+            placeholder="Select an answer"
+            items={[
+              { key: "true", name: "Yes" },
+              { key: "false", name: "No" },
+            ]}
+          />
+          <SelectInput
+            name="partOfTeam"
+            label="Were you part of the team that built this experience?"
+            placeholder="Select an answer"
+            items={[
+              { key: "true", name: "Yes" },
+              { key: "false", name: "No" },
+            ]}
+          />
+          <TextInput
+            type="url"
+            name="url"
+            label="If available, please provide an active URL or prototype link to the experience (ideall in the state you are analyzing)"
+          />
+        </Section>
+        <Section title="Share your report">
+          <div>
+            Please read the{" "}
+            <Link
+              href="/best-practices"
+              className={cn("text-primary", "underline")}
+            >
+              Best Practices Guide
+            </Link>{" "}
+            for guidelines on what to include and how to format your report. All
+            reports are subject to an approval process by the MUTUAL team, based
+            on guidelines outline in our documentation.
+          </div>
           <MilkdownEditorWrapper onChange={setMarkdown} />
-        </div>
+        </Section>
+
         <div className={cn("flex", "justify-center")}>
-          <Button disabled={!isLoggedIn} type="submit">
-            Create
+          <Button
+            variant={"outline"}
+            disabled={!isLoggedIn}
+            type="submit"
+            className={cn("w-full", "uppercase")}
+          >
+            submit report
           </Button>
         </div>
       </form>
     </Form>
+  );
+};
+
+const Section = ({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) => {
+  return (
+    <div className={cn("flex", "flex-col", "gap-4")}>
+      <div className={cn("text-2xl", "font-otBrut", "text-primary")}>
+        {title}
+      </div>
+      <div className={cn("flex", "flex-col", "gap-8")}>{children}</div>
+    </div>
   );
 };
 
