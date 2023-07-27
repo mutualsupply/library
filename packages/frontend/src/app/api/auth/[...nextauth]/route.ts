@@ -1,4 +1,3 @@
-// pages/api/auth/[...nextauth].js
 import NextAuth from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
 import env from "../../../../lib/env";
@@ -14,19 +13,20 @@ const handler = NextAuth({
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
       if (account?.provider === "github") {
-        const res = await fetch("https://api.github.com/user/emails", {
-          headers: {
-            Authorization: `token ${account.accessToken}`,
-          },
-        });
-        const emails = await res.json();
-        if (emails?.length > 0) {
-          profile!.email = emails.sort(
-            (a: any, b: any) => b.primary - a.primary
-          )[0].email;
+        if (!profile?.email) {
+          const res = await fetch("https://api.github.com/user/emails", {
+            headers: {
+              Authorization: `token ${account.accessToken}`,
+            },
+          });
+          const emails = await res.json();
+          if (emails?.length > 0) {
+            profile!.email = emails.sort(
+              (a: any, b: any) => b.primary - a.primary
+            )[0].email;
+          }
         }
       }
-      console.log("signIn", { user, account, profile, email, credentials });
       return true;
     },
   },
