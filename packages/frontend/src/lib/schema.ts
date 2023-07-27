@@ -15,5 +15,8 @@ export const caseStudySchema = z.object({
     }),
   productDescription: z.string(),
   industry: z.string(),
+  doesUseChain: z.string(),
+  partOfTeam: z.string(),
+  url: z.string(),
   markdown: z.string().optional(),
 });

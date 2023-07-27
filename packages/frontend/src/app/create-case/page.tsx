@@ -345,9 +345,9 @@ const NewCaseStudyForm = () => {
             variant={"outline"}
             disabled={!isLoggedIn}
             type="submit"
-            className={cn("w-full", "uppercase")}
+            className={cn("w-full", "uppercase", "rounded-full")}
           >
-            submit report
+            {isLoggedIn ? "submit report" : "sing in to submit"}
           </Button>
         </div>
       </form>
