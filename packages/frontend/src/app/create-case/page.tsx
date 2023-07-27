@@ -18,11 +18,11 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import BackLink from "../../components/BackLink";
+import ConnectButton from "../../components/ConnectButton";
 import { MilkdownEditorWrapper } from "../../components/MilkdownEditor";
 import SelectInput from "../../components/SelectInput";
 import TextInput from "../../components/TextInput";
 import Github from "../../components/icons/Github";
-import Optimism from "../../components/icons/Optimism";
 import { Button } from "../../components/ui/button";
 import { Form } from "../../components/ui/form";
 import { GithubPullResponse, getPulls } from "../../lib/api";
@@ -233,18 +233,7 @@ const CreateNewCaseStudy = () => {
               </Button>
             </div>
           )}
-          <Button
-            className={cn(
-              "text-[#FF0420]",
-              "border-[#FF0420]",
-              "inline-flex",
-              "gap-2"
-            )}
-            variant={"outline"}
-          >
-            <Optimism />
-            <div className={cn("text-black")}>Connect to Optimism</div>
-          </Button>
+          <ConnectButton />
         </div>
 
         {isLoggedIn && (

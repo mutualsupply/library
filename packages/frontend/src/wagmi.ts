@@ -2,13 +2,13 @@
 
 import { getDefaultConfig } from "connectkit";
 import { configureChains, createConfig } from "wagmi";
-import { arbitrum, goerli, mainnet, optimism, sepolia } from "wagmi/chains";
+import { optimism } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import env from "./lib/env";
 
 const { chains } = configureChains(
-  [mainnet, optimism, arbitrum, goerli, sepolia],
+  [optimism],
   [alchemyProvider({ apiKey: env.NEXT_PUBLIC_ALCHEMY_KEY }), publicProvider()]
 );
 

@@ -1,5 +1,6 @@
 import { ConnectKitButton } from "connectkit";
-import { shortenAddress } from "utils";
+import { cn, shortenAddress } from "utils";
+import Optimism from "./icons/Optimism";
 import { Button } from "./ui/button";
 
 const ConnectButton = () => {
@@ -8,8 +9,20 @@ const ConnectButton = () => {
       {({ isConnected, isConnecting, show, hide, address, ensName, chain }) => {
         const displayName = ensName || shortenAddress(address);
         return (
-          <Button onClick={show}>
-            {isConnected ? displayName : "Connect"}
+          <Button
+            className={cn(
+              "text-[#FF0420]",
+              "border-[#FF0420]",
+              "inline-flex",
+              "gap-2"
+            )}
+            variant={"outline"}
+            onClick={show}
+          >
+            <Optimism />
+            <div className={cn("text-black")}>
+              {isConnected ? displayName : "Connect to Optimism"}
+            </div>
           </Button>
         );
       }}
