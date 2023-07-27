@@ -223,11 +223,15 @@ const CreateNewCaseStudy = () => {
                   "gap-2"
                 )}
                 variant={"outline"}
-                onClick={() =>
+                onClick={() => {
+                  console.log(
+                    "calling sign in with callback",
+                    `${window.location.origin}/create-case`
+                  );
                   signIn("github", {
                     callbackUrl: `${window.location.origin}/create-case`,
-                  })
-                }
+                  });
+                }}
               >
                 <Github /> <span>Sign in to Github</span>
               </Button>
