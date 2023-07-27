@@ -16,7 +16,7 @@ const handler = NextAuth({
         if (!profile?.email) {
           const res = await fetch("https://api.github.com/user/emails", {
             headers: {
-              Authorization: `token ${account.accessToken}`,
+              Authorization: `token ${account.access_token}`,
             },
           });
           const emails = await res.json();

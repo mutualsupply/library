@@ -9,7 +9,7 @@ const Optimism = ({ width = "21", className, fill = "#FF0420" }: SvgProps) => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g clip-path="url(#clip0_1040_25026)">
+      <g clipPath="url(#clip0_1040_25026)">
         <path
           d="M10.4166 20C15.9395 20 20.4166 15.5228 20.4166 10C20.4166 4.47715 15.9395 0 10.4166 0C4.89378 0 0.416626 4.47715 0.416626 10C0.416626 15.5228 4.89378 20 10.4166 20Z"
           fill="currentColor"

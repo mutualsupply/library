@@ -16,7 +16,6 @@ const run = (cmd: string) => {
 
 const createCaseStudy = (user: GithubUser, caseStudy: CaseStudy) => {
   console.log("writing case study submitted by", user.email);
-
   const branchName = `robot/mutual-supply-${Date.now()}`;
   const dirName = `/tmp/new-study-${Date.now()}`;
   const pathToFrontendPackage = `${dirName}/site/packages/frontend`;
@@ -46,10 +45,13 @@ const createCaseStudy = (user: GithubUser, caseStudy: CaseStudy) => {
   );
   run(`cd ${dirName}/site && git push origin -u ${branchName}`);
   run(`rm -rf ${dirName}`);
+  return {
+    branchName,
+  };
 };
 
 router.get("/status", async (ctx, next) => {
-  ctx.body = { message: "~mutual supply~~~" };
+  ctx.body = { message: "MUTUAL" };
   await next();
 });
 
@@ -64,11 +66,8 @@ router.post("/case-study", async (ctx: Context, next) => {
       ctx
     );
   } else {
-    console.log("got a new case study");
-    console.log(JSON.stringify(user));
-    console.log(JSON.stringify(caseStudy));
-    createCaseStudy(user, caseStudy);
-    ctx.body = { caseStudy, user };
+    const { branchName } = createCaseStudy(user, caseStudy);
+    ctx.body = { branchName };
     await next();
   }
 });

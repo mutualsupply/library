@@ -12,6 +12,7 @@ export async function POST(req: Request) {
         "Must be authenticated to create a case study"
       );
     }
+    console.log(session.user);
     if (!session.user?.email) {
       throw new UnauthenticatedError(
         "User must have Github public email to publish a case study"
@@ -33,6 +34,10 @@ export async function POST(req: Request) {
       throw new Error("Could not create case study");
     }
     const responseJson = await res.json();
+    const { branchName } = responseJson;
+    console.log("branch name::", branchName);
+    // @next -- create pr using the authed user's ghub token
+    // https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#create-a-pull-request
     return NextResponse.json(responseJson);
   } catch (e) {
     if (e instanceof UnauthenticatedError) {
