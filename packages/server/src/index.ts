@@ -19,6 +19,7 @@ const createCaseStudy = (user: GithubUser, caseStudy: CaseStudy) => {
 
   const branchName = `robot/mutual-supply-${Date.now()}`;
   const dirName = `/tmp/new-study-${Date.now()}`;
+  const pathToFrontendPackage = `${dirName}/site/packages/frontend`;
   run(`mkdir ${dirName}`);
   run(`git clone git@github.com:mutualsupply/site.git ${dirName}/site`);
   let markdown = `
@@ -33,7 +34,9 @@ const createCaseStudy = (user: GithubUser, caseStudy: CaseStudy) => {
     markdown += caseStudy.markdown;
   }
 
-  run(`echo "${markdown}" > ${dirName}/site/src/markdown/mutual-supply.mdx`);
+  run(
+    `echo "${markdown}" > ${pathToFrontendPackage}/src/markdown/mutual-supply.mdx`
+  );
   run(`cd ${dirName}/site && git status`);
   run(`cd ${dirName}/site && git branch ${branchName}`);
   run(`cd ${dirName}/site && git checkout ${branchName}`);
@@ -46,7 +49,7 @@ const createCaseStudy = (user: GithubUser, caseStudy: CaseStudy) => {
 };
 
 router.get("/status", async (ctx, next) => {
-  ctx.body = { message: "~mutual supply~" };
+  ctx.body = { message: "~mutual supply~~~" };
   await next();
 });
 
