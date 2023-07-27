@@ -2,7 +2,7 @@ import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import { cn } from "utils";
 
-const BackLink = ({
+export const BackLink = ({
   children,
   href,
 }: {
@@ -26,4 +26,15 @@ const BackLink = ({
   );
 };
 
-export default BackLink;
+export const BestPracticesLink = () => {
+  return (
+    <Link
+      target="_blank"
+      rel="noreferrer"
+      href="https://www.notion.so/MUTUAL-Framework-for-Building-Experiences-In-The-New-Internet-616cc2ffe809465b9de17087301b65d9"
+      className={cn("text-primary")}
+    >
+      Best Practices Guide
+    </Link>
+  );
+};

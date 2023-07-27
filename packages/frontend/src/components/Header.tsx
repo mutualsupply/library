@@ -16,7 +16,14 @@ export default function Header() {
         />
       </Link>
       <Nav />
-      <button className={cn("hidden", "md:block")}>Join</button>
+      <Link
+        target="_blank"
+        rel="noreferrer"
+        href={"https://community.mutual.supply"}
+        className={cn("hidden", "md:block")}
+      >
+        Join
+      </Link>
     </div>
   );
 }

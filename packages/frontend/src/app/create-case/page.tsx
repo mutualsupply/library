@@ -17,8 +17,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import BackLink from "../../components/BackLink";
 import ConnectButton from "../../components/ConnectButton";
+import { BackLink, BestPracticesLink } from "../../components/Links";
 import { MilkdownEditorWrapper } from "../../components/MilkdownEditor";
 import SelectInput from "../../components/SelectInput";
 import TextInput from "../../components/TextInput";
@@ -79,11 +79,8 @@ const LeftPane = () => {
             </div>
             <div>
               We're excited to be a part of your process as you prepare your
-              report. Before submitting, read the{" "}
-              <Link href="/best-practices" className={cn("text-primary")}>
-                Best Practices Guide
-              </Link>{" "}
-              to understand requirements and internal standards. All reports are
+              report. Before submitting, read the <BestPracticesLink /> to
+              understand requirements and internal standards. All reports are
               subject to an approval process based on guidelines you will find
               in our documentation.
             </div>
@@ -161,25 +158,13 @@ const CreateNewCaseStudy = () => {
       <div className={cn("flex", "flex-col", "gap-6", "font-medium")}>
         <div>
           Welcome to the MUTUAL research collective. Please read the{" "}
-          <Link
-            href={"/best-practices"}
-            className={cn("text-primary", "underline")}
-          >
-            Best Practices Guide
-          </Link>{" "}
-          before submitting your report. All reports are subject to an approval
-          process by the MUTUAL team, based on guidelines outlined in our
-          documentation
+          <BestPracticesLink /> before submitting your report. All reports are
+          subject to an approval process by the MUTUAL team, based on guidelines
+          outlined in our documentation
         </div>
         <div>
           Connect your Github account and/or your wallet on Optimism to earn
           provenance as the author of this report.{" "}
-          <Link
-            href={"/how-this-works"}
-            className={cn("underline", "text-primary")}
-          >
-            How this works
-          </Link>
         </div>
       </div>
       <div className={cn("my-6")}>
@@ -330,16 +315,10 @@ const NewCaseStudyForm = () => {
         </Section>
         <Section title="Share your report">
           <div>
-            Please read the{" "}
-            <Link
-              href="/best-practices"
-              className={cn("text-primary", "underline")}
-            >
-              Best Practices Guide
-            </Link>{" "}
-            for guidelines on what to include and how to format your report. All
-            reports are subject to an approval process by the MUTUAL team, based
-            on guidelines outline in our documentation.
+            Please read the <BestPracticesLink /> for guidelines on what to
+            include and how to format your report. All reports are subject to an
+            approval process by the MUTUAL team, based on guidelines outline in
+            our documentation.
           </div>
           <MilkdownEditorWrapper onChange={setMarkdown} />
         </Section>
