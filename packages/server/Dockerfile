@@ -21,8 +21,7 @@ COPY . .
 
 RUN pnpm install
 
-FROM base as production
-ENV NODE_ENV=production
-RUN pnpm i
+FROM development as production
+COPY --from=development /usr/src/app /usr/src/app
 RUN pnpm build
-CMD ["pnpm start"]
+CMD ["node", "dist/index.js"]
