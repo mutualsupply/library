@@ -14,6 +14,11 @@ export async function POST(req: Request) {
       req: req as any as NextApiRequest,
     });
 
+    console.log({
+      token,
+      session,
+    });
+
     if (!token || !session) {
       throw new UnauthenticatedError(
         "Must be authenticated to create a case study"
