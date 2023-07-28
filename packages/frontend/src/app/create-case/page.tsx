@@ -152,102 +152,120 @@ const DraftCaseStudy = ({ pull }: DraftCaseStudyProps) => {
 const CreateNewCaseStudy = () => {
   const { data: session } = useSession();
   const isLoggedIn = session?.user?.name;
+  const [view, setView] = useState<"form" | "success">("form");
+  const onFormSuccess = () => setView("success");
   return (
     <div>
-      <div className={cn("text-6xl", "text-primary", "font-otBrut", "mb-6")}>
-        Submit a Report
-      </div>
-      <div className={cn("flex", "flex-col", "gap-6", "font-medium")}>
-        <div>
-          Welcome to the MUTUAL research collective. Please read the{" "}
-          <BestPracticesLink /> before submitting your report. All reports are
-          subject to an approval process by the MUTUAL team, based on guidelines
-          outlined in our documentation
-        </div>
-        <div>
-          Connect your Github account and/or your wallet on Optimism to earn
-          provenance as the author of this report.{" "}
-        </div>
-      </div>
-      <div className={cn("my-6")}>
-        <div className={cn("flex", "items-center", "gap-8")}>
-          {isLoggedIn && (
-            <div className={cn("flex", "justify-between", "items-center")}>
-              <div className={cn("flex", "flex-col", "items-start")}>
-                <Button
-                  variant={"outline"}
-                  className={cn("inline-flex", "items-center", "gap-3")}
-                >
-                  <Github />
-                  <div className={cn("inline-flex", "gap-1")}>
-                    {session?.user?.image && (
-                      <Image
-                        src={session.user.image}
-                        height={25}
-                        width={25}
-                        alt={"pfp"}
-                        className={cn("rounded-full")}
-                      />
-                    )}
-                    {session?.user?.name && (
-                      <span className={cn("text-black")}>
-                        {session?.user?.name}
-                      </span>
-                    )}
-                  </div>
-                </Button>
-              </div>
-            </div>
-          )}
-          {!isLoggedIn && (
-            <div>
-              <Button
-                className={cn(
-                  "rounded-sm",
-                  "text-primary",
-                  "inline-flex",
-                  "items-center",
-                  "gap-2"
-                )}
-                variant={"outline"}
-                onClick={() => {
-                  console.log(
-                    "calling sign in with callback",
-                    `${window.location.origin}/create-case`
-                  );
-                  signIn("github", {
-                    callbackUrl: `${window.location.origin}/create-case`,
-                  });
-                }}
-              >
-                <Github /> <span>Sign in to Github</span>
-              </Button>
-            </div>
-          )}
-          <ConnectButton />
-        </div>
-
-        {isLoggedIn && (
-          <Button
-            variant="link"
-            onClick={() => signOut()}
-            className={cn("p-0")}
+      {view === "form" && (
+        <>
+          <div
+            className={cn("text-6xl", "text-primary", "font-otBrut", "mb-6")}
           >
-            Logout
-          </Button>
-        )}
-      </div>
-      <div className={cn("max-w-lg")}>
-        <NewCaseStudyForm />
-      </div>
+            Submit a Report
+          </div>
+          <div className={cn("flex", "flex-col", "gap-6", "font-medium")}>
+            <div>
+              Welcome to the MUTUAL research collective. Please read the{" "}
+              <BestPracticesLink /> before submitting your report. All reports
+              are subject to an approval process by the MUTUAL team, based on
+              guidelines outlined in our documentation
+            </div>
+            <div>
+              Connect your Github account and/or your wallet on Optimism to earn
+              provenance as the author of this report.{" "}
+            </div>
+          </div>
+          <div className={cn("my-6")}>
+            <div className={cn("flex", "items-center", "gap-8")}>
+              {isLoggedIn && (
+                <div className={cn("flex", "justify-between", "items-center")}>
+                  <div className={cn("flex", "flex-col", "items-start")}>
+                    <Button
+                      variant={"outline"}
+                      className={cn("inline-flex", "items-center", "gap-3")}
+                    >
+                      <Github />
+                      <div className={cn("inline-flex", "gap-1")}>
+                        {session?.user?.image && (
+                          <Image
+                            src={session.user.image}
+                            height={25}
+                            width={25}
+                            alt={"pfp"}
+                            className={cn("rounded-full")}
+                          />
+                        )}
+                        {session?.user?.name && (
+                          <span className={cn("text-black")}>
+                            {session?.user?.name}
+                          </span>
+                        )}
+                      </div>
+                    </Button>
+                  </div>
+                </div>
+              )}
+              {!isLoggedIn && (
+                <div>
+                  <Button
+                    className={cn(
+                      "rounded-sm",
+                      "text-primary",
+                      "inline-flex",
+                      "items-center",
+                      "gap-2"
+                    )}
+                    variant={"outline"}
+                    onClick={() => {
+                      console.log(
+                        "calling sign in with callback",
+                        `${window.location.origin}/create-case`
+                      );
+                      signIn("github", {
+                        callbackUrl: `${window.location.origin}/create-case`,
+                      });
+                    }}
+                  >
+                    <Github /> <span>Sign in to Github</span>
+                  </Button>
+                </div>
+              )}
+              <ConnectButton />
+            </div>
+
+            {isLoggedIn && (
+              <Button
+                variant="link"
+                onClick={() => signOut()}
+                className={cn("p-0")}
+              >
+                Logout
+              </Button>
+            )}
+          </div>
+          <div className={cn("max-w-lg")}>
+            <NewCaseStudyForm onSuccess={onFormSuccess} />
+          </div>
+        </>
+      )}
+      {view === "success" && (
+        <div className={cn("text-4xl", "font-aspekta", "text-primary")}>
+          success
+        </div>
+      )}
     </div>
   );
 };
 
-const NewCaseStudyForm = () => {
+interface NewCaseStudyFormProps {
+  onSuccess?: () => void;
+}
+
+const NewCaseStudyForm = ({ onSuccess }: NewCaseStudyFormProps) => {
   const { data: session } = useSession();
   const isLoggedIn = session?.user?.name;
   const [markdown, setMarkdown] = useState("");
+  const [error, setError] = useState<null | string>(null);
   const form = useForm({
     resolver: zodResolver(caseStudyFormSchema),
     defaultValues: {
@@ -262,6 +280,7 @@ const NewCaseStudyForm = () => {
     },
   });
   async function onSubmit(values: z.infer<typeof caseStudyFormSchema>) {
+    setError(null);
     const res = await fetch("/api/create-case", {
       method: "POST",
       body: JSON.stringify({
@@ -275,6 +294,12 @@ const NewCaseStudyForm = () => {
     });
     if (!res.ok) {
       console.error("Could not create case study pr");
+      console.error(await res.text());
+      setError("Could not create case study");
+    }
+
+    if (onSuccess) {
+      onSuccess();
     }
   }
   return (
@@ -327,11 +352,12 @@ const NewCaseStudyForm = () => {
           </div>
           <MilkdownEditorWrapper onChange={setMarkdown} />
         </Section>
+        {error && <div className={cn("text-red-600")}>{error}</div>}
 
         <div className={cn("flex", "justify-center")}>
           <Button
             variant={"outline"}
-            disabled={!isLoggedIn}
+            disabled={!isLoggedIn || error !== null}
             type="submit"
             className={cn("w-full", "uppercase", "rounded-full")}
           >
