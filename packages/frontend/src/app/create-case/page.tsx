@@ -56,6 +56,8 @@ const LeftPane = () => {
   const { data, isLoading } = useQuery({
     queryKey: ["pulls"],
     queryFn: getPulls,
+    cacheTime: 0,
+    refetchOnWindowFocus: true,
   });
   return (
     <Accordion

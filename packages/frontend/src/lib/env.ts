@@ -1,12 +1,15 @@
 import { objectKeys } from "./utils";
 
-export const isDev = () => process.env.NODE_ENV === "development";
-// prod here is considered to be any deployed environment (previews, staging, production, etc)
-export const isProd = () => process.env.NODE_ENV === "production";
+enum AppEnv {
+  Production = "production",
+  Staging = "staging",
+  Development = "development",
+}
 
 interface Env {
   NEXT_PUBLIC_ALCHEMY_KEY: string;
   NEXT_PUBLIC_WALLETCONNECT_ID: string;
+  NEXT_PUBLIC_APP_ENV: AppEnv;
   GITHUB_TOKEN: string;
   GITHUB_ID: string;
   GITHUB_SECRET: string;
@@ -19,6 +22,7 @@ const env: Env = {
   NEXT_PUBLIC_ALCHEMY_KEY: process.env.NEXT_PUBLIC_ALCHEMY_KEY as string,
   NEXT_PUBLIC_WALLETCONNECT_ID: process.env
     .NEXT_PUBLIC_WALLET_CONNECT_ID as string,
+  NEXT_PUBLIC_APP_ENV: process.env.NEXT_PUBLIC_APP_ENV as AppEnv,
   GITHUB_TOKEN: process.env.GITHUB_TOKEN as string,
   GITHUB_ID: process.env.GITHUB_ID as string,
   GITHUB_SECRET: process.env.GITHUB_SECRET as string,
@@ -37,15 +41,34 @@ if (typeof window === "undefined") {
   keysToValidate = serverKeys;
 }
 
+const missingKeys: Array<string> = [];
+
 keysToValidate.forEach((key) => {
-  const missingKeys = [];
   if (!env[key]) {
     missingKeys.push(key);
   }
-
-  if (missingKeys.length > 0) {
-    throw new Error(`Missing environment variables: ${missingKeys.join(", ")}`);
+  if (key === "NEXT_PUBLIC_APP_ENV") {
+    if (!Object.values(AppEnv).includes(env[key] as any)) {
+      throw new Error(
+        `${key} must be one of ${Object.values(AppEnv).join(", ")}`
+      );
+    }
   }
 });
+if (missingKeys.length > 0) {
+  throw new Error(`Missing environment variables: ${missingKeys.join(", ")}`);
+}
+
+export const isDev = () =>
+  process.env.NODE_ENV === "development" &&
+  env.NEXT_PUBLIC_APP_ENV === AppEnv.Development;
+// prod here is considered to be any deployed environment (previews, staging, production, etc)
+export const isProd = () =>
+  process.env.NODE_ENV === "production" &&
+  env.NEXT_PUBLIC_APP_ENV === AppEnv.Production;
+
+export const isStaging = () =>
+  process.env.NODE_ENV === "production" &&
+  env.NEXT_PUBLIC_APP_ENV === AppEnv.Staging;
 
 export default env;

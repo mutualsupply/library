@@ -14,7 +14,7 @@ const handler = NextAuth({
     async signIn({ user, account, profile, email, credentials }) {
       console.log("--- SIGNIN ---");
       console.log({ user, account, profile, email, credentials });
-      console.log("------");
+      console.log("--- END SIGNIN ---");
       if (account?.provider === "github") {
         if (!profile?.email) {
           const res = await fetch("https://api.github.com/user/emails", {
@@ -35,13 +35,19 @@ const handler = NextAuth({
     async jwt(jwt) {
       console.log("--- JWT ---");
       console.log(jwt);
-      console.log("------");
+      console.log("--- END JWT ---");
+      if (jwt.account) {
+        jwt.token.accessToken = jwt.account.access_token;
+        jwt.token.expiresAt = jwt.account.expires_at;
+        jwt.token.refreshToken = jwt.account.refresh_token;
+        jwt.token.refreshExpiresIn = jwt.account.refresh_token_expires_in;
+      }
       return jwt.token;
     },
     async session(sesh) {
       console.log("--- SESSION ---");
       console.log(sesh);
-      console.log("------");
+      console.log("--- END SESSION ---");
       return sesh.session;
     },
   },

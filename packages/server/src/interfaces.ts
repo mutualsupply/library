@@ -19,4 +19,5 @@ export interface GithubUser {
 export interface PostCaseStudyRequestBody {
   caseStudy: CaseStudy;
   user: GithubUser;
+  isProd: boolean;
 }

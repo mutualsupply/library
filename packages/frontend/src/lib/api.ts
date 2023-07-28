@@ -10,3 +10,6 @@ export async function getPulls(): Promise<GithubPullResponse> {
   }
   return res.json();
 }
+
+export const GITHUB_OWNER = "mutualsupply";
+export const GITHUB_REPO = "site";

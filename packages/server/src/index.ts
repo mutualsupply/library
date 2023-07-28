@@ -14,13 +14,23 @@ const run = (cmd: string) => {
   return child.execSync(cmd, { stdio: "inherit" });
 };
 
-const createCaseStudy = (user: GithubUser, caseStudy: CaseStudy) => {
+const createCaseStudy = (
+  user: GithubUser,
+  caseStudy: CaseStudy,
+  isProd: boolean
+) => {
   console.log("writing case study submitted by", user.email);
-  const branchName = `robot/mutual-supply-${Date.now()}`;
+  let branchName = `${caseStudy.email}/mutual-supply-${Date.now()}`;
+  if (!isProd) {
+    branchName += "-dev";
+  }
   const dirName = `/tmp/new-study-${Date.now()}`;
   const pathToFrontendPackage = `${dirName}/site/packages/frontend`;
   run(`mkdir ${dirName}`);
   run(`git clone git@github.com:mutualsupply/site.git ${dirName}/site`);
+  if (!isProd) {
+    run(`cd ${dirName}/site && git checkout dev`);
+  }
   let markdown = `
 # ${caseStudy.title}
 ### by ${caseStudy.name} (${caseStudy.email})
@@ -60,7 +70,8 @@ router.get("/status", async (ctx, next) => {
 });
 
 router.post("/case-study", async (ctx: Context, next) => {
-  const { caseStudy, user } = ctx.request.body as PostCaseStudyRequestBody;
+  const { caseStudy, user, isProd } = ctx.request
+    .body as PostCaseStudyRequestBody;
   if (!user.email) {
     ctx.status = 401;
     ctx.body = "User must have an email to publish a case study";
@@ -70,7 +81,7 @@ router.post("/case-study", async (ctx: Context, next) => {
       ctx
     );
   } else {
-    const { branchName } = createCaseStudy(user, caseStudy);
+    const { branchName } = createCaseStudy(user, caseStudy, isProd);
     ctx.body = { branchName };
     await next();
   }
