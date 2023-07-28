@@ -26,7 +26,7 @@ import Github from "../../components/icons/Github";
 import { Button } from "../../components/ui/button";
 import { Form } from "../../components/ui/form";
 import { GithubPullResponse, getPulls } from "../../lib/api";
-import { caseStudySchema } from "../../lib/schema";
+import { BooleanStrings, caseStudyFormSchema } from "../../lib/schema";
 
 const NewCaseStudyPage = () => {
   return (
@@ -247,24 +247,27 @@ const NewCaseStudyForm = () => {
   const isLoggedIn = session?.user?.name;
   const [markdown, setMarkdown] = useState("");
   const form = useForm({
-    resolver: zodResolver(caseStudySchema),
+    resolver: zodResolver(caseStudyFormSchema),
     defaultValues: {
-      email: session?.user?.email || "",
-      name: session?.user?.name || "",
-      title: "",
-      productDescription: "",
-      industry: "",
-      doesUseChain: "",
-      partOfTeam: "",
-      url: "",
+      email: session?.user?.email || "calebcarithers@me.com",
+      name: session?.user?.name || "Caleb Carithers",
+      title: "wow",
+      productDescription: "wow",
+      industry: "wow",
+      doesUseChain: BooleanStrings.True,
+      partOfTeam: BooleanStrings.True,
+      url: "https://mutual.supply",
     },
   });
-  async function onSubmit(values: z.infer<typeof caseStudySchema>) {
+  async function onSubmit(values: z.infer<typeof caseStudyFormSchema>) {
     const res = await fetch("/api/create-case", {
       method: "POST",
       body: JSON.stringify({
         ...values,
-        markdown,
+        doesUseChain: values.doesUseChain === BooleanStrings.True,
+        partOfTeam: values.partOfTeam === BooleanStrings.True,
+        url: values.url === "" ? undefined : values.url,
+        markdown: markdown === "" ? undefined : markdown,
       }),
       credentials: "same-origin",
     });
@@ -294,8 +297,8 @@ const NewCaseStudyForm = () => {
             label="Does this experience utilize blockchain technology?"
             placeholder="Select an answer"
             items={[
-              { key: "true", name: "Yes" },
-              { key: "false", name: "No" },
+              { key: BooleanStrings.True, name: "Yes" },
+              { key: BooleanStrings.False, name: "No" },
             ]}
           />
           <SelectInput
@@ -303,8 +306,8 @@ const NewCaseStudyForm = () => {
             label="Were you part of the team that built this experience?"
             placeholder="Select an answer"
             items={[
-              { key: "true", name: "Yes" },
-              { key: "false", name: "No" },
+              { key: BooleanStrings.True, name: "Yes" },
+              { key: BooleanStrings.False, name: "No" },
             ]}
           />
           <TextInput

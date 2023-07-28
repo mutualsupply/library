@@ -4,6 +4,9 @@ export interface CaseStudy {
   title: string;
   productDescription: string;
   industry: string;
+  doesUseChain: boolean;
+  partOfTeam: boolean;
+  url?: string;
   markdown?: string;
 }
 

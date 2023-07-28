@@ -1,25 +1,32 @@
+import { NextApiRequest } from "next";
 import { getServerSession } from "next-auth";
+import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 import env from "../../../lib/env";
-import { caseStudySchema } from "../../../lib/schema";
+import { caseStudyBodySchema } from "../../../lib/schema";
 import { UnauthenticatedError } from "../../../lib/server";
 
 export async function POST(req: Request) {
   try {
     const session = await getServerSession();
+    const token = await getToken({
+      req: req as any as NextApiRequest,
+    });
+    console.log("tokne::", token);
     if (!session) {
       throw new UnauthenticatedError(
         "Must be authenticated to create a case study"
       );
     }
-    console.log(session.user);
+    console.log("SESSION", session.user);
     if (!session.user?.email) {
       throw new UnauthenticatedError(
         "User must have Github public email to publish a case study"
       );
     }
     const body = await req.json();
-    const parsedBody = caseStudySchema.parse(body);
+    console.log("body::", body);
+    const parsedBody = caseStudyBodySchema.parse(body);
     const res = await fetch(`${env.SERVER_BASE_URL}/case-study`, {
       method: "POST",
       headers: {

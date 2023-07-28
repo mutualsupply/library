@@ -22,15 +22,19 @@ const createCaseStudy = (user: GithubUser, caseStudy: CaseStudy) => {
   run(`mkdir ${dirName}`);
   run(`git clone git@github.com:mutualsupply/site.git ${dirName}/site`);
   let markdown = `
-    # ${caseStudy.title}
-    ### by ${caseStudy.name} (${caseStudy.email})
+# ${caseStudy.title}
+### by ${caseStudy.name} (${caseStudy.email})
 
-    ${caseStudy.productDescription}
-    ${caseStudy.productDescription}
-    ${caseStudy.industry}
-    `;
+${caseStudy.productDescription}
+${caseStudy.industry}
+Uses a blockchain: ${caseStudy.doesUseChain ? "Yes" : "No"}
+Author is part of the team: ${caseStudy.partOfTeam ? "Yes" : "No"}
+  `;
+  if (caseStudy.url) {
+    markdown += `\n[${caseStudy.url}](${caseStudy.url})`;
+  }
   if (caseStudy.markdown) {
-    markdown += caseStudy.markdown;
+    markdown += `\n${caseStudy.markdown}`;
   }
 
   run(

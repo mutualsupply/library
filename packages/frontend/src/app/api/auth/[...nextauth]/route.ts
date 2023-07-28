@@ -12,6 +12,9 @@ const handler = NextAuth({
   ],
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
+      console.log("--- SIGNIN ---");
+      console.log({ user, account, profile, email, credentials });
+      console.log("------");
       if (account?.provider === "github") {
         if (!profile?.email) {
           const res = await fetch("https://api.github.com/user/emails", {
@@ -28,6 +31,18 @@ const handler = NextAuth({
         }
       }
       return true;
+    },
+    async jwt(jwt) {
+      console.log("--- JWT ---");
+      console.log(jwt);
+      console.log("------");
+      return jwt.token;
+    },
+    async session(sesh) {
+      console.log("--- SESSION ---");
+      console.log(sesh);
+      console.log("------");
+      return sesh.session;
     },
   },
 });
