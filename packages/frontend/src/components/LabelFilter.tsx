@@ -32,7 +32,7 @@ export default function LabelFilter({
                 selected?.includes(item.key),
             },
           )}
-          onClick={() => onClick && onClick(item.key)}
+          onClick={() => onClick?.(item.key)}
         >
           {item.title}
         </Button>
