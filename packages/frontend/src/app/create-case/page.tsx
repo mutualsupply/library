@@ -43,7 +43,7 @@ const NewCaseStudyPage = () => {
     <div>
       <BackLink href={"/"}>Library</BackLink>
       <div className={cn("flex", "gap-24", "mt-4", "flex-col", "md:flex-row")}>
-        <div className={cn("md:max-w-xl")}>
+        <div className={cn("md:max-w-md", "w-full")}>
           <Accordion
             type="multiple"
             className={cn("flex", "flex-col", "gap-8")}
