@@ -10,8 +10,7 @@ COPY id_ed25519.pub /root/.ssh/id_ed25519.pub
 RUN chmod 400 /root/.ssh/id_ed25519
 RUN chmod 400 /root/.ssh/id_ed25519.pub
 
-COPY known_hosts /root/.ssh/known_hosts
-COPY ssh_config ~/.ssh/config
+RUN ssh-keyscan github.com >>/root/.ssh/known_hosts
 
 RUN git config --global user.name "Mutual Supply"
 RUN git config --global user.email "gainormather@gmail.com"

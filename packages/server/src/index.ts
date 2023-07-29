@@ -27,7 +27,9 @@ const createCaseStudy = (
   const dirName = `/tmp/new-study-${Date.now()}`;
   const pathToFrontendPackage = `${dirName}/site/packages/frontend`;
   run(`mkdir ${dirName}`);
-  run(`git clone git@github.com:mutualsupply/site.git ${dirName}/site`);
+  run(
+    `GIT_SSH_COMMAND="ssh -i /root/.ssh/id_ed25519" git clone git@github.com:mutualsupply/site.git ${dirName}/site`
+  );
   if (!isProd) {
     run(`cd ${dirName}/site && git checkout dev`);
   }
