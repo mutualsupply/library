@@ -1,5 +1,6 @@
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
-import Link from "next/link";
+import NextLink from "next/link";
+import { ReactNode } from "react";
 import { cn } from "utils";
 
 export const BackLink = ({
@@ -18,7 +19,9 @@ export const BackLink = ({
         "gap-1",
         "text-sm",
         "border-b",
-        "border-black"
+        "border-black",
+        "no-underline",
+        "text-black"
       )}
     >
       <ArrowLeftIcon /> {children}
@@ -29,12 +32,28 @@ export const BackLink = ({
 export const BestPracticesLink = () => {
   return (
     <Link
-      target="_blank"
-      rel="noreferrer"
+      isExternal={true}
       href="https://www.notion.so/MUTUAL-Framework-for-Building-Experiences-In-The-New-Internet-616cc2ffe809465b9de17087301b65d9"
-      className={cn("text-primary")}
     >
       Best Practices Guide
     </Link>
+  );
+};
+
+interface CustomLinkProps {
+  children?: ReactNode;
+  href: string;
+  isExternal?: boolean;
+  className?: string;
+}
+
+export const Link = ({ isExternal, className, ...rest }: CustomLinkProps) => {
+  return (
+    <NextLink
+      {...rest}
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noreferrer" : undefined}
+      className={cn("text-primary", "underline", className)}
+    />
   );
 };

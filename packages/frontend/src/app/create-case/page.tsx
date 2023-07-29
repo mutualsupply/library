@@ -13,22 +13,32 @@ import {
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import ConnectButton from "../../components/ConnectButton";
-import { BackLink, BestPracticesLink } from "../../components/Links";
+import { BackLink, BestPracticesLink, Link } from "../../components/Links";
 import { MilkdownEditorWrapper } from "../../components/MilkdownEditor";
 import SelectInput from "../../components/SelectInput";
 import TextInput from "../../components/TextInput";
+import Add from "../../components/icons/Add";
 import Github from "../../components/icons/Github";
 import { Button } from "../../components/ui/button";
 import { Form } from "../../components/ui/form";
 import { GithubPullResponse, getPulls } from "../../lib/api";
+import { CreateNewCaseStudyResponse } from "../../lib/interfaces";
 import { BooleanStrings, caseStudyFormSchema } from "../../lib/schema";
 
 const NewCaseStudyPage = () => {
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ["pulls"],
+    queryFn: getPulls,
+    cacheTime: 0,
+    refetchOnWindowFocus: true,
+  });
+  const onCreateSuccess = () => {
+    refetch();
+  };
   return (
     <div>
       <BackLink href={"/"}>Library</BackLink>
@@ -42,91 +52,81 @@ const NewCaseStudyPage = () => {
         )}
       >
         <div className={cn("md:col-span-4")}>
-          <LeftPane />
+          <Accordion
+            type="multiple"
+            className={cn("flex", "flex-col", "gap-8")}
+            defaultValue={["item-0"]}
+          >
+            <AccordionItem value="item-0" defaultValue={"item-0"}>
+              <AccordionTrigger>Welcome</AccordionTrigger>
+              <AccordionContent>
+                <div className={cn("flex", "flex-col", "gap-4")}>
+                  <div>
+                    This database exists to provide a collaborative environment
+                    for designers, researchers and engineers to learn from and
+                    interact with one another.
+                  </div>
+                  <div>
+                    By submitting research, you're contributing to a public
+                    knowledge base that fuels experimentation and drives the
+                    evolution of user-centered design in blockchain products.
+                  </div>
+                  <div>
+                    We're excited to be a part of your process as you prepare
+                    your report. Before submitting, read the{" "}
+                    <BestPracticesLink /> to understand requirements and
+                    internal standards. All reports are subject to an approval
+                    process based on guidelines you will find in our
+                    documentation.
+                  </div>
+                  <div>Database & online experience maintaned by MUTUAL</div>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-1">
+              <AccordionTrigger>Best Practices Guide</AccordionTrigger>
+              <AccordionContent>
+                ~ Mutually supply with us please ~
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-2">
+              <AccordionTrigger>Case Studies In Progress</AccordionTrigger>
+              <AccordionContent>
+                <Link
+                  isExternal
+                  href={"https://github.com/mutualsupply/site/pulls"}
+                  className={cn(
+                    "inline-flex",
+                    "items-center",
+                    "gap-1",
+                    "border-b",
+                    "text-xs",
+                    "no-underline"
+                  )}
+                >
+                  <span>View all on Github</span> <ArrowRightIcon />
+                </Link>
+                {!isLoading && data && (
+                  <div className={cn("flex", "flex-col", "gap-3", "mt-4")}>
+                    {data?.map((pull) => (
+                      <DraftCaseStudy pull={pull} key={pull.number} />
+                    ))}
+                  </div>
+                )}
+                {!isLoading && !data && (
+                  <div className={cn("text-center", "text-primary")}>
+                    No case studies in progress
+                  </div>
+                )}
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </div>
         <div className={cn("md:col-span-6", "mt-6", "md:mt-0")}>
-          <CreateNewCaseStudy />
+          <CreateNewCaseStudy onSuccess={onCreateSuccess} />
         </div>
       </div>
     </div>
-  );
-};
-
-const LeftPane = () => {
-  const { data, isLoading } = useQuery({
-    queryKey: ["pulls"],
-    queryFn: getPulls,
-    cacheTime: 0,
-    refetchOnWindowFocus: true,
-  });
-  return (
-    <Accordion
-      type="multiple"
-      className={cn("flex", "flex-col", "gap-8")}
-      defaultValue={["item-0"]}
-    >
-      <AccordionItem value="item-0" defaultValue={"item-0"}>
-        <AccordionTrigger>Welcome</AccordionTrigger>
-        <AccordionContent>
-          <div className={cn("flex", "flex-col", "gap-4")}>
-            <div>
-              This database exists to provide a collaborative environment for
-              designers, researchers and engineers to learn from and interact
-              with one another.
-            </div>
-            <div>
-              By submitting research, you're contributing to a public knowledge
-              base that fuels experimentation and drives the evolution of
-              user-centered design in blockchain products.
-            </div>
-            <div>
-              We're excited to be a part of your process as you prepare your
-              report. Before submitting, read the <BestPracticesLink /> to
-              understand requirements and internal standards. All reports are
-              subject to an approval process based on guidelines you will find
-              in our documentation.
-            </div>
-            <div>Database & online experience maintaned by MUTUAL</div>
-          </div>
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem value="item-1">
-        <AccordionTrigger>Best Practices Guide</AccordionTrigger>
-        <AccordionContent>~ Mutually supply with us please ~</AccordionContent>
-      </AccordionItem>
-      <AccordionItem value="item-2">
-        <AccordionTrigger>Case Studies In Progress</AccordionTrigger>
-        <AccordionContent>
-          <Link
-            rel="noopener noreferrer"
-            target="_blank"
-            href={"https://github.com/mutualsupply/site/pulls"}
-            className={cn(
-              "inline-flex",
-              "items-center",
-              "text-primary",
-              "gap-1",
-              "border-b",
-              "text-xs"
-            )}
-          >
-            <span>View all on Github</span> <ArrowRightIcon />
-          </Link>
-          {!isLoading && data && (
-            <div className={cn("flex", "flex-col", "gap-3", "mt-4")}>
-              {data?.map((pull) => (
-                <DraftCaseStudy pull={pull} key={pull.number} />
-              ))}
-            </div>
-          )}
-          {!isLoading && !data && (
-            <div className={cn("text-center", "text-primary")}>
-              No case studies in progress
-            </div>
-          )}
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
   );
 };
 
@@ -136,33 +136,46 @@ interface DraftCaseStudyProps {
 
 const DraftCaseStudy = ({ pull }: DraftCaseStudyProps) => {
   return (
-    <Link
-      target={"_blank"}
-      href={pull.html_url}
-      className={cn("p-4", "border")}
-    >
-      <div className={cn("underline", "font-aspekta", "font-light")}>
-        {pull.title}
-      </div>
-      <div className={cn("text-primary", "mt-2")}>{pull.user?.login}</div>
-    </Link>
+    <div className={cn("p-4", "border", "flex", "flex-col", "gap-2")}>
+      <Link
+        isExternal
+        href={pull.html_url}
+        className={cn(
+          "text-black",
+          "font-aspekta",
+          "font-light",
+          "inline-flex",
+          "justify-between",
+          "items-center"
+        )}
+      >
+        <span>{pull.title}</span>
+        <span className={cn("text-xs")}>({pull.number})</span>
+      </Link>
+      <div className={cn("text-primary")}>{pull.user?.login}</div>
+    </div>
   );
 };
 
-const CreateNewCaseStudy = () => {
+const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
   const { data: session } = useSession();
   const isLoggedIn = session?.user?.name;
   const [view, setView] = useState<"form" | "success">("form");
-  const onFormSuccess = () => setView("success");
+  const [receipt, setReceipt] = useState<CreateNewCaseStudyResponse | null>(
+    null
+  );
+  const onFormSuccess = (receipt: CreateNewCaseStudyResponse) => {
+    setView("success");
+    setReceipt(receipt);
+    if (onSuccess) {
+      onSuccess();
+    }
+  };
   return (
     <div>
       {view === "form" && (
-        <>
-          <div
-            className={cn("text-6xl", "text-primary", "font-otBrut", "mb-6")}
-          >
-            Submit a Report
-          </div>
+        <Section title="Submit a Report" size="lg">
+          Submit a Report
           <div className={cn("flex", "flex-col", "gap-6", "font-medium")}>
             <div>
               Welcome to the MUTUAL research collective. Please read the{" "}
@@ -185,7 +198,9 @@ const CreateNewCaseStudy = () => {
                       className={cn("inline-flex", "items-center", "gap-3")}
                     >
                       <Github />
-                      <div className={cn("inline-flex", "gap-1")}>
+                      <div
+                        className={cn("inline-flex", "gap-1", "items-center")}
+                      >
                         {session?.user?.image && (
                           <Image
                             src={session.user.image}
@@ -246,19 +261,46 @@ const CreateNewCaseStudy = () => {
           <div className={cn("max-w-lg")}>
             <NewCaseStudyForm onSuccess={onFormSuccess} />
           </div>
-        </>
+        </Section>
       )}
-      {view === "success" && (
-        <div className={cn("text-4xl", "font-aspekta", "text-primary")}>
-          success
-        </div>
+      {view === "success" && receipt && (
+        <Section title="Case Study Created" size="lg">
+          <div>
+            <div className={cn("text-2xl", "font-bold")}>
+              {receipt?.caseStudy.title}
+            </div>
+            <div className={cn("text-xl")}>by: {receipt?.pr.user.login}</div>
+          </div>
+          <Link
+            isExternal
+            href={receipt.pr.html_url}
+            className={cn("text-primary", "underline")}
+          >
+            View on Github
+          </Link>
+          <Button
+            variant="outline"
+            className={cn(
+              "rounded-full",
+              "uppercase",
+              "text-black",
+              "flex",
+              "items-center",
+              "gap-2"
+            )}
+            onClick={() => setView("form")}
+          >
+            <Add fill="black" width={14} />
+            <span className={cn("inline-block")}>Submit Another Report</span>
+          </Button>
+        </Section>
       )}
     </div>
   );
 };
 
 interface NewCaseStudyFormProps {
-  onSuccess?: () => void;
+  onSuccess?: (data: CreateNewCaseStudyResponse) => void;
 }
 
 const NewCaseStudyForm = ({ onSuccess }: NewCaseStudyFormProps) => {
@@ -296,10 +338,11 @@ const NewCaseStudyForm = ({ onSuccess }: NewCaseStudyFormProps) => {
       console.error("Could not create case study pr");
       console.error(await res.text());
       setError("Could not create case study");
-    }
-
-    if (onSuccess) {
-      onSuccess();
+    } else {
+      const json = await res.json();
+      if (onSuccess) {
+        onSuccess(json);
+      }
     }
   }
   return (
@@ -354,16 +397,15 @@ const NewCaseStudyForm = ({ onSuccess }: NewCaseStudyFormProps) => {
         </Section>
         {error && <div className={cn("text-red-600")}>{error}</div>}
 
-        <div className={cn("flex", "justify-center")}>
-          <Button
-            variant={"outline"}
-            disabled={!isLoggedIn || error !== null}
-            type="submit"
-            className={cn("w-full", "uppercase", "rounded-full")}
-          >
-            {isLoggedIn ? "submit report" : "sing in to submit"}
-          </Button>
-        </div>
+        <Button
+          loading={form.formState.isSubmitting}
+          variant={"outline"}
+          disabled={!isLoggedIn || error !== null}
+          type="submit"
+          className={cn("w-full", "uppercase", "rounded-full")}
+        >
+          {isLoggedIn ? "submit report" : "sign in to submit"}
+        </Button>
       </form>
     </Form>
   );
@@ -372,13 +414,20 @@ const NewCaseStudyForm = ({ onSuccess }: NewCaseStudyFormProps) => {
 const Section = ({
   title,
   children,
+  size = "sm",
 }: {
   title: string;
   children: React.ReactNode;
+  size?: "sm" | "lg";
 }) => {
   return (
     <div className={cn("flex", "flex-col", "gap-4")}>
-      <div className={cn("text-2xl", "font-otBrut", "text-primary")}>
+      <div
+        className={cn("font-otBrut", "text-primary", {
+          "text-2xl": size === "sm",
+          "text-6xl": size === "lg",
+        })}
+      >
         {title}
       </div>
       <div className={cn("flex", "flex-col", "gap-8")}>{children}</div>
