@@ -335,33 +335,18 @@ const NewCaseStudyForm = ({ onSuccess }: NewCaseStudyFormProps) => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className={cn("space-y-8")}>
         <Section title="Your information">
-          <TextInput
-            name="email"
-            type="email"
-            label="Email"
-            placeholder="calebcarithers@me.com"
-          />
-          <TextInput
-            name="name"
-            label="Your Name"
-            placeholder="Caleb Carithers"
-          />
+          <TextInput name="email" type="email" label="Email" />
+          <TextInput name="name" label="Your Name" />
         </Section>
         <Section title="About the report">
-          <TextInput
-            name="title"
-            label="Title of the Report"
-            placeholder="Interaction Patterns within Dawn Wallet"
-          />
+          <TextInput name="title" label="Title of the Report" />
           <TextInput
             name="productDescription"
             label="In 1-2 sentences, please briefly outline the main purpose of the product you are analyzing"
-            placeholder="Dawn enables Safari users to interact with Ethereum"
           />
           <TextInput
             name="industry"
             label="In which industry would you place this product?"
-            placeholder="Financial Services"
           />
           <SelectInput
             name="doesUseChain"
@@ -385,7 +370,6 @@ const NewCaseStudyForm = ({ onSuccess }: NewCaseStudyFormProps) => {
             type="url"
             name="url"
             label="If available, please provide an active URL or prototype link to the experience (ideally in the state you are analyzing)"
-            placeholder="i.e. https://mutual.supply"
           />
         </Section>
         <Section title="Share your report">
