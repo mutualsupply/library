@@ -1,13 +1,13 @@
-"use client";
+"use client"
 
-import * as AccordionPrimitive from "@radix-ui/react-accordion";
-import * as React from "react";
+import * as AccordionPrimitive from "@radix-ui/react-accordion"
+import * as React from "react"
 
-import { cn } from "utils";
-import Add from "../icons/Add";
-import Minus from "../icons/Minus";
+import { cn } from "utils"
+import Add from "../icons/Add"
+import Minus from "../icons/Minus"
 
-const Accordion = AccordionPrimitive.Root;
+const Accordion = AccordionPrimitive.Root
 
 const AccordionItem = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Item>,
@@ -27,12 +27,12 @@ const AccordionItem = React.forwardRef<
         "inset-0",
         "group-data-[state=open]:block",
         "hidden",
-        "bg-tertiary/25"
+        "bg-tertiary/25",
       )}
     />
   </AccordionPrimitive.Item>
-));
-AccordionItem.displayName = "AccordionItem";
+))
+AccordionItem.displayName = "AccordionItem"
 
 const AccordionTrigger = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Trigger>,
@@ -43,7 +43,7 @@ const AccordionTrigger = React.forwardRef<
       ref={ref}
       className={cn(
         "flex flex-1 items-center justify-between py-4 text-lg font-medium hover:underline p-3 gap-2 text-left",
-        className
+        className,
       )}
       {...props}
     >
@@ -52,8 +52,8 @@ const AccordionTrigger = React.forwardRef<
       <Minus className={cn("group-data-[state=closed]:hidden")} />
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
-));
-AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName;
+))
+AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName
 
 const AccordionContent = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Content>,
@@ -63,13 +63,13 @@ const AccordionContent = React.forwardRef<
     ref={ref}
     className={cn(
       "overflow-hidden text-sm data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down p-3",
-      className
+      className,
     )}
     {...props}
   >
     <div className="pt-0 pb-4">{children}</div>
   </AccordionPrimitive.Content>
-));
-AccordionContent.displayName = AccordionPrimitive.Content.displayName;
+))
+AccordionContent.displayName = AccordionPrimitive.Content.displayName
 
-export { Accordion, AccordionContent, AccordionItem, AccordionTrigger };
+export { Accordion, AccordionContent, AccordionItem, AccordionTrigger }

@@ -1,20 +1,20 @@
-import { Metadata } from "next";
-import localFont from "next/font/local";
-import { cn } from "utils";
-import Header from "../components/Header";
-import Providers from "../components/Providers";
-import "../styles/globals.css";
+import { Metadata } from "next"
+import localFont from "next/font/local"
+import { cn } from "utils"
+import Header from "../components/Header"
+import Providers from "../components/Providers"
+import "../styles/globals.css"
 
 export const metadata: Metadata = {
   title: "Mutual Supply",
   description: "Mutual Supply",
-};
+}
 const aeonikFono = localFont({
   src: "../../public/fonts/AeonikFonoTRIAL-Light.woff2",
   variable: "--font-aeonik-fono",
   weight: "300",
   style: "normal",
-});
+})
 const aspekta = localFont({
   src: [
     {
@@ -34,17 +34,17 @@ const aspekta = localFont({
     },
   ],
   variable: "--font-aspekta",
-});
+})
 const otBrut = localFont({
   src: "../../public/fonts/OTBrut-Regular.woff2",
   variable: "--font-ot-brut",
   style: "normal",
-});
+})
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
     <html lang="en">
@@ -58,7 +58,7 @@ export default function RootLayout({
           "font-light",
           aeonikFono.variable,
           aspekta.variable,
-          otBrut.variable
+          otBrut.variable,
         )}
       >
         <Providers>
@@ -69,5 +69,5 @@ export default function RootLayout({
         </Providers>
       </body>
     </html>
-  );
+  )
 }

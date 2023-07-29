@@ -1,4 +1,4 @@
-import { SvgProps } from "./Logo";
+import { SvgProps } from "./Logo"
 
 const Github = ({ width = "21", className, fill = "#0C89E9" }: SvgProps) => {
   return (
@@ -24,7 +24,7 @@ const Github = ({ width = "21", className, fill = "#0C89E9" }: SvgProps) => {
         </clipPath>
       </defs>
     </svg>
-  );
-};
+  )
+}
 
-export default Github;
+export default Github

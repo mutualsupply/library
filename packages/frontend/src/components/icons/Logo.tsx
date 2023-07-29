@@ -1,4 +1,4 @@
-import { cn } from "utils";
+import { cn } from "utils"
 
 export interface SvgProps
   extends Pick<React.SVGProps<SVGSVGElement>, "fill" | "width" | "className"> {}
@@ -38,7 +38,7 @@ const Logo = ({ width = 75, fill = "#0064FB", className }: SvgProps) => {
         fill={fill}
       />
     </svg>
-  );
-};
+  )
+}
 
-export default Logo;
+export default Logo

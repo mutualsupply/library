@@ -1,12 +1,12 @@
-import { z } from "zod";
+import { z } from "zod"
 
-const MAX_TITLE_LENGTH = 200;
+const MAX_TITLE_LENGTH = 200
 
 export enum BooleanStrings {
   True = "true",
   False = "false",
 }
-const BooleanEnum = z.nativeEnum(BooleanStrings);
+const BooleanEnum = z.nativeEnum(BooleanStrings)
 
 export const caseStudyFormSchema = z.object({
   email: z.string().email({
@@ -25,13 +25,13 @@ export const caseStudyFormSchema = z.object({
   industry: z.string().min(1, {
     message: "Please include which industry this product is a part of",
   }),
-  doesUseChain: BooleanEnum,
-  partOfTeam: BooleanEnum,
+  doesUseChain: BooleanEnum.or(z.string()),
+  partOfTeam: BooleanEnum.or(z.string()),
   url: z.union([z.string().url().optional(), z.literal("")]),
-});
+})
 
 export const caseStudyBodySchema = caseStudyFormSchema.extend({
   partOfTeam: z.boolean(),
   doesUseChain: z.boolean(),
   markdown: z.string().optional(),
-});
+})
