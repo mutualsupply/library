@@ -232,10 +232,6 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
                     )}
                     variant={"outline"}
                     onClick={() => {
-                      console.log(
-                        "calling sign in with callback",
-                        `${window.location.origin}/create-case`
-                      );
                       signIn("github", {
                         callbackUrl: `${window.location.origin}/create-case`,
                       });
