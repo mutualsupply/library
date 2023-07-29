@@ -1,4 +1,4 @@
-import { SvgProps } from "./Logo";
+import { SvgProps } from "./Logo"
 
 const Close = ({ width = "24", className, fill = "#161615" }: SvgProps) => {
   return (
@@ -17,7 +17,7 @@ const Close = ({ width = "24", className, fill = "#161615" }: SvgProps) => {
         fill={fill}
       />
     </svg>
-  );
-};
+  )
+}
 
-export default Close;
+export default Close

@@ -3,9 +3,9 @@ const nextConfig = {
   pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],
   reactStrictMode: true,
   webpack: (config) => {
-    config.resolve.fallback = { fs: false, net: false, tls: false };
-    config.externals.push("pino-pretty", "lokijs", "encoding");
-    return config;
+    config.resolve.fallback = { fs: false, net: false, tls: false }
+    config.externals.push("pino-pretty", "lokijs", "encoding")
+    return config
   },
   experimental: {
     mdxRs: true,
@@ -13,7 +13,7 @@ const nextConfig = {
   images: {
     domains: ["avatars.githubusercontent.com"],
   },
-};
+}
 
 const withMDX = require("@next/mdx")({
   extension: /\.mdx?$/,
@@ -26,6 +26,6 @@ const withMDX = require("@next/mdx")({
     // If you use `MDXProvider`, uncomment the following line.
     // providerImportSource: "@mdx-js/react",
   },
-});
+})
 
-module.exports = withMDX(nextConfig);
+module.exports = withMDX(nextConfig)

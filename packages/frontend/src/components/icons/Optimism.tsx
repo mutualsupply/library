@@ -1,4 +1,4 @@
-import { SvgProps } from "./Logo";
+import { SvgProps } from "./Logo"
 
 const Optimism = ({ width = "21", className, fill = "#FF0420" }: SvgProps) => {
   return (
@@ -34,7 +34,7 @@ const Optimism = ({ width = "21", className, fill = "#FF0420" }: SvgProps) => {
         </clipPath>
       </defs>
     </svg>
-  );
-};
+  )
+}
 
-export default Optimism;
+export default Optimism

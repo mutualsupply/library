@@ -1,7 +1,7 @@
-"use client";
+"use client"
 
-import { MDXRemote } from "next-mdx-remote";
-import { cn } from "utils";
+import { MDXRemote } from "next-mdx-remote"
+import { cn } from "utils"
 
 export default function RemoteMDX({ serialized }: any) {
   return (
@@ -20,5 +20,5 @@ export default function RemoteMDX({ serialized }: any) {
       }}
       {...(serialized as any)}
     />
-  );
+  )
 }

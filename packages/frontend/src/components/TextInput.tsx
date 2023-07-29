@@ -1,5 +1,5 @@
-import { InputHTMLAttributes } from "react";
-import { useFormContext } from "react-hook-form";
+import { InputHTMLAttributes } from "react"
+import { useFormContext } from "react-hook-form"
 import {
   FormControl,
   FormDescription,
@@ -7,15 +7,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
-import { Input } from "./ui/input";
+} from "./ui/form"
+import { Input } from "./ui/input"
 
 interface TextInputProps
   extends Pick<InputHTMLAttributes<HTMLInputElement>, "type"> {
-  name: string;
-  label?: string;
-  placeholder?: string;
-  description?: string;
+  name: string
+  label?: string
+  placeholder?: string
+  description?: string
 }
 
 const TextInput = ({
@@ -25,7 +25,7 @@ const TextInput = ({
   description,
   type = "text",
 }: TextInputProps) => {
-  const form = useFormContext();
+  const form = useFormContext()
   return (
     <FormField
       control={form.control}
@@ -41,7 +41,7 @@ const TextInput = ({
         </FormItem>
       )}
     />
-  );
-};
+  )
+}
 
-export default TextInput;
+export default TextInput
