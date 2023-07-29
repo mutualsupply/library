@@ -15,7 +15,7 @@ import {
   SelectValue,
 } from "./ui/select"
 
-interface SelectItem {
+interface SelectItemI {
   key: string
   name: string
 }
@@ -25,7 +25,7 @@ interface SelectInputProps {
   label?: string
   placeholder?: string
   description?: string
-  items: Array<SelectItem>
+  items: Array<SelectItemI>
   defaultValue?: string
 }
 
@@ -47,7 +47,7 @@ const SelectInput = ({
           <FormControl>
             <Select
               onValueChange={(value) => field.onChange(value)}
-              value={field.value}
+              value={field.value === "" ? undefined : field.value}
             >
               <SelectTrigger>
                 <SelectValue placeholder={placeholder} />

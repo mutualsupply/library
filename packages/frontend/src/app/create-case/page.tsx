@@ -302,8 +302,8 @@ const NewCaseStudyForm = ({ onSuccess }: NewCaseStudyFormProps) => {
       title: "",
       productDescription: "",
       industry: "",
-      doesUseChain: undefined,
-      partOfTeam: undefined,
+      doesUseChain: "",
+      partOfTeam: "",
       url: "",
     },
   })
