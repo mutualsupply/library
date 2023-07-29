@@ -43,13 +43,13 @@ const NewCaseStudyPage = () => {
     <div>
       <BackLink href={"/"}>Library</BackLink>
       <div className={cn("flex", "gap-24", "mt-4", "flex-col", "md:flex-row")}>
-        <div className={cn("md:max-w-xl")}>
+        <div className={cn("md:max-w-md", "w-full")}>
           <Accordion
-            type='multiple'
+            type="multiple"
             className={cn("flex", "flex-col", "gap-8")}
             defaultValue={["item-0"]}
           >
-            <AccordionItem value='item-0' defaultValue={"item-0"}>
+            <AccordionItem value="item-0" defaultValue={"item-0"}>
               <AccordionTrigger>Welcome</AccordionTrigger>
               <AccordionContent>
                 <div className={cn("flex", "flex-col", "gap-4")}>
@@ -75,13 +75,13 @@ const NewCaseStudyPage = () => {
                 </div>
               </AccordionContent>
             </AccordionItem>
-            <AccordionItem value='item-1'>
+            <AccordionItem value="item-1">
               <AccordionTrigger>Best Practices Guide</AccordionTrigger>
               <AccordionContent>
                 ~ Mutually supply with us please ~
               </AccordionContent>
             </AccordionItem>
-            <AccordionItem value='item-2'>
+            <AccordionItem value="item-2">
               <AccordionTrigger>Case Studies In Progress</AccordionTrigger>
               <AccordionContent>
                 <Link
@@ -166,7 +166,7 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
   return (
     <div>
       {view === "form" && (
-        <Section title='Submit a Report' size='lg'>
+        <Section title="Submit a Report" size="lg">
           Submit a Report
           <div className={cn("flex", "flex-col", "gap-6", "font-medium")}>
             <div>
@@ -238,7 +238,7 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
 
             {isLoggedIn && (
               <Button
-                variant='link'
+                variant="link"
                 onClick={() => signOut()}
                 className={cn("p-0")}
               >
@@ -250,7 +250,7 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
         </Section>
       )}
       {view === "success" && receipt && (
-        <Section title='Case Study Created' size='lg'>
+        <Section title="Case Study Created" size="lg">
           <div>
             <div className={cn("text-2xl", "font-bold")}>
               {receipt?.caseStudy.title}
@@ -265,7 +265,7 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
             View on Github
           </Link>
           <Button
-            variant='outline'
+            variant="outline"
             className={cn(
               "rounded-full",
               "uppercase",
@@ -276,7 +276,7 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
             )}
             onClick={() => setView("form")}
           >
-            <Add fill='black' width={14} />
+            <Add fill="black" width={14} />
             <span className={cn("inline-block")}>Submit Another Report</span>
           </Button>
         </Section>
@@ -334,61 +334,61 @@ const NewCaseStudyForm = ({ onSuccess }: NewCaseStudyFormProps) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className={cn("space-y-8")}>
-        <Section title='Your information'>
+        <Section title="Your information">
           <TextInput
-            name='email'
-            type='email'
-            label='Email'
-            placeholder='calebcarithers@me.com'
+            name="email"
+            type="email"
+            label="Email"
+            placeholder="calebcarithers@me.com"
           />
           <TextInput
-            name='name'
-            label='Your Name'
-            placeholder='Caleb Carithers'
+            name="name"
+            label="Your Name"
+            placeholder="Caleb Carithers"
           />
         </Section>
-        <Section title='About the report'>
+        <Section title="About the report">
           <TextInput
-            name='title'
-            label='Title of the Report'
-            placeholder='Interaction Patterns within Dawn Wallet'
+            name="title"
+            label="Title of the Report"
+            placeholder="Interaction Patterns within Dawn Wallet"
           />
           <TextInput
-            name='productDescription'
-            label='In 1-2 sentences, please briefly outline the main purpose of the product you are analyzing'
-            placeholder='Dawn enables Safari users to interact with Ethereum'
+            name="productDescription"
+            label="In 1-2 sentences, please briefly outline the main purpose of the product you are analyzing"
+            placeholder="Dawn enables Safari users to interact with Ethereum"
           />
           <TextInput
-            name='industry'
-            label='In which industry would you place this product?'
-            placeholder='Financial Services'
+            name="industry"
+            label="In which industry would you place this product?"
+            placeholder="Financial Services"
           />
           <SelectInput
-            name='doesUseChain'
-            label='Does this experience utilize blockchain technology?'
-            placeholder='Select an answer'
+            name="doesUseChain"
+            label="Does this experience utilize blockchain technology?"
+            placeholder="Select an answer"
             items={[
               { key: BooleanStrings.True, name: "Yes" },
               { key: BooleanStrings.False, name: "No" },
             ]}
           />
           <SelectInput
-            name='partOfTeam'
-            label='Were you part of the team that built this experience?'
-            placeholder='Select an answer'
+            name="partOfTeam"
+            label="Were you part of the team that built this experience?"
+            placeholder="Select an answer"
             items={[
               { key: BooleanStrings.True, name: "Yes" },
               { key: BooleanStrings.False, name: "No" },
             ]}
           />
           <TextInput
-            type='url'
-            name='url'
-            label='If available, please provide an active URL or prototype link to the experience (ideally in the state you are analyzing)'
-            placeholder='i.e. https://mutual.supply'
+            type="url"
+            name="url"
+            label="If available, please provide an active URL or prototype link to the experience (ideally in the state you are analyzing)"
+            placeholder="i.e. https://mutual.supply"
           />
         </Section>
-        <Section title='Share your report'>
+        <Section title="Share your report">
           <div>
             Please read the <BestPracticesLink /> for guidelines on what to
             include and how to format your report. All reports are subject to an
@@ -402,8 +402,8 @@ const NewCaseStudyForm = ({ onSuccess }: NewCaseStudyFormProps) => {
         <Button
           loading={form.formState.isSubmitting}
           variant={"outline"}
-          disabled={!isLoggedIn || error !== null}
-          type='submit'
+          disabled={!isLoggedIn}
+          type="submit"
           className={cn("w-full", "uppercase", "rounded-full")}
         >
           {isLoggedIn ? "submit report" : "sign in to submit"}

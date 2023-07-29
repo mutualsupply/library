@@ -15,6 +15,7 @@ const aeonikFono = localFont({
   weight: "300",
   style: "normal",
 })
+
 const aspekta = localFont({
   src: [
     {

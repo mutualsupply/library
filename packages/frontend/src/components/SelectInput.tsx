@@ -1,5 +1,4 @@
 import { Select } from "@radix-ui/react-select"
-import { useEffect } from "react"
 import { useFormContext } from "react-hook-form"
 import {
   FormControl,
@@ -16,7 +15,7 @@ import {
   SelectValue,
 } from "./ui/select"
 
-interface SelectItem {
+interface SelectItemI {
   key: string
   name: string
 }
@@ -26,7 +25,7 @@ interface SelectInputProps {
   label?: string
   placeholder?: string
   description?: string
-  items: Array<SelectItem>
+  items: Array<SelectItemI>
   defaultValue?: string
 }
 
@@ -36,14 +35,8 @@ const SelectInput = ({
   placeholder,
   description,
   items,
-  defaultValue,
 }: SelectInputProps) => {
   const form = useFormContext()
-  useEffect(() => {
-    if (defaultValue) {
-      form.setValue(name, defaultValue)
-    }
-  }, [])
   return (
     <FormField
       control={form.control}
@@ -54,11 +47,10 @@ const SelectInput = ({
           <FormControl>
             <Select
               onValueChange={(value) => field.onChange(value)}
-              defaultValue={placeholder ? undefined : defaultValue}
-              value={field.value}
+              value={field.value === "" ? undefined : field.value}
             >
               <SelectTrigger>
-                <SelectValue placeholder={placeholder || defaultValue} />
+                <SelectValue placeholder={placeholder} />
               </SelectTrigger>
               <SelectContent>
                 {items.map((item) => (

@@ -1,9 +1,11 @@
 "use client"
 
-import { MDXRemote } from "next-mdx-remote"
+import { MDXRemote, MDXRemoteProps } from "next-mdx-remote"
 import { cn } from "utils"
 
-export default function RemoteMDX({ serialized }: any) {
+export default function RemoteMDX({
+  serialized,
+}: { serialized: MDXRemoteProps }) {
   return (
     <MDXRemote
       components={{
@@ -18,7 +20,7 @@ export default function RemoteMDX({ serialized }: any) {
           </h2>
         ),
       }}
-      {...(serialized as any)}
+      {...serialized}
     />
   )
 }
