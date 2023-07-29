@@ -1,9 +1,9 @@
-import { alphabet, cn } from "utils";
-import { Button } from "./ui/button";
+import { alphabet, cn } from "utils"
+import { Button } from "./ui/button"
 
 interface AlphaToggleProps {
-  onClick: (char: string) => void;
-  selected?: Array<string>;
+  onClick: (char: string) => void
+  selected?: Array<string>
 }
 
 export default function AlphaToggle({ onClick, selected }: AlphaToggleProps) {
@@ -21,12 +21,12 @@ export default function AlphaToggle({ onClick, selected }: AlphaToggleProps) {
                 selected?.includes(char),
             },
             "font-aspekta",
-            "font-light"
+            "font-light",
           )}
         >
           {char}
         </Button>
       ))}
     </div>
-  );
+  )
 }
