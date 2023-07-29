@@ -42,16 +42,8 @@ const NewCaseStudyPage = () => {
   return (
     <div>
       <BackLink href={"/"}>Library</BackLink>
-      <div
-        className={cn(
-          "grid",
-          "gap-24",
-          "mt-4",
-          "grid-cols-1",
-          "md:grid-cols-12"
-        )}
-      >
-        <div className={cn("md:col-span-4")}>
+      <div className={cn("flex", "gap-24", "mt-4", "flex-col", "md:flex-row")}>
+        <div className={cn("md:max-w-xl")}>
           <Accordion
             type="multiple"
             className={cn("flex", "flex-col", "gap-8")}
@@ -122,7 +114,7 @@ const NewCaseStudyPage = () => {
             </AccordionItem>
           </Accordion>
         </div>
-        <div className={cn("md:col-span-6", "mt-6", "md:mt-0")}>
+        <div className={cn("mt-6", "md:mt-0")}>
           <CreateNewCaseStudy onSuccess={onCreateSuccess} />
         </div>
       </div>
@@ -254,9 +246,7 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
               </Button>
             )}
           </div>
-          <div className={cn("max-w-lg")}>
-            <NewCaseStudyForm onSuccess={onFormSuccess} />
-          </div>
+          <NewCaseStudyForm onSuccess={onFormSuccess} />
         </Section>
       )}
       {view === "success" && receipt && (
@@ -417,7 +407,7 @@ const Section = ({
   size?: "sm" | "lg";
 }) => {
   return (
-    <div className={cn("flex", "flex-col", "gap-4")}>
+    <div className={cn("flex", "flex-col", "gap-4", "md:max-w-xl")}>
       <div
         className={cn("font-otBrut", "text-primary", {
           "text-2xl": size === "sm",

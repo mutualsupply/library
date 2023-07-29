@@ -1,10 +1,4 @@
 import { SpinnerCircularFixed } from "spinners-react";
-import resolveConfig from "tailwindcss/resolveConfig";
-import myConfig from "../../tailwind.config";
-const tailwindConfig = resolveConfig(myConfig);
-console.log("colors", tailwindConfig?.theme?.colors);
-
-const colors = tailwindConfig?.theme?.colors;
 
 const Spinner = () => {
   return (
