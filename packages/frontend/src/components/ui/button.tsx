@@ -1,8 +1,8 @@
-import { cva, type VariantProps } from "class-variance-authority";
-import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority"
+import * as React from "react"
 
-import { cn } from "utils";
-import Spinner from "../Spinner";
+import { cn } from "utils"
+import Spinner from "../Spinner"
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed",
@@ -32,14 +32,14 @@ const buttonVariants = cva(
       variant: "default",
       size: "default",
     },
-  }
-);
+  },
+)
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
-  loading?: boolean;
+  asChild?: boolean
+  loading?: boolean
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -54,9 +54,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {loading && <Spinner />}
         {!loading && props.children}
       </button>
-    );
-  }
-);
-Button.displayName = "Button";
+    )
+  },
+)
+Button.displayName = "Button"
 
-export { Button, buttonVariants };
+export { Button, buttonVariants }

@@ -1,33 +1,33 @@
-"use client";
+"use client"
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn, signOut, useSession } from "next-auth/react";
-import { cn } from "utils";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { signIn, signOut, useSession } from "next-auth/react"
+import { cn } from "utils"
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "../../components/ui/accordion";
+} from "../../components/ui/accordion"
 
-import { ArrowRightIcon } from "@radix-ui/react-icons";
-import { useQuery } from "@tanstack/react-query";
-import Image from "next/image";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import ConnectButton from "../../components/ConnectButton";
-import { BackLink, BestPracticesLink, Link } from "../../components/Links";
-import { MilkdownEditorWrapper } from "../../components/MilkdownEditor";
-import SelectInput from "../../components/SelectInput";
-import TextInput from "../../components/TextInput";
-import Add from "../../components/icons/Add";
-import Github from "../../components/icons/Github";
-import { Button } from "../../components/ui/button";
-import { Form } from "../../components/ui/form";
-import { GithubPullResponse, getPulls } from "../../lib/api";
-import { CreateNewCaseStudyResponse } from "../../lib/interfaces";
-import { BooleanStrings, caseStudyFormSchema } from "../../lib/schema";
+import { ArrowRightIcon } from "@radix-ui/react-icons"
+import { useQuery } from "@tanstack/react-query"
+import Image from "next/image"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import ConnectButton from "../../components/ConnectButton"
+import { BackLink, BestPracticesLink, Link } from "../../components/Links"
+import { MilkdownEditorWrapper } from "../../components/MilkdownEditor"
+import SelectInput from "../../components/SelectInput"
+import TextInput from "../../components/TextInput"
+import Add from "../../components/icons/Add"
+import Github from "../../components/icons/Github"
+import { Button } from "../../components/ui/button"
+import { Form } from "../../components/ui/form"
+import { GithubPullResponse, getPulls } from "../../lib/api"
+import { CreateNewCaseStudyResponse } from "../../lib/interfaces"
+import { BooleanStrings, caseStudyFormSchema } from "../../lib/schema"
 
 const NewCaseStudyPage = () => {
   const { data, isLoading, refetch } = useQuery({
@@ -35,10 +35,10 @@ const NewCaseStudyPage = () => {
     queryFn: getPulls,
     cacheTime: 0,
     refetchOnWindowFocus: true,
-  });
+  })
   const onCreateSuccess = () => {
-    refetch();
-  };
+    refetch()
+  }
   return (
     <div>
       <BackLink href={"/"}>Library</BackLink>
@@ -93,7 +93,7 @@ const NewCaseStudyPage = () => {
                     "gap-1",
                     "border-b",
                     "text-xs",
-                    "no-underline"
+                    "no-underline",
                   )}
                 >
                   <span>View all on Github</span> <ArrowRightIcon />
@@ -119,11 +119,11 @@ const NewCaseStudyPage = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 interface DraftCaseStudyProps {
-  pull: GithubPullResponse[number];
+  pull: GithubPullResponse[number]
 }
 
 const DraftCaseStudy = ({ pull }: DraftCaseStudyProps) => {
@@ -138,7 +138,7 @@ const DraftCaseStudy = ({ pull }: DraftCaseStudyProps) => {
           "font-light",
           "inline-flex",
           "justify-between",
-          "items-center"
+          "items-center",
         )}
       >
         <span>{pull.title}</span>
@@ -146,23 +146,23 @@ const DraftCaseStudy = ({ pull }: DraftCaseStudyProps) => {
       </Link>
       <div className={cn("text-primary")}>{pull.user?.login}</div>
     </div>
-  );
-};
+  )
+}
 
 const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
-  const { data: session } = useSession();
-  const isLoggedIn = session?.user?.name;
-  const [view, setView] = useState<"form" | "success">("form");
+  const { data: session } = useSession()
+  const isLoggedIn = session?.user?.name
+  const [view, setView] = useState<"form" | "success">("form")
   const [receipt, setReceipt] = useState<CreateNewCaseStudyResponse | null>(
-    null
-  );
+    null,
+  )
   const onFormSuccess = (receipt: CreateNewCaseStudyResponse) => {
-    setView("success");
-    setReceipt(receipt);
+    setView("success")
+    setReceipt(receipt)
     if (onSuccess) {
-      onSuccess();
+      onSuccess()
     }
-  };
+  }
   return (
     <div>
       {view === "form" && (
@@ -220,13 +220,13 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
                       "text-primary",
                       "inline-flex",
                       "items-center",
-                      "gap-2"
+                      "gap-2",
                     )}
                     variant={"outline"}
                     onClick={() => {
                       signIn("github", {
                         callbackUrl: `${window.location.origin}/create-case`,
-                      });
+                      })
                     }}
                   >
                     <Github /> <span>Sign in to Github</span>
@@ -272,7 +272,7 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
               "text-black",
               "flex",
               "items-center",
-              "gap-2"
+              "gap-2",
             )}
             onClick={() => setView("form")}
           >
@@ -282,18 +282,18 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
         </Section>
       )}
     </div>
-  );
-};
+  )
+}
 
 interface NewCaseStudyFormProps {
-  onSuccess?: (data: CreateNewCaseStudyResponse) => void;
+  onSuccess?: (data: CreateNewCaseStudyResponse) => void
 }
 
 const NewCaseStudyForm = ({ onSuccess }: NewCaseStudyFormProps) => {
-  const { data: session } = useSession();
-  const isLoggedIn = session?.user?.name;
-  const [markdown, setMarkdown] = useState("");
-  const [error, setError] = useState<null | string>(null);
+  const { data: session } = useSession()
+  const isLoggedIn = session?.user?.name
+  const [markdown, setMarkdown] = useState("")
+  const [error, setError] = useState<null | string>(null)
   const form = useForm({
     resolver: zodResolver(caseStudyFormSchema),
     defaultValues: {
@@ -306,9 +306,9 @@ const NewCaseStudyForm = ({ onSuccess }: NewCaseStudyFormProps) => {
       partOfTeam: undefined,
       url: "",
     },
-  });
+  })
   async function onSubmit(values: z.infer<typeof caseStudyFormSchema>) {
-    setError(null);
+    setError(null)
     const res = await fetch("/api/create-case", {
       method: "POST",
       body: JSON.stringify({
@@ -319,15 +319,15 @@ const NewCaseStudyForm = ({ onSuccess }: NewCaseStudyFormProps) => {
         markdown: markdown === "" ? undefined : markdown,
       }),
       credentials: "same-origin",
-    });
+    })
     if (!res.ok) {
-      console.error("Could not create case study pr");
-      console.error(await res.text());
-      setError("Could not create case study");
+      console.error("Could not create case study pr")
+      console.error(await res.text())
+      setError("Could not create case study")
     } else {
-      const json = await res.json();
+      const json = await res.json()
       if (onSuccess) {
-        onSuccess(json);
+        onSuccess(json)
       }
     }
   }
@@ -410,17 +410,17 @@ const NewCaseStudyForm = ({ onSuccess }: NewCaseStudyFormProps) => {
         </Button>
       </form>
     </Form>
-  );
-};
+  )
+}
 
 const Section = ({
   title,
   children,
   size = "sm",
 }: {
-  title: string;
-  children: React.ReactNode;
-  size?: "sm" | "lg";
+  title: string
+  children: React.ReactNode
+  size?: "sm" | "lg"
 }) => {
   return (
     <div className={cn("flex", "flex-col", "gap-4", "md:max-w-xl")}>
@@ -434,7 +434,7 @@ const Section = ({
       </div>
       <div className={cn("flex", "flex-col", "gap-8")}>{children}</div>
     </div>
-  );
-};
+  )
+}
 
-export default NewCaseStudyPage;
+export default NewCaseStudyPage

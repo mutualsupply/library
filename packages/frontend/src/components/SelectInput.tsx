@@ -1,5 +1,5 @@
-import { Select } from "@radix-ui/react-select";
-import { useFormContext } from "react-hook-form";
+import { Select } from "@radix-ui/react-select"
+import { useFormContext } from "react-hook-form"
 import {
   FormControl,
   FormDescription,
@@ -7,26 +7,26 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
+} from "./ui/form"
 import {
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
+} from "./ui/select"
 
 interface SelectItem {
-  key: string;
-  name: string;
+  key: string
+  name: string
 }
 
 interface SelectInputProps {
-  name: string;
-  label?: string;
-  placeholder?: string;
-  description?: string;
-  items: Array<SelectItem>;
-  defaultValue?: string;
+  name: string
+  label?: string
+  placeholder?: string
+  description?: string
+  items: Array<SelectItem>
+  defaultValue?: string
 }
 
 const SelectInput = ({
@@ -36,7 +36,7 @@ const SelectInput = ({
   description,
   items,
 }: SelectInputProps) => {
-  const form = useFormContext();
+  const form = useFormContext()
   return (
     <FormField
       control={form.control}
@@ -66,7 +66,7 @@ const SelectInput = ({
         </FormItem>
       )}
     />
-  );
-};
+  )
+}
 
-export default SelectInput;
+export default SelectInput
