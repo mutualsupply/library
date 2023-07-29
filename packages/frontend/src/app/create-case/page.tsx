@@ -386,7 +386,7 @@ const NewCaseStudyForm = ({ onSuccess }: NewCaseStudyFormProps) => {
         <Button
           loading={form.formState.isSubmitting}
           variant={"outline"}
-          disabled={!isLoggedIn || error !== null}
+          disabled={!isLoggedIn}
           type="submit"
           className={cn("w-full", "uppercase", "rounded-full")}
         >
