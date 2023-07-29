@@ -1,15 +1,15 @@
-import { Endpoints } from "@octokit/types";
+import { Endpoints } from "@octokit/types"
 
 export type GithubPullResponse =
-  Endpoints["GET /repos/{owner}/{repo}/pulls"]["response"]["data"];
+  Endpoints["GET /repos/{owner}/{repo}/pulls"]["response"]["data"]
 
 export async function getPulls(): Promise<GithubPullResponse> {
-  const res = await fetch("/api/pulls");
+  const res = await fetch("/api/pulls")
   if (!res.ok) {
-    throw new Error("Failed to fetch pulls");
+    throw new Error("Failed to fetch pulls")
   }
-  return res.json();
+  return res.json()
 }
 
-export const GITHUB_OWNER = "mutualsupply";
-export const GITHUB_REPO = "site";
+export const GITHUB_OWNER = "mutualsupply"
+export const GITHUB_REPO = "site"

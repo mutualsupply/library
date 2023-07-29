@@ -1,12 +1,12 @@
-import { cn } from "utils";
-import Close from "./icons/Close";
-import { Button } from "./ui/button";
+import { cn } from "utils"
+import Close from "./icons/Close"
+import { Button } from "./ui/button"
 
 interface LabelFilterProps {
-  items: { key: string; title: string }[];
-  selected?: string[];
-  onClick?: (key: string) => void;
-  onClearClick?: () => void;
+  items: { key: string; title: string }[]
+  selected?: string[]
+  onClick?: (key: string) => void
+  onClearClick?: () => void
 }
 
 export default function LabelFilter({
@@ -30,7 +30,7 @@ export default function LabelFilter({
             {
               [cn("bg-black", "text-white", "border-transparent")]:
                 selected?.includes(item.key),
-            }
+            },
           )}
           onClick={() => onClick && onClick(item.key)}
         >
@@ -49,5 +49,5 @@ export default function LabelFilter({
         </Button>
       )}
     </div>
-  );
+  )
 }

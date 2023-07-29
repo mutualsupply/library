@@ -1,41 +1,41 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { useMemo, useState } from "react";
-import { cn } from "utils";
-import { getCaseLabelItems } from "../lib/client";
-import { Case, CaseSource } from "../lib/interfaces";
-import LabelFilter from "./LabelFilter";
-import RemoteMDX from "./RemoteMDX";
+import Link from "next/link"
+import { useMemo, useState } from "react"
+import { cn } from "utils"
+import { getCaseLabelItems } from "../lib/client"
+import { Case, CaseSource } from "../lib/interfaces"
+import LabelFilter from "./LabelFilter"
+import RemoteMDX from "./RemoteMDX"
 
 interface CaseProps {
-  cases: Array<Case>;
-  caseStudy: CaseSource;
+  cases: Array<Case>
+  caseStudy: CaseSource
 }
 
 export default function CasePage({ cases, caseStudy }: CaseProps) {
   const [selectedLabel, setSelectedLabel] = useState<undefined | Array<string>>(
-    caseStudy.labels
-  );
+    caseStudy.labels,
+  )
   const firstLetterOfTitles = useMemo(() => {
     const selectedCases = cases.filter((caseStudy) => {
       if (!selectedLabel || selectedLabel.length === 0) {
-        return true;
+        return true
       }
-      return caseStudy.labels.some((label) => selectedLabel.includes(label));
-    });
-    const firstLetters = selectedCases.map((c) => c.title[0].toUpperCase());
-    const uniqueLetters = Array.from(new Set(firstLetters));
-    return uniqueLetters.sort();
-  }, [cases, selectedLabel]);
-  const labelFilterItems = getCaseLabelItems(cases);
+      return caseStudy.labels.some((label) => selectedLabel.includes(label))
+    })
+    const firstLetters = selectedCases.map((c) => c.title[0].toUpperCase())
+    const uniqueLetters = Array.from(new Set(firstLetters))
+    return uniqueLetters.sort()
+  }, [cases, selectedLabel])
+  const labelFilterItems = getCaseLabelItems(cases)
   const onLabelFilterClick = (label: string) => {
     if (selectedLabel?.includes(label)) {
-      setSelectedLabel(selectedLabel.filter((l) => l !== label));
+      setSelectedLabel(selectedLabel.filter((l) => l !== label))
     } else {
-      setSelectedLabel((selectedLabel || []).concat(label));
+      setSelectedLabel((selectedLabel || []).concat(label))
     }
-  };
+  }
   return (
     <>
       <div className={cn("my-5")}>
@@ -58,7 +58,7 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
                   "py-2",
                   "text-xl",
                   "inline-block",
-                  "font-otBrut"
+                  "font-otBrut",
                 )}
               >
                 {letter}
@@ -95,7 +95,7 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
             "relative",
             "grow",
             "grid",
-            "grid-cols-12"
+            "grid-cols-12",
           )}
         >
           <div className={cn("z-10", "relative", "p-8", "col-span-9")}>
@@ -111,7 +111,7 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
                 "left-[34px]",
                 "flex",
                 "flex-col",
-                "gap-6"
+                "gap-6",
               )}
             >
               <div className={cn("grid", "md:grid-cols-6", "grid-cols-1")}>
@@ -121,7 +121,7 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
                     "underline",
                     "col-span-4",
                     "font-aspekta",
-                    "font-light"
+                    "font-light",
                   )}
                 >
                   NAME
@@ -149,7 +149,7 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
                         "w-full",
                         "h-full",
                         "opacity-60",
-                        "rounded-sm"
+                        "rounded-sm",
                       )}
                     />
                   </div>
@@ -165,11 +165,11 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
               "h-[calc(100%+32px)]",
               "bg-gradient-to-t",
               "from-tertiary/50",
-              "to-transparent"
+              "to-transparent",
             )}
           />
         </div>
       </div>
     </>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-import { SpinnerCircularFixed } from "spinners-react";
+import { SpinnerCircularFixed } from "spinners-react"
 
 const Spinner = () => {
   return (
@@ -9,7 +9,7 @@ const Spinner = () => {
       color={"#0C89E9"}
       secondaryColor={"#EAEAE6"}
     />
-  );
-};
+  )
+}
 
-export default Spinner;
+export default Spinner

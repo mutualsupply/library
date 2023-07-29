@@ -1,49 +1,49 @@
-"use client";
-import Link from "next/link";
-import { useMemo, useState } from "react";
-import { cn, fuzzyFilter } from "utils";
-import { getCaseLabelItems } from "../lib/client";
-import { Case } from "../lib/interfaces";
-import AlphaToggle from "./AlphaToggle";
-import LabelFilter from "./LabelFilter";
+"use client"
+import Link from "next/link"
+import { useMemo, useState } from "react"
+import { cn, fuzzyFilter } from "utils"
+import { getCaseLabelItems } from "../lib/client"
+import { Case } from "../lib/interfaces"
+import AlphaToggle from "./AlphaToggle"
+import LabelFilter from "./LabelFilter"
 
 interface HomeProps {
-  cases: Array<Case>;
+  cases: Array<Case>
 }
 
 export function HomePage({ cases }: HomeProps) {
-  const [selectedChar, setSelectedChar] = useState<undefined | Array<string>>();
+  const [selectedChar, setSelectedChar] = useState<undefined | Array<string>>()
   const [selectedLabel, setSelectedLabel] = useState<
     undefined | Array<string>
-  >();
+  >()
   const onAlphaToggleClick = (char: string) => {
     if (selectedChar?.includes(char)) {
-      setSelectedChar(selectedChar.filter((c) => c !== char));
+      setSelectedChar(selectedChar.filter((c) => c !== char))
     } else {
-      setSelectedChar((selectedChar || []).concat(char));
+      setSelectedChar((selectedChar || []).concat(char))
     }
-  };
+  }
   const onLabelFilterClick = (label: string) => {
     if (selectedLabel?.includes(label)) {
-      setSelectedLabel(selectedLabel.filter((l) => l !== label));
+      setSelectedLabel(selectedLabel.filter((l) => l !== label))
     } else {
-      setSelectedLabel((selectedLabel || []).concat(label));
+      setSelectedLabel((selectedLabel || []).concat(label))
     }
-  };
+  }
 
   const filteredData = useMemo(() => {
     const labelFilteredData = cases.filter((d) => {
       if (selectedLabel) {
-        return selectedLabel.every((label) => d.labels.includes(label));
+        return selectedLabel.every((label) => d.labels.includes(label))
       }
-      return true;
-    });
+      return true
+    })
     return fuzzyFilter(
       labelFilteredData,
       selectedChar ? selectedChar.join("") : "",
-      "title"
-    );
-  }, [selectedLabel, selectedChar, cases]);
+      "title",
+    )
+  }, [selectedLabel, selectedChar, cases])
 
   return (
     <>
@@ -72,7 +72,7 @@ export function HomePage({ cases }: HomeProps) {
                 "gap-4",
                 "items-center",
                 "relative",
-                "group-hover:text-primary"
+                "group-hover:text-primary",
               )}
             >
               <span className={cn("text-sm")}>{index + 1}</span>
@@ -87,5 +87,5 @@ export function HomePage({ cases }: HomeProps) {
         ))}
       </div>
     </>
-  );
+  )
 }

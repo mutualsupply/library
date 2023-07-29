@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import Image from "next/image";
-import Link from "next/link";
-import { cn } from "utils";
+import Image from "next/image"
+import Link from "next/link"
+import { cn } from "utils"
 
 export default function Header() {
   return (
@@ -25,7 +25,7 @@ export default function Header() {
         Join
       </Link>
     </div>
-  );
+  )
 }
 
 const Nav = () => {
@@ -35,5 +35,5 @@ const Nav = () => {
       <Link href={""}>Releases</Link>
       <Link href={""}>info</Link>
     </div>
-  );
-};
+  )
+}

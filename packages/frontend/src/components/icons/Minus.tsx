@@ -1,4 +1,4 @@
-import { SvgProps } from "./Logo";
+import { SvgProps } from "./Logo"
 
 const Minus = ({ width = "24", fill = "#0C89E9", className }: SvgProps) => {
   return (
@@ -15,7 +15,7 @@ const Minus = ({ width = "24", fill = "#0C89E9", className }: SvgProps) => {
         fill={fill}
       />
     </svg>
-  );
-};
+  )
+}
 
-export default Minus;
+export default Minus

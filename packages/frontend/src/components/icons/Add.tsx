@@ -1,5 +1,5 @@
-import { cn } from "utils";
-import { SvgProps } from "./Logo";
+import { cn } from "utils"
+import { SvgProps } from "./Logo"
 
 const Add = ({ width = "24", className, fill = "#0C89E9" }: SvgProps) => {
   return (
@@ -18,7 +18,7 @@ const Add = ({ width = "24", className, fill = "#0C89E9" }: SvgProps) => {
         fill={fill}
       />
     </svg>
-  );
-};
+  )
+}
 
-export default Add;
+export default Add

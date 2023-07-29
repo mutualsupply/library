@@ -1,14 +1,14 @@
-import { ArrowLeftIcon } from "@radix-ui/react-icons";
-import NextLink from "next/link";
-import { ReactNode } from "react";
-import { cn } from "utils";
+import { ArrowLeftIcon } from "@radix-ui/react-icons"
+import NextLink from "next/link"
+import { ReactNode } from "react"
+import { cn } from "utils"
 
 export const BackLink = ({
   children,
   href,
 }: {
-  children: React.ReactNode;
-  href: string;
+  children: React.ReactNode
+  href: string
 }) => {
   return (
     <Link
@@ -21,13 +21,13 @@ export const BackLink = ({
         "border-b",
         "border-black",
         "no-underline",
-        "text-black"
+        "text-black",
       )}
     >
       <ArrowLeftIcon /> {children}
     </Link>
-  );
-};
+  )
+}
 
 export const BestPracticesLink = () => {
   return (
@@ -37,14 +37,14 @@ export const BestPracticesLink = () => {
     >
       Best Practices Guide
     </Link>
-  );
-};
+  )
+}
 
 interface CustomLinkProps {
-  children?: ReactNode;
-  href: string;
-  isExternal?: boolean;
-  className?: string;
+  children?: ReactNode
+  href: string
+  isExternal?: boolean
+  className?: string
 }
 
 export const Link = ({ isExternal, className, ...rest }: CustomLinkProps) => {
@@ -55,5 +55,5 @@ export const Link = ({ isExternal, className, ...rest }: CustomLinkProps) => {
       rel={isExternal ? "noreferrer" : undefined}
       className={cn("text-primary", "underline", className)}
     />
-  );
-};
+  )
+}
