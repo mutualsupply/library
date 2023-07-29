@@ -3,6 +3,9 @@ import GitHubProvider from "next-auth/providers/github";
 import env from "../../../../lib/env";
 
 const handler = NextAuth({
+  session: {
+    strategy: "jwt",
+  },
   secret: process.env.SECRET,
   providers: [
     GitHubProvider({
