@@ -12,6 +12,7 @@ RUN chmod 400 ~/.ssh/id_ed25519
 RUN chmod 400 ~/.ssh/id_ed25519.pub
 
 RUN ssh-keyscan github.com >>/root/.ssh/known_hosts
+RUN ssh-keyscan github.com >>~/.ssh/known_hosts
 
 RUN chmod 400 ~/.ssh/id_ed25519
 RUN chmod 400 ~/.ssh/id_ed25519.pub
