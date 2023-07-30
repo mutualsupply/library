@@ -321,8 +321,7 @@ const NewCaseStudyForm = ({ onSuccess }: NewCaseStudyFormProps) => {
       credentials: "same-origin",
     })
     if (!res.ok) {
-      console.error("Could not create case study pr")
-      console.error(await res.text())
+      console.error("Could not create case study", await res.text())
       setError("Could not create case study")
     } else {
       const json = await res.json()
