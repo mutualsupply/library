@@ -36,6 +36,7 @@ const createCaseStudy = (
   let markdown = `
 # ${caseStudy.title}
 ### by ${caseStudy.name} (${caseStudy.email})
+### organization: ${caseStudy.organizationName}
 
 ${caseStudy.productDescription}
 ${caseStudy.industry}

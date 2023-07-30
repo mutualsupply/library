@@ -2,6 +2,7 @@ export interface CaseStudy {
   email: string
   name: string
   title: string
+  organizationName: string
   productDescription: string
   industry: string
   doesUseChain: boolean

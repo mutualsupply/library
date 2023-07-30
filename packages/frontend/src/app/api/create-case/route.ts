@@ -24,6 +24,7 @@ export async function POST(req: Request) {
       )
     }
     const caseStudy = caseStudyBodySchema.parse(await req.json())
+    console.log(`Creating case study: ${JSON.stringify(caseStudy)}`)
     const res = await fetch(`${env.SERVER_BASE_URL}/case-study`, {
       method: "POST",
       headers: {
