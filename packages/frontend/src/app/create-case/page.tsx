@@ -251,11 +251,8 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
         </Section>
       )}
       {view === "success" && receipt && (
-        <Section title="Case Study Created" size="lg">
+        <Section title={receipt.caseStudy.title} size="lg">
           <div>
-            <div className={cn("text-2xl", "font-bold")}>
-              {receipt?.caseStudy.title}
-            </div>
             <div className={cn("text-xl")}>by: {receipt?.pr.user.login}</div>
           </div>
           <Link
