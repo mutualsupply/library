@@ -24,9 +24,13 @@ const createCaseStudy = (
   if (!isProd) {
     branchName += "-dev"
   }
+  const now = Date.now()
+  console.log("writing now", now)
+
   const dirName = `/tmp/new-study-${Date.now()}`
   const pathToFrontendPackage = `${dirName}/site/packages/frontend`
   run(`mkdir ${dirName}`)
+  run(`echo 'testing this out ${now}' > /tmp/test-${now}.txt`)
   run(
     `GIT_SSH_COMMAND="ssh -i /root/.ssh/id_ed25519" git clone git@github.com:mutualsupply/site.git ${dirName}/site`,
   )
