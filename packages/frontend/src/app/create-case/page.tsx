@@ -143,7 +143,6 @@ const DraftCaseStudy = ({ pull }: DraftCaseStudyProps) => {
         )}
       >
         <span>{pull.title}</span>
-        <span className={cn("text-xs")}>({pull.number})</span>
       </Link>
       <div className={cn("text-primary")}>{pull.user?.login}</div>
     </div>
