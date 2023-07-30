@@ -1,6 +1,7 @@
 import NextAuth from "next-auth"
 import GitHubProvider from "next-auth/providers/github"
 import env from "../../../../lib/env"
+import { GithubEmailsRepsonse } from "./../../../../../../server/src/interfaces"
 
 const handler = NextAuth({
   session: {
@@ -14,31 +15,25 @@ const handler = NextAuth({
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
-      console.log("--- SIGNIN ---")
-      console.log({ user, account, profile, email, credentials })
-      console.log("--- END SIGNIN ---")
+    async signIn({ account, profile }) {
       if (account?.provider === "github") {
-        if (!profile?.email) {
-          const res = await fetch("https://api.github.com/user/emails", {
-            headers: {
-              Authorization: `token ${account.access_token}`,
-            },
-          })
-          const emails = await res.json()
-          if (emails?.length > 0) {
-            profile!.email = emails.sort(
-              (a: any, b: any) => b.primary - a.primary,
-            )[0].email
+        if (profile) {
+          if (!profile.email) {
+            const res = await fetch("https://api.github.com/user/emails", {
+              headers: {
+                Authorization: `token ${account.access_token}`,
+              },
+            })
+            const emails = (await res.json()) as GithubEmailsRepsonse
+            if (emails?.length > 0) {
+              profile.email = emails.find((email) => email.primary)?.email
+            }
           }
         }
       }
       return true
     },
     async jwt(jwt) {
-      console.log("--- JWT ---")
-      console.log(jwt)
-      console.log("--- END JWT ---")
       if (jwt.account) {
         jwt.token.accessToken = jwt.account.access_token
         jwt.token.expiresAt = jwt.account.expires_at
@@ -48,9 +43,6 @@ const handler = NextAuth({
       return jwt.token
     },
     async session(sesh) {
-      console.log("--- SESSION ---")
-      console.log(sesh)
-      console.log("--- END SESSION ---")
       return sesh.session
     },
   },

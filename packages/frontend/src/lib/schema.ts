@@ -19,6 +19,9 @@ export const caseStudyFormSchema = z.object({
     .max(MAX_TITLE_LENGTH, {
       message: `Keep it short, max characters: ${MAX_TITLE_LENGTH}`,
     }),
+  organizationName: z
+    .string()
+    .min(1, { message: "Please include the name of the organization" }),
   productDescription: z
     .string()
     .min(1, { message: "Please include a description of the product" }),

@@ -26,6 +26,7 @@ import Github from "../../components/icons/Github"
 import { Button } from "../../components/ui/button"
 import { Form } from "../../components/ui/form"
 import { GithubPullResponse, getPulls } from "../../lib/api"
+import { isProd } from "../../lib/env"
 import { CreateNewCaseStudyResponse } from "../../lib/interfaces"
 import { BooleanStrings, caseStudyFormSchema } from "../../lib/schema"
 
@@ -250,11 +251,8 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
         </Section>
       )}
       {view === "success" && receipt && (
-        <Section title="Case Study Created" size="lg">
+        <Section title={receipt.caseStudy.title} size="lg">
           <div>
-            <div className={cn("text-2xl", "font-bold")}>
-              {receipt?.caseStudy.title}
-            </div>
             <div className={cn("text-xl")}>by: {receipt?.pr.user.login}</div>
           </div>
           <Link
@@ -294,18 +292,32 @@ const NewCaseStudyForm = ({ onSuccess }: NewCaseStudyFormProps) => {
   const isLoggedIn = session?.user?.name
   const [markdown, setMarkdown] = useState("")
   const [error, setError] = useState<null | string>(null)
+  const defaultValues = isProd()
+    ? {
+        email: session?.user?.email || "",
+        name: session?.user?.name || "",
+        organizationName: "",
+        title: "",
+        productDescription: "",
+        industry: "",
+        doesUseChain: "",
+        partOfTeam: "",
+        url: "",
+      }
+    : {
+        email: session?.user?.email || "calebcarithers@me.com",
+        name: session?.user?.name || "calebguy",
+        title: "How to make a Case Study",
+        organizationName: "MUTUAL",
+        productDescription: "Mutual Supply",
+        industry: "Knowledge",
+        doesUseChain: BooleanStrings.True,
+        partOfTeam: BooleanStrings.True,
+        url: "https://dev.mutual.supply",
+      }
   const form = useForm({
     resolver: zodResolver(caseStudyFormSchema),
-    defaultValues: {
-      email: session?.user?.email || "",
-      name: session?.user?.name || "",
-      title: "",
-      productDescription: "",
-      industry: "",
-      doesUseChain: "",
-      partOfTeam: "",
-      url: "",
-    },
+    defaultValues,
   })
   async function onSubmit(values: z.infer<typeof caseStudyFormSchema>) {
     setError(null)
@@ -321,8 +333,7 @@ const NewCaseStudyForm = ({ onSuccess }: NewCaseStudyFormProps) => {
       credentials: "same-origin",
     })
     if (!res.ok) {
-      console.error("Could not create case study pr")
-      console.error(await res.text())
+      console.error("Could not create case study", await res.text())
       setError("Could not create case study")
     } else {
       const json = await res.json()
@@ -340,13 +351,14 @@ const NewCaseStudyForm = ({ onSuccess }: NewCaseStudyFormProps) => {
         </Section>
         <Section title="About the report">
           <TextInput name="title" label="Title of the Report" />
+          <TextInput name="organizationName" label="Name of the organization" />
           <TextInput
             name="productDescription"
             label="In 1-2 sentences, please briefly outline the main purpose of the product you are analyzing"
           />
           <TextInput
             name="industry"
-            label="In which industry would you place this product?"
+            label="Which industry is this interface designed for?"
           />
           <SelectInput
             name="doesUseChain"

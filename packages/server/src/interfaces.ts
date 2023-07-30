@@ -2,6 +2,7 @@ export interface CaseStudy {
   email: string
   name: string
   title: string
+  organizationName: string
   productDescription: string
   industry: string
   doesUseChain: boolean
@@ -15,6 +16,15 @@ export interface GithubUser {
   email: string
   image?: string
 }
+
+export interface GithubEmail {
+  email: string
+  verified: boolean
+  primary: boolean
+  visibility: string
+}
+
+export type GithubEmailsRepsonse = Array<GithubEmail>
 
 export interface PostCaseStudyRequestBody {
   caseStudy: CaseStudy
