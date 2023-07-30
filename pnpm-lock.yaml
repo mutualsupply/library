@@ -68,6 +68,9 @@ importers:
       '@milkdown/transformer':
         specifier: ^7.2.4
         version: 7.2.4(@milkdown/prose@7.2.4)
+      '@milkdown/utils':
+        specifier: ^7.2.4
+        version: 7.2.4(@milkdown/core@7.2.4)(@milkdown/ctx@7.2.4)(@milkdown/prose@7.2.4)(@milkdown/transformer@7.2.4)
       '@next/mdx':
         specifier: ^13.4.6
         version: 13.4.6(@mdx-js/loader@2.3.0)(@mdx-js/react@2.3.0)
@@ -125,6 +128,9 @@ importers:
       react-hook-form:
         specifier: ^7.45.1
         version: 7.45.1(react@18.2.0)
+      react-icons:
+        specifier: ^4.10.1
+        version: 4.10.1(react@18.2.0)
       spinners-react:
         specifier: ^1.0.7
         version: 1.0.7(@types/react-dom@18.0.3)(@types/react@18.0.9)(react-dom@18.2.0)(react@18.2.0)
@@ -6525,6 +6531,14 @@ packages:
     engines: {node: '>=12.22.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18
+    dependencies:
+      react: 18.2.0
+    dev: false
+
+  /react-icons@4.10.1(react@18.2.0):
+    resolution: {integrity: sha512-/ngzDP/77tlCfqthiiGNZeYFACw85fUjZtLbedmJ5DTlNDIwETxhwBzdOJ21zj4iJdvc0J3y7yOsX3PpxAJzrw==}
+    peerDependencies:
+      react: '*'
     dependencies:
       react: 18.2.0
     dev: false

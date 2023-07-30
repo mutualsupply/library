@@ -1,14 +1,37 @@
-import { Editor, editorViewOptionsCtx, rootCtx } from "@milkdown/core"
+import { CmdKey, Editor, editorViewOptionsCtx, rootCtx } from "@milkdown/core"
 import { clipboard } from "@milkdown/plugin-clipboard"
 import { cursor } from "@milkdown/plugin-cursor"
 import { emoji } from "@milkdown/plugin-emoji"
-import { history, historyKeymap } from "@milkdown/plugin-history"
+import {
+  history,
+  historyKeymap,
+  redoCommand,
+  undoCommand,
+} from "@milkdown/plugin-history"
 import { indent } from "@milkdown/plugin-indent"
 import { listener, listenerCtx } from "@milkdown/plugin-listener"
 import { upload } from "@milkdown/plugin-upload"
-import { commonmark } from "@milkdown/preset-commonmark"
+import {
+  commonmark,
+  toggleEmphasisCommand,
+  toggleStrongCommand,
+  wrapInBlockquoteCommand,
+  wrapInBulletListCommand,
+  wrapInOrderedListCommand,
+} from "@milkdown/preset-commonmark"
 import { Milkdown, MilkdownProvider, useEditor } from "@milkdown/react"
 import { nord } from "@milkdown/theme-nord"
+import { callCommand } from "@milkdown/utils"
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  FontBoldIcon,
+  FontItalicIcon,
+  QuoteIcon,
+} from "@radix-ui/react-icons"
+import { BiListOl, BiListUl } from "react-icons/bi"
+import { cn } from "utils"
+import { Button } from "./ui/button"
 
 interface MilkdownEditorProps {
   onChange: (value: string) => void
@@ -16,7 +39,7 @@ interface MilkdownEditorProps {
 }
 
 const MilkdownEditor = ({ onChange }: MilkdownEditorProps) => {
-  useEditor(
+  const { get } = useEditor(
     (root) =>
       Editor.make()
         .config((ctx) => {
@@ -59,7 +82,75 @@ const MilkdownEditor = ({ onChange }: MilkdownEditorProps) => {
         .use(cursor),
     [],
   )
-  return <Milkdown />
+
+  function call<T>(command: CmdKey<T>, payload?: T) {
+    return get()?.action(callCommand(command, payload))
+  }
+  return (
+    <div>
+      <div
+        className={cn(
+          "border",
+          "p-1",
+          "bg-[#EAEAE6]",
+          "flex",
+          "items-center",
+          "gap-1",
+        )}
+      >
+        <Button
+          onClick={() => call(undoCommand.key)}
+          variant={"outlineWhite"}
+          size="icon"
+        >
+          <ArrowLeftIcon />
+        </Button>
+        <Button
+          onClick={() => call(redoCommand.key)}
+          variant="outlineWhite"
+          size="icon"
+        >
+          <ArrowRightIcon />
+        </Button>
+        <Button
+          onClick={() => call(toggleStrongCommand.key)}
+          variant="outlineWhite"
+          size="icon"
+        >
+          <FontBoldIcon />
+        </Button>
+        <Button
+          onClick={() => call(toggleEmphasisCommand.key)}
+          variant="outlineWhite"
+          size="icon"
+        >
+          <FontItalicIcon />
+        </Button>
+        <Button
+          onClick={() => call(wrapInBulletListCommand.key)}
+          variant="outlineWhite"
+          size="icon"
+        >
+          <BiListUl />
+        </Button>
+        <Button
+          onClick={() => call(wrapInOrderedListCommand.key)}
+          variant="outlineWhite"
+          size="icon"
+        >
+          <BiListOl />
+        </Button>
+        <Button
+          onClick={() => call(wrapInBlockquoteCommand.key)}
+          variant="outlineWhite"
+          size="icon"
+        >
+          <QuoteIcon />
+        </Button>
+      </div>
+      <Milkdown />
+    </div>
+  )
 }
 
 export const MilkdownEditorWrapper = ({ onChange }: MilkdownEditorProps) => {
