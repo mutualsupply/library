@@ -96,6 +96,7 @@ const MilkdownEditor = ({ onChange }: MilkdownEditorProps) => {
           "flex",
           "items-center",
           "gap-1",
+          "border-b-0",
         )}
       >
         <Button
