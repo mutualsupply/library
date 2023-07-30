@@ -88,3 +88,7 @@
     background-image: url('/images/bg-pattern.svg');
   }
 }
+
+.ProseMirror {
+  min-height: 600px;
+}

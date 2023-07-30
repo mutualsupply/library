@@ -10,12 +10,12 @@ interface Env {
   NEXT_PUBLIC_ALCHEMY_KEY: string
   NEXT_PUBLIC_WALLETCONNECT_ID: string
   NEXT_PUBLIC_APP_ENV: AppEnv
+  NEXT_PUBLIC_SERVER_BASE_URL: string
   GITHUB_TOKEN: string
   GITHUB_ID: string
   GITHUB_SECRET: string
   NEXTAUTH_URL: string
   NEXTAUTH_SECRET: string
-  SERVER_BASE_URL: string
 }
 
 const env: Env = {
@@ -28,7 +28,8 @@ const env: Env = {
   GITHUB_SECRET: process.env.GITHUB_SECRET as string,
   NEXTAUTH_URL: process.env.NEXTAUTH_URL as string,
   NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET as string,
-  SERVER_BASE_URL: process.env.SERVER_BASE_URL as string,
+  NEXT_PUBLIC_SERVER_BASE_URL: process.env
+    .NEXT_PUBLIC_SERVER_BASE_URL as string,
 }
 
 const frontendKeys = objectKeys(env).filter((key) =>

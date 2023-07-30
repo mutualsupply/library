@@ -10,32 +10,57 @@ import {
 } from "@milkdown/plugin-history"
 import { indent } from "@milkdown/plugin-indent"
 import { listener, listenerCtx } from "@milkdown/plugin-listener"
-import { upload } from "@milkdown/plugin-upload"
+import { Uploader, upload, uploadConfig } from "@milkdown/plugin-upload"
 import {
   commonmark,
   toggleEmphasisCommand,
   toggleStrongCommand,
   wrapInBlockquoteCommand,
   wrapInBulletListCommand,
+  wrapInHeadingCommand,
   wrapInOrderedListCommand,
 } from "@milkdown/preset-commonmark"
+import { Node, Schema } from "@milkdown/prose/model"
 import { Milkdown, MilkdownProvider, useEditor } from "@milkdown/react"
 import { nord } from "@milkdown/theme-nord"
 import { callCommand } from "@milkdown/utils"
-import {
-  ArrowLeftIcon,
-  ArrowRightIcon,
-  FontBoldIcon,
-  FontItalicIcon,
-  QuoteIcon,
-} from "@radix-ui/react-icons"
+import { FontBoldIcon, FontItalicIcon, QuoteIcon } from "@radix-ui/react-icons"
 import { BiListOl, BiListUl } from "react-icons/bi"
+import { GrRedo, GrUndo } from "react-icons/gr"
+import { LuHeading1, LuHeading2, LuHeading3 } from "react-icons/lu"
 import { cn } from "utils"
 import { Button } from "./ui/button"
 
 interface MilkdownEditorProps {
   onChange: (value: string) => void
   placeholder?: string
+}
+
+const uploader: Uploader = async (files: FileList, schema: Schema) => {
+  const images: File[] = []
+  for (let i = 0; i < files.length; i++) {
+    const file = files.item(i)
+    if (!file) continue
+    if (!file.type.includes("image")) continue
+    images.push(file)
+  }
+
+  const nodes: Node[] = await Promise.all(
+    images.map(async (image) => {
+      console.log(image)
+      const src = await fetch("/api/upload", {
+        method: "POST",
+        body: image,
+      })
+      const alt = image.name
+      return schema.nodes.image.createAndFill({
+        src,
+        alt,
+      }) as Node
+    }),
+  )
+
+  return nodes
 }
 
 const MilkdownEditor = ({ onChange }: MilkdownEditorProps) => {
@@ -70,6 +95,11 @@ const MilkdownEditor = ({ onChange }: MilkdownEditorProps) => {
             Undo: "Mod-z",
             Redo: ["Mod-y", "Shift-Mod-z"],
           })
+
+          ctx.update(uploadConfig.key, (prev) => ({
+            ...prev,
+            uploader,
+          }))
         })
         .config(nord)
         .use(clipboard)
@@ -91,11 +121,11 @@ const MilkdownEditor = ({ onChange }: MilkdownEditorProps) => {
       <div
         className={cn(
           "border",
-          "p-1",
-          "bg-[#EAEAE6]",
+          "p-3",
+          "bg-[#D1E9FA]",
           "flex",
           "items-center",
-          "gap-1",
+          "gap-2",
           "border-b-0",
         )}
       >
@@ -104,14 +134,14 @@ const MilkdownEditor = ({ onChange }: MilkdownEditorProps) => {
           variant={"outlineWhite"}
           size="icon"
         >
-          <ArrowLeftIcon />
+          <GrUndo />
         </Button>
         <Button
           onClick={() => call(redoCommand.key)}
           variant="outlineWhite"
           size="icon"
         >
-          <ArrowRightIcon />
+          <GrRedo />
         </Button>
         <Button
           onClick={() => call(toggleStrongCommand.key)}
@@ -147,6 +177,27 @@ const MilkdownEditor = ({ onChange }: MilkdownEditorProps) => {
           size="icon"
         >
           <QuoteIcon />
+        </Button>
+        <Button
+          onClick={() => call(wrapInHeadingCommand.key, 1)}
+          variant="outlineWhite"
+          size="icon"
+        >
+          <LuHeading1 />
+        </Button>
+        <Button
+          onClick={() => call(wrapInHeadingCommand.key, 2)}
+          variant="outlineWhite"
+          size="icon"
+        >
+          <LuHeading2 />
+        </Button>
+        <Button
+          onClick={() => call(wrapInHeadingCommand.key, 3)}
+          variant="outlineWhite"
+          size="icon"
+        >
+          <LuHeading3 />
         </Button>
       </div>
       <Milkdown />
