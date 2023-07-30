@@ -305,8 +305,8 @@ const NewCaseStudyForm = ({ onSuccess }: NewCaseStudyFormProps) => {
         url: "",
       }
     : {
-        email: session?.user?.email || "calebcarithers@me.com",
-        name: session?.user?.name || "calebguy",
+        email: session?.user?.email || "",
+        name: session?.user?.name || "",
         title: "How to make a Case Study",
         organizationName: "MUTUAL",
         productDescription: "Mutual Supply",
