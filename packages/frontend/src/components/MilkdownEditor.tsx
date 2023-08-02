@@ -29,6 +29,7 @@ import { BiListOl, BiListUl } from "react-icons/bi"
 import { GrRedo, GrUndo } from "react-icons/gr"
 import { LuHeading1, LuHeading2, LuHeading3 } from "react-icons/lu"
 import { cn } from "utils"
+import env from "../lib/env"
 import { Button } from "./ui/button"
 
 interface MilkdownEditorProps {
@@ -48,9 +49,11 @@ const uploader: Uploader = async (files: FileList, schema: Schema) => {
   const nodes: Node[] = await Promise.all(
     images.map(async (image) => {
       console.log(image)
-      const src = await fetch("/api/upload", {
+      const formData = new FormData()
+      formData.append("files", image)
+      const src = await fetch(`${env.NEXT_PUBLIC_SERVER_BASE_URL}/media`, {
         method: "POST",
-        body: image,
+        body: formData,
       })
       const alt = image.name
       return schema.nodes.image.createAndFill({

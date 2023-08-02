@@ -44,6 +44,8 @@ router.post(
   "/media",
   multer.fields([{ name: "files", maxCount: 10 }]),
   async (ctx: Context, next) => {
+    //@ts-ignore
+    console.log("processing files", ctx.request.files)
     const origin = ctx.request.get("origin")
     console.log("origin", origin)
     //@ts-ignore
