@@ -22,7 +22,7 @@ router.get("/status", async (ctx, next) => {
   await next()
 })
 
-router.post("/case-study", async (ctx: Context, next) => {
+router.post("/case-study", async (ctx, next) => {
   const { caseStudy, user, isProd } = ctx.request
     .body as PostCaseStudyRequestBody
   if (!user.email) {
@@ -42,13 +42,11 @@ router.post("/case-study", async (ctx: Context, next) => {
 
 router.post(
   "/media",
-  multer.fields([{ name: "files", maxCount: 10 }]),
+  upload.fields([{ name: "files", maxCount: 10 }]),
   async (ctx: Context, next) => {
-    //@ts-ignore
     console.log("processing files", ctx.request.files)
     const origin = ctx.request.get("origin")
     console.log("origin", origin)
-    //@ts-ignore
     console.log("ctx.request.files", ctx.request.files)
     // const res = await uploadMedia()
     ctx.body = { message: "got it" }
