@@ -48,7 +48,7 @@ export function HomePage({ cases }: HomeProps) {
 
   return (
     <>
-      <div className={cn("flex", "items-center", "gap-8")}>
+      <div className={cn("my-5", "flex", "items-center", "gap-8")}>
         <div className={cn("flex", "justify-between", "items-center")}>
           <BackLink href={"https://mutual.supply"}>Index</BackLink>
         </div>
@@ -59,7 +59,7 @@ export function HomePage({ cases }: HomeProps) {
           onClearClick={() => setSelectedLabel(undefined)}
         />
       </div>
-      <div className={cn("my-10")}>
+      <div className={cn("mb-10", "mt-5")}>
         <AlphaToggle selected={selectedChar} onClick={onAlphaToggleClick} />
       </div>
       <div className={cn("flex", "flex-col")}>

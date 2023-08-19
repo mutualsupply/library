@@ -21,6 +21,7 @@ RUN git config --global user.name "Mutual Supply"
 RUN git config --global user.email "calebcarithers@me.com"
 
 RUN pnpm install
+RUN pnpx prisma generate
 
 FROM development as production
 COPY --from=development /usr/src/app /usr/src/app
