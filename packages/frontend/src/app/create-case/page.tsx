@@ -35,7 +35,7 @@ const NewCaseStudyPage = () => {
   }
   return (
     <div>
-      <BackLink href={"/"}>Library</BackLink>
+      <BackLink href={"/"}>Index</BackLink>
       <div className={cn("flex", "gap-24", "mt-4", "flex-col", "md:flex-row")}>
         <div className={cn("md:max-w-md", "w-full")}>
           <Accordion
@@ -125,7 +125,7 @@ const DraftCaseStudy = ({ pull }: DraftCaseStudyProps) => {
     <div className={cn("p-4", "border", "flex", "flex-col", "gap-2")}>
       <Link
         isExternal
-        href={pull.html_url}
+        href={`${pull.html_url}/files`}
         className={cn(
           "text-black",
           "font-aspekta",
