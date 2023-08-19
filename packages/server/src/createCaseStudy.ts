@@ -17,7 +17,7 @@ function createCaseStudy(
   }
   const now = Date.now()
   const dirName = `/tmp/new-study-${Date.now()}`
-  const repoName = 'library'
+  const repoName = "library"
   const pathToFrontendPackage = `${dirName}/${repoName}/packages/frontend`
   run(`mkdir ${dirName}`)
   run(`echo 'testing this out ${now}' > /tmp/test-${now}.txt`)
