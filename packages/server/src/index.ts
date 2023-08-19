@@ -46,7 +46,7 @@ router.post(
   upload.fields([{ name: "files", maxCount: 10 }]),
   async (ctx: Context, next) => {
     const origin = ctx.request.get("origin")
-    if (origin !== 'http://localhost:3000') {
+    if (origin !== "http://localhost:3000") {
       throw new Error("Invalid origin")
     }
     const files = ctx.request.files

@@ -6,7 +6,5 @@ import { getCases } from "../lib/server"
 
 export default function Page() {
   const cases = getCases()
-  return (
-    <HomePage cases={cases} />
-  )
+  return <HomePage cases={cases} />
 }

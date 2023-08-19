@@ -39,11 +39,15 @@ export default function Header() {
 }
 
 interface NavButtonProps {
-  href: string;
+  href: string
   isSelected?: boolean
 }
 
-const NavButton = ({ href, children, isSelected }: PropsWithChildren<NavButtonProps>) => {
+const NavButton = ({
+  href,
+  children,
+  isSelected,
+}: PropsWithChildren<NavButtonProps>) => {
   return (
     <Link
       href={href}
@@ -59,7 +63,7 @@ const NavButton = ({ href, children, isSelected }: PropsWithChildren<NavButtonPr
         "inline-flex",
         "items-center",
         "justify-center",
-        {"bg-primary border-transparent text-white": isSelected}
+        { "bg-primary border-transparent text-white": isSelected },
       )}
     >
       {children}
