@@ -4,9 +4,8 @@ import multer from "@koa/multer"
 import { join } from "path"
 import { createReadStream, readFileSync } from "fs"
 
-
 class MediaClass {
-  cdnBaseUrl = 'https://media.mutual.supply'
+  cdnBaseUrl = "https://media.mutual.supply"
   client: AWS.S3
   constructor() {
     this.client = new AWS.S3({
@@ -19,9 +18,9 @@ class MediaClass {
   }
 
   private getFilename(file: multer.File) {
-    return `${file.filename}-${
-      new Date().toISOString().split("T")[0]
-    }.${file.originalname.split(".")[file.originalname.split(".").length - 1]}`
+    return `${file.filename}-${new Date().toISOString().split("T")[0]}.${
+      file.originalname.split(".")[file.originalname.split(".").length - 1]
+    }`
   }
 
   async upload(file: multer.File) {
@@ -30,7 +29,7 @@ class MediaClass {
       new AWS.PutObjectCommand({
         Bucket: env.AWS_BUCKET_NAME,
         Key: filename,
-        Body: createReadStream(file.path)
+        Body: createReadStream(file.path),
       }),
     )
     return `${this.cdnBaseUrl}/${filename}`
