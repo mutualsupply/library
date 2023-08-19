@@ -22,6 +22,7 @@ export default function AlphaToggle({ onClick, selected }: AlphaToggleProps) {
             },
             "font-aspekta",
             "font-light",
+            "w-[28px]", "h-[28px]"
           )}
         >
           {char}

@@ -1,3 +1,4 @@
+import cors from "@koa/cors"
 import multer from "@koa/multer"
 import Koa, { Context } from "koa"
 import bodyParser from "koa-bodyparser"
@@ -44,10 +45,12 @@ router.post(
   "/media",
   upload.fields([{ name: "files", maxCount: 10 }]),
   async (ctx: Context, next) => {
-    console.log("processing files", ctx.request.files)
     const origin = ctx.request.get("origin")
-    console.log("origin", origin)
-    console.log("ctx.request.files", ctx.request.files)
+    if (origin !== 'http://localhost:3000') {
+      throw new Error("Invalid origin")
+    }
+    const files = ctx.request.files
+    console.log("processing files", files)
     // const res = await uploadMedia()
     ctx.body = { message: "got it" }
     await next()
@@ -57,6 +60,7 @@ router.post(
 app.use(json())
 app.use(bodyParser())
 app.use(logger())
+app.use(cors())
 app.use(router.routes())
 app.use(router.allowedMethods())
 
