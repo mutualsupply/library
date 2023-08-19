@@ -17,14 +17,15 @@ function createCaseStudy(
   }
   const now = Date.now()
   const dirName = `/tmp/new-study-${Date.now()}`
-  const pathToFrontendPackage = `${dirName}/site/packages/frontend`
+  const repoName = 'library'
+  const pathToFrontendPackage = `${dirName}/${repoName}/packages/frontend`
   run(`mkdir ${dirName}`)
   run(`echo 'testing this out ${now}' > /tmp/test-${now}.txt`)
   run(
-    `GIT_SSH_COMMAND="ssh -i /root/.ssh/id_ed25519" git clone git@github.com:mutualsupply/site.git ${dirName}/site`,
+    `GIT_SSH_COMMAND="ssh -i /root/.ssh/id_ed25519" git clone git@github.com:mutualsupply/${repoName}.git ${dirName}/${repoName}`,
   )
   if (!isProd) {
-    run(`cd ${dirName}/site && git checkout dev`)
+    run(`cd ${dirName}/${repoName} && git checkout dev`)
   }
   let markdown = `
 # ${caseStudy.title}
@@ -46,14 +47,14 @@ Author is part of the team: ${caseStudy.partOfTeam ? "Yes" : "No"}
   run(
     `echo "${markdown}" > ${pathToFrontendPackage}/src/markdown/mutual-supply.mdx`,
   )
-  run(`cd ${dirName}/site && git status`)
-  run(`cd ${dirName}/site && git branch ${branchName}`)
-  run(`cd ${dirName}/site && git checkout ${branchName}`)
-  run(`cd ${dirName}/site && git add .`)
+  run(`cd ${dirName}/${repoName} && git status`)
+  run(`cd ${dirName}/${repoName} && git branch ${branchName}`)
+  run(`cd ${dirName}/${repoName} && git checkout ${branchName}`)
+  run(`cd ${dirName}/${repoName} && git add .`)
   run(
-    `cd ${dirName}/site && git commit -m 'testing' --author "${user.name} <${user.email}>" `,
+    `cd ${dirName}/${repoName} && git commit -m 'testing' --author "${user.name} <${user.email}>" `,
   )
-  run(`cd ${dirName}/site && git push origin -u ${branchName}`)
+  run(`cd ${dirName}/${repoName} && git push origin -u ${branchName}`)
   run(`rm -rf ${dirName}`)
   return {
     branchName,

@@ -12,4 +12,4 @@ export async function getPulls(): Promise<GithubPullResponse> {
 }
 
 export const GITHUB_OWNER = "mutualsupply"
-export const GITHUB_REPO = "site"
+export const GITHUB_REPO = "library"

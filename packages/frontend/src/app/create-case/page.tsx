@@ -80,7 +80,7 @@ const NewCaseStudyPage = () => {
               <AccordionContent>
                 <Link
                   isExternal
-                  href={"https://github.com/mutualsupply/site/pulls"}
+                  href={"https://github.com/mutualsupply/library/pulls"}
                   className={cn(
                     "inline-flex",
                     "items-center",
