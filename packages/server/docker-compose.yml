@@ -30,13 +30,3 @@ services:
     depends_on: 
       - db
     # command: tail -f /dev/null
-
-  # apiprod:
-  #   container_name: mutual-api-prod
-  #   build:
-  #     context: .
-  #     target: production
-  #   ports:
-  #     - "${PORT}:${PORT}"
-  #   env_file:
-  #     - .env

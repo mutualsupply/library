@@ -8,6 +8,7 @@ import Router from "koa-router"
 import createCaseStudy from "./createCaseStudy"
 import env from "./env"
 import { PostCaseStudyRequestBody } from "./interfaces"
+import Media from "./media"
 
 const app = new Koa()
 const router = new Router()
@@ -49,10 +50,15 @@ router.post(
     if (origin !== "http://localhost:3000") {
       throw new Error("Invalid origin")
     }
-    const files = ctx.request.files
-    console.log("processing files", files)
-    // const res = await uploadMedia()
-    ctx.body = { message: "got it" }
+    //@ts-ignore
+    const files = ctx.request.files?.files
+    if (!files || !Array.isArray(files)) {
+      throw new Error("No files")
+    }
+    const promises = files.map((file) => Media.upload(file))
+    const res = await Promise.all(promises)
+    console.log("res", res)
+    ctx.body = res
     await next()
   },
 )

@@ -51,10 +51,13 @@ const uploader: Uploader = async (files: FileList, schema: Schema) => {
       console.log(image)
       const formData = new FormData()
       formData.append("files", image)
-      const src = await fetch(`${env.NEXT_PUBLIC_SERVER_BASE_URL}/media`, {
+      const res = await fetch(`${env.NEXT_PUBLIC_SERVER_BASE_URL}/media`, {
         method: "POST",
         body: formData,
       })
+      const json = await res.json()
+      const src = json[0]
+      console.log("debug:: got back src", json)
       const alt = image.name
       return schema.nodes.image.createAndFill({
         src,
