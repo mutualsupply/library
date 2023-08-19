@@ -25,7 +25,17 @@ export default function Header() {
       </div>
       <div className={cn("items-center", "gap-4", "hidden", "md:flex")}>
         <Dev>
-          <Link href="/create-case" className={cn("text-sm", "border", "border-red-400", "border-dashed", "p-2", "rounded")}>
+          <Link
+            href="/create-case"
+            className={cn(
+              "text-sm",
+              "border",
+              "border-red-400",
+              "border-dashed",
+              "p-2",
+              "rounded",
+            )}
+          >
             ~create case~
           </Link>
         </Dev>

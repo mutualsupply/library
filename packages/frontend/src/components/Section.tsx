@@ -8,7 +8,7 @@ export default function Section({
   title: string
   children: React.ReactNode
   size?: "sm" | "lg"
-}){
+}) {
   return (
     <div className={cn("flex", "flex-col", "gap-4", "md:max-w-xl")}>
       <div

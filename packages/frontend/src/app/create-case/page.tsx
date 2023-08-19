@@ -160,7 +160,9 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
     <div>
       {view === "form" && (
         <Section title="Submit a Report" size="lg">
-          <div className={cn("flex", "flex-col", "gap-6", "font-medium", "mt-4")}>
+          <div
+            className={cn("flex", "flex-col", "gap-6", "font-medium", "mt-4")}
+          >
             <div>
               Welcome to the MUTUAL research collective. Please read the{" "}
               <BestPracticesLink /> before submitting your report. All reports

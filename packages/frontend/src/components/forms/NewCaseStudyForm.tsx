@@ -19,7 +19,7 @@ interface NewCaseStudyFormProps {
   onSuccess?: (data: CreateNewCaseStudyResponse) => void
 }
 
-export default function NewCaseStudyForm({ onSuccess }: NewCaseStudyFormProps){
+export default function NewCaseStudyForm({ onSuccess }: NewCaseStudyFormProps) {
   const { data: session } = useSession()
   const isLoggedIn = session?.user?.name
   const [markdown, setMarkdown] = useState("")
