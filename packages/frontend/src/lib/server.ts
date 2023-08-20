@@ -4,11 +4,7 @@ import path from "path"
 import { randomInclusive } from "utils"
 const marked = require("marked")
 
-const TEST_CASES = [
-  "User Interaction",
-  "Onboarding",
-  "Swapping"
-]
+const TEST_CASES = ["User Interaction", "Onboarding", "Swapping"]
 
 export function getCases() {
   const dir = path.join(process.cwd(), "src/markdown")
