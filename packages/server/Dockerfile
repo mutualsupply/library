@@ -26,4 +26,4 @@ RUN pnpx prisma generate
 FROM development as production
 COPY --from=development /usr/src/app /usr/src/app
 RUN pnpm build
-CMD ["node", "dist/index.js"]
+CMD ["pnpm", "start:prod"]
