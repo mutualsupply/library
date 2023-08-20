@@ -4,31 +4,41 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev:container": "nodemon --exec ts-node src/index.ts",
-    "dev": "docker-compose up apidev",
+    "dev:container": "pnpm prisma:migrate:dev && nodemon --exec ts-node src/index.ts",
+    "dev": "docker-compose up",
     "build": "tsc",
     "start": "node dist/index.js",
-    "format": "rome format . --write"
+    "format": "rome format . --write",
+    "prisma:migrate:dev": "pnpx prisma migrate dev",
+    "prisma:format": "pnpx prisma format"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.379.1",
+    "@koa/cors": "^4.0.0",
+    "@koa/multer": "^3.0.2",
+    "@prisma/client": "^5.1.1",
     "@types/koa-bodyparser": "^4.3.10",
     "dotenv": "^16.3.1",
     "koa": "^2.14.2",
     "koa-bodyparser": "^4.4.1",
     "koa-json": "^2.0.2",
     "koa-logger": "^3.2.1",
-    "koa-router": "^12.0.0"
+    "koa-router": "^12.0.0",
+    "multer": "1.4.5-lts.1"
   },
   "devDependencies": {
     "@types/koa": "^2.13.6",
     "@types/koa-json": "^2.0.20",
     "@types/koa-logger": "^3.1.2",
     "@types/koa-router": "^7.4.4",
+    "@types/koa__cors": "^4.0.0",
+    "@types/koa__multer": "^2.0.4",
     "@types/node": "^17.0.31",
     "nodemon": "^3.0.1",
+    "prisma": "5.2.0-dev.71",
     "rome": "12.0.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4"

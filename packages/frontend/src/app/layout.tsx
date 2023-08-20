@@ -10,9 +10,9 @@ export const metadata: Metadata = {
   description: "Mutual Supply",
 }
 const aeonikFono = localFont({
-  src: "../../public/fonts/AeonikFonoTRIAL-Light.woff2",
+  src: "../../public/fonts/AeonikFonoTRIAL-Regular.otf",
   variable: "--font-aeonik-fono",
-  weight: "300",
+  weight: "400",
   style: "normal",
 })
 
