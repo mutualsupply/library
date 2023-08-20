@@ -7,6 +7,7 @@ import { getCaseLabelItems } from "../lib/client"
 import { Case, CaseSource } from "../lib/interfaces"
 import LabelFilter from "./LabelFilter"
 import RemoteMDX from "./RemoteMDX"
+import { BackLink } from "./Links"
 
 interface CaseProps {
   cases: Array<Case>
@@ -38,7 +39,8 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
   }
   return (
     <>
-      <div className={cn("my-5")}>
+      <div className={cn("my-5", "flex", "items-center", "gap-8")}>
+        <BackLink href={"/"}>Index</BackLink>
         <LabelFilter
           items={labelFilterItems}
           selected={selectedLabel}

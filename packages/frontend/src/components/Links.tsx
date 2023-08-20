@@ -19,9 +19,9 @@ export const BackLink = ({
         "gap-1",
         "text-sm",
         "border-b",
-        "border-black",
         "no-underline",
-        "text-black",
+        "text-primary",
+        "border-primary",
       )}
     >
       <ArrowLeftIcon /> {children}

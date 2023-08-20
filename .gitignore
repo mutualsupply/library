@@ -47,3 +47,4 @@ next-env.d.ts
 dist/
 id_ed25519
 id_ed25519.pub
+uploads
