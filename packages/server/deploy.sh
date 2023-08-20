@@ -1,3 +1,3 @@
 set -eu
 
-fly launch
+fly deploy

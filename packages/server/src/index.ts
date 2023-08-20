@@ -46,8 +46,13 @@ router.post(
   "/media",
   upload.fields([{ name: "files", maxCount: 10 }]),
   async (ctx: Context, next) => {
+    const validOrigins = [
+      "http://localhost:3000",
+      "https://dev.research.mutual.supply",
+      "https://research.mutual.supply",
+    ]
     const origin = ctx.request.get("origin")
-    if (origin !== "http://localhost:3000") {
+    if (!validOrigins.includes(origin)) {
       throw new Error("Invalid origin")
     }
     //@ts-ignore

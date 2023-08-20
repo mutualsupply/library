@@ -6,9 +6,8 @@ const marked = require("marked")
 
 const TEST_CASES = [
   "User Interaction",
-  "Buttons",
-  "How not to do it",
-  "Just cool",
+  "Onboarding",
+  "Swapping"
 ]
 
 export function getCases() {
