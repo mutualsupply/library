@@ -24,6 +24,8 @@ import NewCaseStudyForm from "../forms/NewCaseStudyForm"
 import Section from "../Section"
 import DraftCaseStudy from "./DraftCaseStudy"
 import { MilkdownEditorWrapper } from "../MilkdownEditor"
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group"
+import { Label } from "../ui/label"
 
 export default function NewCaseStudy() {
   const { data, isLoading, refetch } = useQuery({
@@ -221,15 +223,42 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
             <AccordionItem value="item-1">
               <AccordionTrigger>2. Type of thoughts</AccordionTrigger>
               <AccordionContent>
-                <div>I am submitting a:</div>
-                <div>
-                  <div>Signal</div>
-                  <div>Observation</div>
-                  <div>Exploration</div>
+                <div className={cn("font-bold", "text-lg")}>
+                  I am submitting a:
                 </div>
+                <RadioGroup defaultValue="option-one" className="mt-3">
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="option-one" id="option-one" />
+                    <Label htmlFor="option-one" className="text-base">
+                      Signal
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="option-two" id="option-two" />
+                    <Label htmlFor="option-two" className="text-base">
+                      Observation
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem
+                      disabled
+                      value="option-three"
+                      id="option-three"
+                    />
+                    <Label
+                      htmlFor="option-three"
+                      className="text-base text-gray-400"
+                    >
+                      Exploration
+                    </Label>
+                  </div>
+                </RadioGroup>
                 <div className={cn("mt-4")}>
-                  We are currently accepting Exploration submissions manually.
-                  Chat with us to get started on the submission process.
+                  We are currently accepting Exploration submissions manually.{" "}
+                  <Link isExternal href="mailto:help@mutual.supply">
+                    Chat with us
+                  </Link>{" "}
+                  to get started on the submission process.
                 </div>
               </AccordionContent>
             </AccordionItem>
