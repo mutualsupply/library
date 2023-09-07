@@ -64,10 +64,12 @@ export default function RootLayout({
         )}
       >
         <Providers>
-          <div className={cn("mb-4")}>
-            <Header />
+          <div className={cn("flex-grow")}>
+            <div className={cn("mb-4")}>
+              <Header />
+            </div>
+            {children}
           </div>
-          {children}
           <Footer />
         </Providers>
       </body>
