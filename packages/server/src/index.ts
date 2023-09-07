@@ -9,6 +9,8 @@ import createCaseStudy from "./createCaseStudy"
 import env from "./env"
 import { PostCaseStudyRequestBody } from "./interfaces"
 import Media from "./media"
+import prisma from "./prismaClient"
+import { SubmissionType } from "@prisma/client"
 
 const app = new Koa()
 const router = new Router()
@@ -16,6 +18,44 @@ const upload = multer({ dest: "uploads/" })
 
 router.get("/", async (ctx, next) => {
   ctx.body = { message: "🍎" }
+  await next()
+})
+
+router.get("/user/:email", async (ctx, next) => {
+  const { email } = ctx.params
+  const user = await prisma.user.findUnique({ where: { email } })
+  ctx.body = user
+  await next()
+})
+
+router.get("draft/:email", async (ctx, next) => {
+  const { email } = ctx.params
+  const user = await prisma.user.findUnique({ where: { email } })
+  if (!user) {
+    throw new Error("Could not find user")
+  }
+  const submissions = await prisma.submission.findMany({
+    where: { userId: user.id },
+  })
+  ctx.body = submissions
+  await next()
+})
+
+router.post("draft/:email", async (ctx, next) => {
+  const { type, content } = ctx.body
+  const { email } = ctx.params
+  const user = await prisma.user.findUnique({ where: { email } })
+  if (!user) {
+    throw new Error("Could not find user")
+  }
+  const submission = await prisma.submission.create({
+    data: {
+      userId: user.id,
+      type,
+      content: JSON.stringify(content),
+    },
+  })
+  ctx.body = submission
   await next()
 })
 
@@ -37,6 +77,20 @@ router.post("/case-study", async (ctx, next) => {
     )
   } else {
     const { branchName } = createCaseStudy(user, caseStudy, isProd)
+
+    const dbUser = await prisma.user.upsert({
+      where: { email: user.email },
+      update: user,
+      create: user,
+    })
+
+    await prisma.submission.create({
+      data: {
+        userId: dbUser.id,
+        content: JSON.stringify(caseStudy),
+        type: SubmissionType.CASE_STUDY,
+      },
+    })
     ctx.body = { branchName }
     await next()
   }

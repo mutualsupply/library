@@ -20,6 +20,11 @@ model User {
   submissions Submission[]
 }
 
+enum ENV {
+  PROD
+  DEV
+}
+
 enum SubmissionType {
   CASE_STUDY
   RESEARCH_REPORT
@@ -33,6 +38,7 @@ model Submission {
   user              User           @relation(fields: [userId], references: [id])
   submitted         Boolean        @default(false)
   signedWithAddress String?
+  env               ENV            @default(DEV)
   createdAt         DateTime       @default(now())
   updatedAt         DateTime       @updatedAt
   deletedAt         DateTime?

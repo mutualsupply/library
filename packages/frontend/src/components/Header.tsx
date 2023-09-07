@@ -46,7 +46,7 @@ export default function Header() {
           isSelected={pathname === "/create-case"}
           href="https://www.mutual.supply/"
         >
-          Submit a report
+          Submit
         </NavButton>
         <NavButton href="">Info</NavButton>
       </div>
