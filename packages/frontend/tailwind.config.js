@@ -67,7 +67,7 @@ module.exports = {
         red: {
           DEFAULT: "hsl(var(--red))",
           op: "hsl(var(--red))",
-        }
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
