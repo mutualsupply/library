@@ -4,6 +4,7 @@ import { cn } from "utils"
 import Header from "../components/Header"
 import Providers from "../components/Providers"
 import "../styles/globals.css"
+import Footer from "../components/Footer"
 
 export const metadata: Metadata = {
   title: "Mutual Supply",
@@ -67,6 +68,7 @@ export default function RootLayout({
             <Header />
           </div>
           {children}
+          <Footer />
         </Providers>
       </body>
     </html>

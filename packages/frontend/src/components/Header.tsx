@@ -2,10 +2,9 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { PropsWithChildren } from "react"
 import { cn } from "utils"
-import Dev from "./Dev"
 
 export default function Header() {
   const pathname = usePathname()
@@ -27,28 +26,10 @@ export default function Header() {
         </div>
       </div>
       <div className={cn("items-center", "gap-4", "hidden", "md:flex")}>
-        <Dev>
-          <Link
-            href="/create-case"
-            className={cn(
-              "text-sm",
-              "border",
-              "border-red-400",
-              "border-dashed",
-              "p-2",
-              "rounded",
-            )}
-          >
-            ~create case~
-          </Link>
-        </Dev>
         <NavButton isSelected={pathname === "/"} href="/">
           Index
         </NavButton>
-        <NavButton
-          isSelected={pathname === "/create-case"}
-          href="https://www.mutual.supply/"
-        >
+        <NavButton isSelected={pathname === "/create-case"} href="/create-case">
           Submit
         </NavButton>
         <NavButton href="">Info</NavButton>

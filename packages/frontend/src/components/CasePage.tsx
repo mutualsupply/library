@@ -110,8 +110,9 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
             <div
               className={cn(
                 "border",
-                "border-tertiary",
-                "p-3",
+                "border-black",
+                "border-dashed",
+                "p-8",
                 "relative",
                 "left-[34px]",
                 "flex",
