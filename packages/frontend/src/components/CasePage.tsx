@@ -19,24 +19,14 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
     caseStudy.type,
   ])
 
-  // const firstLetterOfTitles = useMemo(() => {
-  //   const selectedCases = cases.filter((caseStudy) => {
-  //     if (selectedType.length === 0) {
-  //       return true
-  //     }
-  //     // return caseStudy.labels.some((label) => selectedLabel.includes(label))
-  //   })
-
-  //   const firstLetters = selectedCases.map((c) => c.title[0].toUpperCase())
-  //   const uniqueLetters = Array.from(new Set(firstLetters))
-  //   return uniqueLetters.sort()
-  // }, [cases, selectedType])
-
   const filteredCasesByType = useMemo(() => {
+    if (selectedType.length === 0) {
+      return cases
+    }
     return cases.filter((c) => selectedType.includes(c.type))
   }, [cases, selectedType])
 
-  const casesByFirstLetter = cases.reduce((acc, currCase) => {
+  const casesByFirstLetter = filteredCasesByType.reduce((acc, currCase) => {
     const firstLetter = currCase.title[0].toUpperCase()
     if (!acc[firstLetter]) {
       acc[firstLetter] = []

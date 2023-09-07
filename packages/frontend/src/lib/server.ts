@@ -5,17 +5,17 @@ import { randomInclusive } from "utils"
 import { marked } from "marked"
 import { Case, CaseMetadata, StudyType } from "./interfaces"
 
-const TEST_CASES = ["User Interaction", "Onboarding", "Swapping"]
+const PATH_TO_MARKDOWN = "src/markdown"
 
 export function getCases() {
-  const dir = path.join(process.cwd(), "src/markdown")
+  const dir = path.join(process.cwd(), PATH_TO_MARKDOWN)
   const filenames = fs.readdirSync(dir)
   return filenames.map((filename) => getCase(dir, filename))
 }
 
 export async function getCaseFromSlug(slug: string) {
   const filename = `${slug}.mdx`
-  const caseFile = getCase(path.join(process.cwd(), "src/markdown"), filename)
+  const caseFile = getCase(path.join(process.cwd(), PATH_TO_MARKDOWN), filename)
   const serialized = await serialize(caseFile.source, {
     parseFrontmatter: true,
   })
