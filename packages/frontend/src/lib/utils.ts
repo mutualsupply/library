@@ -6,10 +6,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-/**
- * Returns typed object keys
- * @param obj
- */
 export const objectKeys = <Obj>(obj: Obj): (keyof Obj)[] => {
   return Object.keys(obj as object) as (keyof Obj)[]
 }
@@ -32,28 +28,17 @@ export const alphabet = "abcdefghijklmnopqrstuvwxyz"
   .split("")
   .map((char) => char.toUpperCase())
 
-export function fuzzyFilter<T, K extends keyof T>(
+// Filter by starts with
+export function startsWithFilter<T, K extends keyof T>(
   items: Array<T>,
   query: string,
   key: K,
 ) {
-  query = query.toLowerCase()
   return items.filter(function (item) {
     if (typeof item[key] === "string") {
-      var itemLower = (item[key] as string).toLowerCase()
-
-      var j = 0
-      for (var i = 0; i < itemLower.length; i++) {
-        if (itemLower[i] === query[j]) {
-          j++
-        }
-
-        if (j === query.length) {
-          return true
-        }
-      }
+      const itemLower = (item[key] as string).toLowerCase()
+      return itemLower.startsWith(query.toLowerCase())
     }
-
     return false
   })
 }

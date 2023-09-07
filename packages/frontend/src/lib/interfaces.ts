@@ -1,10 +1,20 @@
 import { MDXRemoteSerializeResult } from "next-mdx-remote"
 
-export interface Case {
+export enum StudyType {
+  Signal = "Signal",
+  Observation = "Observation",
+  Exploration = "Exploration",
+}
+
+export interface CaseMetadata {
+  title: string
+  organization: string
+  type: StudyType
+}
+
+export interface Case extends CaseMetadata {
   filename: string
   slug: string
-  labels: Array<string>
-  title: string
   source: string
 }
 

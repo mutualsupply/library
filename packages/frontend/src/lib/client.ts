@@ -1,9 +1,6 @@
-import { Case } from "./interfaces"
+import { Case, StudyType } from "./interfaces"
 
-export function getCaseLabelItems(cases: Array<Case>) {
-  const uniqueLabels = new Set<string>(cases.flatMap((d) => d.labels))
-  return Array.from(uniqueLabels).map((label) => ({
-    key: label,
-    title: label,
-  }))
-}
+export const caseTypeFilterItems = Object.values(StudyType).map((title) => ({
+  title,
+  key: title,
+}))

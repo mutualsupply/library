@@ -2,7 +2,8 @@ import fs from "fs"
 import { serialize } from "next-mdx-remote/serialize"
 import path from "path"
 import { randomInclusive } from "utils"
-const marked = require("marked")
+import { marked } from "marked"
+import { Case, CaseMetadata, StudyType } from "./interfaces"
 
 const TEST_CASES = ["User Interaction", "Onboarding", "Swapping"]
 
@@ -21,7 +22,7 @@ export async function getCaseFromSlug(slug: string) {
   return { ...caseFile, serialized }
 }
 
-export function getCase(pathToMarkdownDir: string, filename: string) {
+export function getCase(pathToMarkdownDir: string, filename: string): Case {
   const source = fs
     .readFileSync(path.join(pathToMarkdownDir, filename))
     .toString("utf-8")
@@ -31,22 +32,35 @@ export function getCase(pathToMarkdownDir: string, filename: string) {
     filename,
     slug,
     source,
-    title: parsed.title,
-    labels: [
-      TEST_CASES[randomInclusive(TEST_CASES.length - 1)],
-      TEST_CASES[randomInclusive(TEST_CASES.length - 1)],
-      TEST_CASES[randomInclusive(TEST_CASES.length - 1)],
-    ],
+    ...parsed,
   }
 }
 
-export function parseMarkdown(source: string) {
-  const tokens = marked.lexer(source)
-  const heading = tokens.find(
-    (token: any) => token.type === "heading" && token.depth === 1,
-  )
+export function parseMarkdown(source: string): CaseMetadata {
+  const lexer = new marked.Lexer()
+  const tokens = lexer.lex(source)
+
+  const getStrongTextStartsWith = (search: string) => {
+    const organizationToken = tokens.find(
+      (token) => token.type === "paragraph" && token.text?.startsWith(search),
+    ) as marked.Tokens.Paragraph
+    const { text } = organizationToken.tokens.find(
+      (token) => token.type === "strong",
+    ) as marked.Tokens.Strong
+    return text
+  }
+
+  const { text: title } = tokens.find(
+    (token) => token.type === "heading" && token.depth === 1,
+  ) as marked.Tokens.Heading
+
+  const organization = getStrongTextStartsWith("Organization")
+  const type = getStrongTextStartsWith("Type") as StudyType
+
   return {
-    title: heading?.text,
+    title,
+    organization,
+    type,
   }
 }
 

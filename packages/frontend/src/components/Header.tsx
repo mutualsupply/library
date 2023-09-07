@@ -12,16 +12,19 @@ export default function Header() {
   console.log(pathname)
   return (
     <div className="flex items-center justify-between py-4">
-      <div className={cn("inline-flex", "items-center")}>
+      <div className={cn("inline-flex", "items-center", "gap-4")}>
         <Link href={"/"}>
           <Image
-            src={"/images/apple.gif"}
+            src={"/images/glasses.png"}
             alt={"s/o blackboard"}
-            width={64}
-            height={64}
+            width={91}
+            height={48}
           />
         </Link>
-        <span className={cn("font-sans", "ml-6")}>MUTUAL Research Library</span>
+        <div className={cn("font-aspekta", "flex", "items-center", "gap-3")}>
+          <span>MUTUAL Research Library</span>
+          <span className={cn("bg-[#97FFC1]", "p-1", "rounded")}>BETA</span>
+        </div>
       </div>
       <div className={cn("items-center", "gap-4", "hidden", "md:flex")}>
         <Dev>

@@ -2,9 +2,9 @@
 
 import Link from "next/link"
 import { useMemo, useState } from "react"
-import { cn } from "utils"
-import { getCaseLabelItems } from "../lib/client"
-import { Case, CaseSource } from "../lib/interfaces"
+import { cn, objectKeys } from "utils"
+import { caseTypeFilterItems } from "../lib/client"
+import { Case, CaseSource, StudyType } from "../lib/interfaces"
 import LabelFilter from "./LabelFilter"
 import RemoteMDX from "./RemoteMDX"
 import { BackLink } from "./Links"
@@ -15,26 +15,41 @@ interface CaseProps {
 }
 
 export default function CasePage({ cases, caseStudy }: CaseProps) {
-  const [selectedLabel, setSelectedLabel] = useState<undefined | Array<string>>(
-    caseStudy.labels,
-  )
-  const firstLetterOfTitles = useMemo(() => {
-    const selectedCases = cases.filter((caseStudy) => {
-      if (!selectedLabel || selectedLabel.length === 0) {
-        return true
-      }
-      return caseStudy.labels.some((label) => selectedLabel.includes(label))
-    })
-    const firstLetters = selectedCases.map((c) => c.title[0].toUpperCase())
-    const uniqueLetters = Array.from(new Set(firstLetters))
-    return uniqueLetters.sort()
-  }, [cases, selectedLabel])
-  const labelFilterItems = getCaseLabelItems(cases)
-  const onLabelFilterClick = (label: string) => {
-    if (selectedLabel?.includes(label)) {
-      setSelectedLabel(selectedLabel.filter((l) => l !== label))
+  const [selectedType, setSelectedType] = useState<Array<StudyType>>([
+    caseStudy.type,
+  ])
+
+  // const firstLetterOfTitles = useMemo(() => {
+  //   const selectedCases = cases.filter((caseStudy) => {
+  //     if (selectedType.length === 0) {
+  //       return true
+  //     }
+  //     // return caseStudy.labels.some((label) => selectedLabel.includes(label))
+  //   })
+
+  //   const firstLetters = selectedCases.map((c) => c.title[0].toUpperCase())
+  //   const uniqueLetters = Array.from(new Set(firstLetters))
+  //   return uniqueLetters.sort()
+  // }, [cases, selectedType])
+
+  const filteredCasesByType = useMemo(() => {
+    return cases.filter((c) => selectedType.includes(c.type))
+  }, [cases, selectedType])
+
+  const casesByFirstLetter = cases.reduce((acc, currCase) => {
+    const firstLetter = currCase.title[0].toUpperCase()
+    if (!acc[firstLetter]) {
+      acc[firstLetter] = []
+    }
+    acc[firstLetter].push(currCase)
+    return acc
+  }, {} as Record<string, Case[]>)
+
+  const onLabelFilterClick = (label: StudyType) => {
+    if (selectedType?.includes(label)) {
+      setSelectedType(selectedType.filter((l) => l !== label))
     } else {
-      setSelectedLabel((selectedLabel || []).concat(label))
+      setSelectedType((selectedType || []).concat(label))
     }
   }
   return (
@@ -42,16 +57,16 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
       <div className={cn("my-5", "flex", "items-center", "gap-8")}>
         <BackLink href={"/"}>Index</BackLink>
         <LabelFilter
-          items={labelFilterItems}
-          selected={selectedLabel}
+          items={caseTypeFilterItems}
+          selected={selectedType}
           onClick={onLabelFilterClick}
-          onClearClick={() => setSelectedLabel(undefined)}
+          onClearClick={() => setSelectedType([])}
         />
       </div>
       <div className={cn("grid", "grid-cols-12", "grow")}>
         <div className={cn("col-span-2", "flex", "flex-col", "gap-2")}>
-          {firstLetterOfTitles.map((letter) => (
-            <div key={`letter-${letter}`}>
+          {objectKeys(casesByFirstLetter).map((firstLetter) => (
+            <div key={`letter-${firstLetter}`}>
               <span
                 className={cn(
                   "bg-tertiary",
@@ -63,28 +78,26 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
                   "font-otBrut",
                 )}
               >
-                {letter}
+                {caseStudy.title[0].toUpperCase()}
               </span>
               <div className={cn("flex", "flex-col", "gap-4", "mt-2")}>
-                {cases
-                  .filter((c) => c.title[0].toUpperCase() === letter)
-                  .map((c) => (
-                    <div
-                      key={`case-${c.slug}`}
+                {casesByFirstLetter[firstLetter].map((c) => (
+                  <div
+                    key={`case-${c.slug}`}
+                    className={cn({
+                      [cn("bg-tertiary")]: c.slug === caseStudy.slug,
+                    })}
+                  >
+                    <Link
+                      href={`/case/${c.slug}`}
                       className={cn({
-                        [cn("bg-tertiary")]: c.slug === caseStudy.slug,
+                        "hover:text-primary": c.slug !== caseStudy.slug,
                       })}
                     >
-                      <Link
-                        href={`/case/${c.slug}`}
-                        className={cn({
-                          "hover:text-primary": c.slug !== caseStudy.slug,
-                        })}
-                      >
-                        {c.title}
-                      </Link>
-                    </div>
-                  ))}
+                      {c.title}
+                    </Link>
+                  </div>
+                ))}
               </div>
             </div>
           ))}
@@ -136,26 +149,22 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
                 </div>
               </div>
               <div className={cn("flex", "items-center", "flex-wrap", "gap-4")}>
-                {caseStudy.labels.map((label) => (
-                  <div key={label} className={cn("relative")}>
-                    <div
-                      className={cn("relative", "z-10", "px-2", "rounded-sm")}
-                    >
-                      {label}
-                    </div>
-                    <div
-                      className={cn(
-                        "bg-g",
-                        "absolute",
-                        "inset-0",
-                        "w-full",
-                        "h-full",
-                        "opacity-60",
-                        "rounded-sm",
-                      )}
-                    />
+                <div key={caseStudy.title} className={cn("relative")}>
+                  <div className={cn("relative", "z-10", "px-2", "rounded-sm")}>
+                    {caseStudy.type}
                   </div>
-                ))}
+                  <div
+                    className={cn(
+                      "bg-g",
+                      "absolute",
+                      "inset-0",
+                      "w-full",
+                      "h-full",
+                      "opacity-60",
+                      "rounded-sm",
+                    )}
+                  />
+                </div>
               </div>
             </div>
           </div>

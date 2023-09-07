@@ -5,7 +5,7 @@ import { Button } from "./ui/button"
 interface LabelFilterProps {
   items: { key: string; title: string }[]
   selected?: string[]
-  onClick?: (key: string) => void
+  onClick?: (key: any) => void
   onClearClick?: () => void
 }
 

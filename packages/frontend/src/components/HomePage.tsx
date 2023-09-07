@@ -1,12 +1,12 @@
 "use client"
 import Link from "next/link"
 import { useMemo, useState } from "react"
-import { cn, fuzzyFilter } from "utils"
-import { getCaseLabelItems } from "../lib/client"
-import { Case } from "../lib/interfaces"
+import { cn, startsWithFilter } from "utils"
+import { Case, StudyType } from "../lib/interfaces"
 import AlphaToggle from "./AlphaToggle"
 import LabelFilter from "./LabelFilter"
 import { BackLink } from "./Links"
+import { caseTypeFilterItems } from "../lib/client"
 
 interface HomeProps {
   cases: Array<Case>
@@ -14,9 +14,7 @@ interface HomeProps {
 
 export function HomePage({ cases }: HomeProps) {
   const [selectedChar, setSelectedChar] = useState<undefined | Array<string>>()
-  const [selectedLabel, setSelectedLabel] = useState<
-    undefined | Array<string>
-  >()
+  const [selectedLabel, setSelectedLabel] = useState<Array<StudyType>>([])
   const onAlphaToggleClick = (char: string) => {
     if (selectedChar?.includes(char)) {
       setSelectedChar(selectedChar.filter((c) => c !== char))
@@ -24,7 +22,7 @@ export function HomePage({ cases }: HomeProps) {
       setSelectedChar((selectedChar || []).concat(char))
     }
   }
-  const onLabelFilterClick = (label: string) => {
+  const onLabelFilterClick = (label: StudyType) => {
     if (selectedLabel?.includes(label)) {
       setSelectedLabel(selectedLabel.filter((l) => l !== label))
     } else {
@@ -34,12 +32,12 @@ export function HomePage({ cases }: HomeProps) {
 
   const filteredData = useMemo(() => {
     const labelFilteredData = cases.filter((d) => {
-      if (selectedLabel) {
-        return selectedLabel.every((label) => d.labels.includes(label))
+      if (selectedLabel.length > 0) {
+        return selectedLabel.some((label) => d.type.includes(label))
       }
       return true
     })
-    return fuzzyFilter(
+    return startsWithFilter(
       labelFilteredData,
       selectedChar ? selectedChar.join("") : "",
       "title",
@@ -53,10 +51,10 @@ export function HomePage({ cases }: HomeProps) {
           <BackLink href={"https://mutual.supply"}>Index</BackLink>
         </div>
         <LabelFilter
-          items={getCaseLabelItems(cases)}
+          items={caseTypeFilterItems}
           selected={selectedLabel}
           onClick={onLabelFilterClick}
-          onClearClick={() => setSelectedLabel(undefined)}
+          onClearClick={() => setSelectedLabel([])}
         />
       </div>
       <div className={cn("mb-10", "mt-5")}>
@@ -67,7 +65,16 @@ export function HomePage({ cases }: HomeProps) {
           <Link
             key={caseFile.slug}
             href={`/case/${caseFile.slug}`}
-            className={cn("p-6", "relative", "group", "hover:text-primary")}
+            className={cn(
+              "p-6",
+              "relative",
+              "group",
+              "hover:text-primary",
+              "flex",
+              "items-center",
+              "justify-between",
+              "group",
+            )}
           >
             <div
               className={cn(
@@ -87,6 +94,9 @@ export function HomePage({ cases }: HomeProps) {
             {(index + 1) % 2 === 0 && (
               <div className={cn("absolute", "inset-0", "bg-tertiary/25")} />
             )}
+            <div className={cn("hidden", "group-hover:block")}>
+              {caseFile.organization}
+            </div>
           </Link>
         ))}
       </div>
