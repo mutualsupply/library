@@ -1,4 +1,5 @@
 import { cn } from "utils"
+import Image from "next/image"
 
 export default function Footer() {
   return (
@@ -12,7 +13,12 @@ export default function Footer() {
       )}
     >
       <div className={cn("flex", "items-center", "gap-4")}>
-        <div>logo</div>
+        <Image
+          alt="apple-logo"
+          width={50}
+          height={50}
+          src="/images/apple.gif"
+        />
         <div>
           This website is maintained and stewarded by the MUTUAL collective.{" "}
         </div>

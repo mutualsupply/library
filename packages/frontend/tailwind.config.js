@@ -4,9 +4,10 @@ const { fontFamily } = require("tailwindcss/defaultTheme")
 module.exports = {
   darkMode: ["class"],
   content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
+    // "./src/pages/**/*.{ts,tsx}",
+    "./src/components/**/*.{ts,tsx}",
+    "./src/components/ui/*.{ts,tsx}",
+    "./src/app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
   ],
   theme: {
@@ -63,6 +64,10 @@ module.exports = {
         g: {
           DEFAULT: "hsl(var(--g))",
         },
+        red: {
+          DEFAULT: "hsl(var(--red))",
+          op: "hsl(var(--red))",
+        }
       },
       borderRadius: {
         lg: "var(--radius)",

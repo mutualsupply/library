@@ -116,18 +116,9 @@ export default function NewCaseStudyForm({ onSuccess }: NewCaseStudyFormProps) {
             label="If available, please provide an active URL or prototype link to the experience (ideally in the state you are analyzing)"
           />
         </Section>
-        <Section title="Share your report">
-          <div>
-            Please read the <BestPracticesLink /> for guidelines on what to
-            include and how to format your report. All reports are subject to an
-            approval process by the MUTUAL team, based on guidelines outline in
-            our documentation.
-          </div>
-          <MilkdownEditorWrapper onChange={setMarkdown} />
-        </Section>
         {error && <div className={cn("text-red-600")}>{error}</div>}
 
-        <Button
+        {/* <Button
           loading={form.formState.isSubmitting}
           variant={"outline"}
           disabled={!isLoggedIn}
@@ -135,7 +126,7 @@ export default function NewCaseStudyForm({ onSuccess }: NewCaseStudyFormProps) {
           className={cn("w-full", "uppercase", "rounded-full")}
         >
           {isLoggedIn ? "submit report" : "sign in to submit"}
-        </Button>
+        </Button> */}
       </form>
     </Form>
   )
