@@ -29,14 +29,14 @@ export interface CreateNewCaseStudyResponse {
 }
 
 export interface CaseStudy {
-  email: string
+  type: StudyType
   name: string
+  email: string
   title: string
-  productDescription: string
-  industry: string
-  doesUseChain: boolean
-  partOfTeam: boolean
+  organizationName: string
   url: string
+  industry: string
+  partOfTeam: boolean
   markdown?: string
 }
 

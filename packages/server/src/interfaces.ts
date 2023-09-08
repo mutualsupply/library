@@ -1,14 +1,19 @@
 export interface CaseStudy {
-  email: string
+  type: StudyType
   name: string
+  email: string
   title: string
   organizationName: string
-  productDescription: string
-  industry: string
-  doesUseChain: boolean
-  partOfTeam: boolean
   url?: string
+  industry: string
+  partOfTeam: boolean
   markdown?: string
+}
+
+enum StudyType {
+  Signal = "Signal",
+  Observation = "Observation",
+  Exploration = "Exploration",
 }
 
 export interface GithubUser {

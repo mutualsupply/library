@@ -10,6 +10,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum ENV {
+  PROD
+  DEV
+}
+
 model User {
   id          Int          @id @default(autoincrement())
   email       String       @unique
@@ -17,29 +22,19 @@ model User {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   deletedAt   DateTime?
-  submissions Submission[]
+  env               ENV            @default(DEV)
+  drafts Draft[]
 }
 
-enum ENV {
-  PROD
-  DEV
-}
-
-enum SubmissionType {
-  CASE_STUDY
-  RESEARCH_REPORT
-}
-
-model Submission {
+model Draft {
   id                Int            @id @default(autoincrement())
   content           Json
-  type              SubmissionType
   userId            Int
   user              User           @relation(fields: [userId], references: [id])
-  submitted         Boolean        @default(false)
+  isAccepted         Boolean        @default(false)
   signedWithAddress String?
-  env               ENV            @default(DEV)
   createdAt         DateTime       @default(now())
   updatedAt         DateTime       @updatedAt
   deletedAt         DateTime?
+  env               ENV            @default(DEV)
 }

@@ -131,9 +131,7 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
         name: session?.user?.name || "",
         organizationName: "",
         title: "",
-        productDescription: "",
         industry: "",
-        doesUseChain: "",
         partOfTeam: "",
         url: "",
         type: StudyType.Signal,
@@ -143,9 +141,7 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
         name: session?.user?.name || "",
         title: "How to make a Case Study",
         organizationName: "MUTUAL",
-        productDescription: "Mutual Supply",
         industry: "Knowledge",
-        doesUseChain: BooleanStrings.True,
         partOfTeam: BooleanStrings.True,
         url: "https://dev.mutual.supply",
         type: StudyType.Signal,
@@ -157,12 +153,10 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
   })
 
   async function onSubmit(values: z.infer<typeof caseStudyFormSchema>) {
-    setError(null)
     const res = await fetch("/api/create-case", {
       method: "POST",
       body: JSON.stringify({
         ...values,
-        doesUseChain: values.doesUseChain === BooleanStrings.True,
         partOfTeam: values.partOfTeam === BooleanStrings.True,
         url: values.url === "" ? undefined : values.url,
         markdown: markdown === "" ? undefined : markdown,
@@ -175,12 +169,14 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
     } else {
       try {
         const json = await res.json()
+        setError(null)
         setView("success")
         setReceipt(json)
         if (onSuccess) {
           onSuccess()
         }
       } catch (e) {
+        setError("Could not create case study")
         console.error(e)
       }
     }
@@ -213,6 +209,7 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
                 <RecordAccordion value="item-2" onChange={setMarkdown} />
                 <DetailsAccordion value="item-3" />
               </Accordion>
+              {error && <div className={cn("text-red")}>{error}</div>}
               <div className={cn("flex", "items-center", "gap-2")}>
                 <Button
                   className={cn("w-full", "rounded-full")}

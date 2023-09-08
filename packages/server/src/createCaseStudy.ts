@@ -27,21 +27,20 @@ function createCaseStudy(
   if (!isProd) {
     run(`cd ${dirName}/${repoName} && git checkout dev`)
   }
-  let markdown = `
-# ${caseStudy.title}
-### by ${caseStudy.name} (${caseStudy.email})
-### organization: ${caseStudy.organizationName}
+  let markdown = `# ${caseStudy.title}
 
-${caseStudy.productDescription}
-${caseStudy.industry}
-Uses a blockchain: ${caseStudy.doesUseChain ? "Yes" : "No"}
-Author is part of the team: ${caseStudy.partOfTeam ? "Yes" : "No"}
-  `
+### Metadata
+Organization: ***${caseStudy.organizationName}***
+Type: ***${caseStudy.type}***
+Industry: ***${caseStudy.industry}***
+Authored by: ***${caseStudy.name} (${caseStudy.email})***
+Is Part Of Team: ***${caseStudy.partOfTeam ? "Yes" : "No"}***
+`
   if (caseStudy.url) {
-    markdown += `\n[${caseStudy.url}](${caseStudy.url})`
+    markdown += `\nProof of Experience: ***[${caseStudy.url}](${caseStudy.url})***`
   }
   if (caseStudy.markdown) {
-    markdown += `\n${caseStudy.markdown}`
+    markdown += `\n\n${caseStudy.markdown}`
   }
 
   run(

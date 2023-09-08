@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { StudyType } from "./interfaces"
 
 const MAX_TITLE_LENGTH = 200
 
@@ -9,10 +10,11 @@ export enum BooleanStrings {
 const BooleanEnum = z.nativeEnum(BooleanStrings)
 
 export const caseStudyFormSchema = z.object({
+  type: z.enum([StudyType.Signal, StudyType.Observation]),
+  name: z.string().min(1, { message: "Don't forget your name" }),
   email: z.string().email({
     message: "Email please!",
   }),
-  name: z.string().min(1, { message: "Don't forget your name" }),
   title: z
     .string()
     .min(1, { message: "Must be named something!" })
@@ -22,19 +24,13 @@ export const caseStudyFormSchema = z.object({
   organizationName: z
     .string()
     .min(1, { message: "Please include the name of the organization" }),
-  productDescription: z
-    .string()
-    .min(1, { message: "Please include a description of the product" }),
+  url: z.union([z.string().url().optional(), z.literal("")]),
   industry: z.string().min(1, {
     message: "Please include which industry this product is a part of",
   }),
-  doesUseChain: BooleanEnum.or(z.string()),
-  partOfTeam: BooleanEnum.or(z.string()),
-  url: z.union([z.string().url().optional(), z.literal("")]),
+  partOfTeam: BooleanEnum.or(z.boolean()),
 })
 
 export const caseStudyBodySchema = caseStudyFormSchema.extend({
-  partOfTeam: z.boolean(),
-  doesUseChain: z.boolean(),
   markdown: z.string().optional(),
 })
