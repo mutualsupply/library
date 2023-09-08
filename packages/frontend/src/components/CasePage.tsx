@@ -68,7 +68,7 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
                   "font-otBrut",
                 )}
               >
-                {caseStudy.title[0].toUpperCase()}
+                {firstLetter.toUpperCase()}
               </span>
               <div className={cn("flex", "flex-col", "gap-4", "mt-2")}>
                 {casesByFirstLetter[firstLetter].map((c, index) => (
