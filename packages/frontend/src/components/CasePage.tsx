@@ -6,8 +6,8 @@ import { cn, objectKeys } from "utils"
 import { caseTypeFilterItems } from "../lib/client"
 import { Case, CaseSource, StudyType } from "../lib/interfaces"
 import LabelFilter from "./LabelFilter"
-import RemoteMDX from "./RemoteMDX"
 import { BackLink } from "./Links"
+import RemoteMDX from "./RemoteMDX"
 
 interface CaseProps {
   cases: Array<Case>
@@ -55,8 +55,8 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
       </div>
       <div className={cn("grid", "grid-cols-12", "grow")}>
         <div className={cn("col-span-2", "flex", "flex-col", "gap-2")}>
-          {objectKeys(casesByFirstLetter).map((firstLetter) => (
-            <div key={`letter-${firstLetter}`}>
+          {objectKeys(casesByFirstLetter).map((firstLetter, index) => (
+            <div key={`letter-${firstLetter}-${index}`}>
               <span
                 className={cn(
                   "bg-tertiary",
@@ -71,9 +71,9 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
                 {caseStudy.title[0].toUpperCase()}
               </span>
               <div className={cn("flex", "flex-col", "gap-4", "mt-2")}>
-                {casesByFirstLetter[firstLetter].map((c) => (
+                {casesByFirstLetter[firstLetter].map((c, index) => (
                   <div
-                    key={`case-${c.slug}`}
+                    key={`case-${c.slug}-${index}`}
                     className={cn({
                       [cn("bg-tertiary")]: c.slug === caseStudy.slug,
                     })}
