@@ -8,7 +8,8 @@
     "dev": "pnpm --stream -r run dev",
     "format": "pnpm -r run format",
     "pre-commit": "pnpm format",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "server:deploy": "cd packages/server && ./deploy.sh"
   },
   "keywords": [],
   "author": "",
