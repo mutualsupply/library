@@ -37,4 +37,5 @@ export const caseStudyFormSchema = z.object({
 
 export const caseStudyBodySchema = caseStudyFormSchema.extend({
   markdown: z.string().optional(),
+  partOfTeam: z.boolean(),
 })
