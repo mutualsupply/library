@@ -29,15 +29,15 @@ function createCaseStudy(
   }
   let markdown = `# ${caseStudy.title}
 
-### Metadata
-Organization: ***${caseStudy.organizationName}***
-Type: ***${caseStudy.type}***
-Industry: ***${caseStudy.industry}***
-Authored by: ***${caseStudy.name} (${caseStudy.email})***
-Is Part Of Team: ***${caseStudy.partOfTeam ? "Yes" : "No"}***
+### Metadata\n
+Organization: **${caseStudy.organizationName}**\n
+Type: **${caseStudy.type}**\n
+Industry: **${caseStudy.industry}**\n
+Authored by: **${caseStudy.name} (${caseStudy.email})**\n
+Is Part Of Team: **${caseStudy.partOfTeam ? "Yes" : "No"}**
 `
   if (caseStudy.url) {
-    markdown += `\nProof of Experience: ***[${caseStudy.url}](${caseStudy.url})***`
+    markdown += `\nProof of Experience: **[${caseStudy.url}](${caseStudy.url})**`
   }
   if (caseStudy.markdown) {
     markdown += `\n\n${caseStudy.markdown}`
