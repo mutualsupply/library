@@ -15,6 +15,7 @@ const ConnectButton = () => {
               "border-[#FF0420]",
               "inline-flex",
               "gap-2",
+              "border-solid",
             )}
             variant={"outline"}
             onClick={show}

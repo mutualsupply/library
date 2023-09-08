@@ -1,6 +1,6 @@
 "use client"
 
-import { signIn, signOut, useSession } from "next-auth/react"
+import { useSession } from "next-auth/react"
 import { cn } from "utils"
 import {
   Accordion,
@@ -9,23 +9,26 @@ import {
   AccordionTrigger,
 } from "../ui/accordion"
 
+import { zodResolver } from "@hookform/resolvers/zod"
 import { ArrowRightIcon } from "@radix-ui/react-icons"
 import { useQuery } from "@tanstack/react-query"
-import Image from "next/image"
 import { useState } from "react"
-import ConnectButton from "../ConnectButton"
-import { BackLink, BestPracticesLink, Link } from "../Links"
-import Add from "../icons/Add"
-import Github from "../icons/Github"
-import { Button } from "../ui/button"
-import { GithubPullResponse, getPulls } from "../../lib/api"
-import { CreateNewCaseStudyResponse } from "../../lib/interfaces"
-import NewCaseStudyForm from "../forms/NewCaseStudyForm"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { getPulls } from "../../lib/api"
+import { isProd } from "../../lib/env"
+import { CreateNewCaseStudyResponse, StudyType } from "../../lib/interfaces"
+import { BooleanStrings, caseStudyFormSchema } from "../../lib/schema"
+import { Link } from "../Links"
 import Section from "../Section"
+import Add from "../icons/Add"
+import { Button } from "../ui/button"
+import { Form } from "../ui/form"
+import DetailsAccordion from "./Accordions/DetailsAccordion"
+import RecordAccordion from "./Accordions/RecordAccordion"
+import SignInAccordion from "./Accordions/SignInAccordion"
+import ThoughtsAccordion from "./Accordions/ThoughtsAccordion"
 import DraftCaseStudy from "./DraftCaseStudy"
-import { MilkdownEditorWrapper } from "../MilkdownEditor"
-import { RadioGroup, RadioGroupItem } from "../ui/radio-group"
-import { Label } from "../ui/label"
 
 export default function NewCaseStudy() {
   const { data, isLoading, refetch } = useQuery({
@@ -63,7 +66,7 @@ export default function NewCaseStudy() {
           </div>
           <Link
             href=""
-            className="border-dashed border border-red-op text-red-op p-3 text-lg"
+            className="border-dashed border border-red-op text-red-op p-3 text-lg no-underline"
           >
             Earn $OP rewards & on-chain reputation →
           </Link>
@@ -113,18 +116,73 @@ export default function NewCaseStudy() {
 }
 
 const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
-  const { data: session } = useSession()
-  const isLoggedIn = session?.user?.name
   const [view, setView] = useState<"form" | "success">("form")
   const [receipt, setReceipt] = useState<CreateNewCaseStudyResponse | null>(
     null,
   )
+  const [error, setError] = useState<string | null>(null)
   const [markdown, setMarkdown] = useState("")
-  const onFormSuccess = (receipt: CreateNewCaseStudyResponse) => {
-    setView("success")
-    setReceipt(receipt)
-    if (onSuccess) {
-      onSuccess()
+  const { data: session } = useSession()
+  const isLoggedIn = !!session?.user
+
+  const defaultValues = isProd()
+    ? {
+        email: session?.user?.email || "",
+        name: session?.user?.name || "",
+        organizationName: "",
+        title: "",
+        productDescription: "",
+        industry: "",
+        doesUseChain: "",
+        partOfTeam: "",
+        url: "",
+        type: StudyType.Signal,
+      }
+    : {
+        email: session?.user?.email || "",
+        name: session?.user?.name || "",
+        title: "How to make a Case Study",
+        organizationName: "MUTUAL",
+        productDescription: "Mutual Supply",
+        industry: "Knowledge",
+        doesUseChain: BooleanStrings.True,
+        partOfTeam: BooleanStrings.True,
+        url: "https://dev.mutual.supply",
+        type: StudyType.Signal,
+      }
+
+  const form = useForm({
+    resolver: zodResolver(caseStudyFormSchema),
+    defaultValues,
+  })
+
+  async function onSubmit(values: z.infer<typeof caseStudyFormSchema>) {
+    setError(null)
+    const res = await fetch("/api/create-case", {
+      method: "POST",
+      body: JSON.stringify({
+        ...values,
+        doesUseChain: values.doesUseChain === BooleanStrings.True,
+        partOfTeam: values.partOfTeam === BooleanStrings.True,
+        url: values.url === "" ? undefined : values.url,
+        markdown: markdown === "" ? undefined : markdown,
+      }),
+      credentials: "same-origin",
+    })
+    if (!res.ok) {
+      console.error("Could not create case study", await res.text())
+      setError("Could not create case study")
+    } else {
+      try {
+        const json = await res.json()
+        setView("success")
+        setReceipt(json)
+        if (onSuccess) {
+          onSuccess()
+        }
+      } catch (e) {
+        console.error(e)
+      }
     }
   }
   return (
@@ -140,163 +198,41 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
             "md:mt-0",
           )}
         >
-          <Accordion
-            type="multiple"
-            className={cn("flex", "flex-col", "gap-8", "w-full")}
-            defaultValue={["item-0"]}
-          >
-            <AccordionItem value="item-0" defaultValue={"item-0"}>
-              <AccordionTrigger>1. Sign in</AccordionTrigger>
-              <AccordionContent>
-                <div className={cn("flex", "items-center", "gap-8")}>
-                  {isLoggedIn && (
-                    <div
-                      className={cn("flex", "justify-between", "items-center")}
-                    >
-                      <div className={cn("flex", "flex-col", "items-start")}>
-                        <Button
-                          variant={"outline"}
-                          className={cn("inline-flex", "items-center", "gap-3")}
-                        >
-                          <Github />
-                          <div
-                            className={cn(
-                              "inline-flex",
-                              "gap-1",
-                              "items-center",
-                            )}
-                          >
-                            {session?.user?.image && (
-                              <Image
-                                src={session.user.image}
-                                height={25}
-                                width={25}
-                                alt={"pfp"}
-                                className={cn("rounded-full")}
-                              />
-                            )}
-                            {session?.user?.name && (
-                              <span className={cn("text-black")}>
-                                {session?.user?.name}
-                              </span>
-                            )}
-                          </div>
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-                  {!isLoggedIn && (
-                    <div>
-                      <Button
-                        className={cn(
-                          "rounded-sm",
-                          "text-primary",
-                          "inline-flex",
-                          "items-center",
-                          "gap-2",
-                        )}
-                        variant={"outline"}
-                        onClick={() => {
-                          signIn("github", {
-                            callbackUrl: `${window.location.origin}/create-case`,
-                          })
-                        }}
-                      >
-                        <Github /> <span>Sign in to Github</span>
-                      </Button>
-                    </div>
-                  )}
-                  <ConnectButton />
-                </div>
-
-                {isLoggedIn && (
-                  <Button
-                    variant="link"
-                    onClick={() => signOut()}
-                    className={cn("p-0")}
-                  >
-                    Logout
-                  </Button>
-                )}
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-1">
-              <AccordionTrigger>2. Type of thoughts</AccordionTrigger>
-              <AccordionContent>
-                <div className={cn("font-bold", "text-lg")}>
-                  I am submitting a:
-                </div>
-                <RadioGroup defaultValue="option-one" className="mt-3">
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="option-one" id="option-one" />
-                    <Label htmlFor="option-one" className="text-base">
-                      Signal
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="option-two" id="option-two" />
-                    <Label htmlFor="option-two" className="text-base">
-                      Observation
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem
-                      disabled
-                      value="option-three"
-                      id="option-three"
-                    />
-                    <Label
-                      htmlFor="option-three"
-                      className="text-base text-gray-400"
-                    >
-                      Exploration
-                    </Label>
-                  </div>
-                </RadioGroup>
-                <div className={cn("mt-4")}>
-                  We are currently accepting Exploration submissions manually.{" "}
-                  <Link isExternal href="mailto:help@mutual.supply">
-                    Chat with us
-                  </Link>{" "}
-                  to get started on the submission process.
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-2">
-              <AccordionTrigger>3. Record your thoughts</AccordionTrigger>
-              <AccordionContent>
-                <div>
-                  All submissions are subject to a review process by the MUTUAL
-                  team. We suggest starting with our Best Practices Guide to
-                  understand what kind of information to include, and how to
-                  format your thoughts in the editor below.
-                </div>
-                <div className={cn("font-bold", "my-6")}>
-                  Pro tip : Open the editor below in full-screen mode for a
-                  breezy editing experience.
-                </div>
-                <MilkdownEditorWrapper onChange={setMarkdown} />
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-3">
-              <AccordionTrigger>4. Details</AccordionTrigger>
-              <AccordionContent>
-                <NewCaseStudyForm onSuccess={onFormSuccess} />
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-          <div className={cn("flex", "items-center", "gap-2")}>
-            <Button
-              className={cn("w-full", "rounded-full")}
-              size="lg"
-              variant="outline"
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className={cn("space-y-8")}
             >
-              Save draft
-            </Button>
-            <Button className={cn("w-full", "rounded-full")} size="lg">
-              Submit for review
-            </Button>
-          </div>
+              <Accordion
+                type="multiple"
+                className={cn("flex", "flex-col", "gap-8", "w-full")}
+                defaultValue={["item-0"]}
+              >
+                <SignInAccordion value="item-0" />
+                <ThoughtsAccordion value="item-1" />
+                <RecordAccordion value="item-2" onChange={setMarkdown} />
+                <DetailsAccordion value="item-3" />
+              </Accordion>
+              <div className={cn("flex", "items-center", "gap-2")}>
+                <Button
+                  className={cn("w-full", "rounded-full")}
+                  size="lg"
+                  variant="outline"
+                  disabled={!isLoggedIn}
+                >
+                  Save draft
+                </Button>
+                <Button
+                  type="submit"
+                  className={cn("w-full", "rounded-full")}
+                  size="lg"
+                  disabled={!isLoggedIn}
+                >
+                  {isLoggedIn ? "Submit" : "Sign in to submit"}
+                </Button>
+              </div>
+            </form>
+          </Form>
         </div>
       )}
 

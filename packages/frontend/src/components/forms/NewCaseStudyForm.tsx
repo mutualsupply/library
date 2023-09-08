@@ -7,12 +7,9 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { Form } from "../ui/form"
-import TextInput from "../TextInput"
+import TextInput from "../inputs/TextInput"
 import { cn } from "utils"
-import SelectInput from "../SelectInput"
-import { BestPracticesLink } from "../Links"
-import { MilkdownEditorWrapper } from "../MilkdownEditor"
-import { Button } from "../ui/button"
+import SelectInput from "../inputs/SelectInput"
 import Section from "../Section"
 
 interface NewCaseStudyFormProps {
@@ -117,16 +114,6 @@ export default function NewCaseStudyForm({ onSuccess }: NewCaseStudyFormProps) {
           />
         </Section>
         {error && <div className={cn("text-red-600")}>{error}</div>}
-
-        {/* <Button
-          loading={form.formState.isSubmitting}
-          variant={"outline"}
-          disabled={!isLoggedIn}
-          type="submit"
-          className={cn("w-full", "uppercase", "rounded-full")}
-        >
-          {isLoggedIn ? "submit report" : "sign in to submit"}
-        </Button> */}
       </form>
     </Form>
   )
