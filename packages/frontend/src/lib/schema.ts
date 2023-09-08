@@ -10,7 +10,11 @@ export enum BooleanStrings {
 const BooleanEnum = z.nativeEnum(BooleanStrings)
 
 export const caseStudyFormSchema = z.object({
-  type: z.enum([StudyType.Signal, StudyType.Observation]),
+  type: z.enum([
+    StudyType.Signal,
+    StudyType.Observation,
+    StudyType.Exploration,
+  ]),
   name: z.string().min(1, { message: "Don't forget your name" }),
   email: z.string().email({
     message: "Email please!",
@@ -28,7 +32,7 @@ export const caseStudyFormSchema = z.object({
   industry: z.string().min(1, {
     message: "Please include which industry this product is a part of",
   }),
-  partOfTeam: BooleanEnum.or(z.boolean()),
+  partOfTeam: z.string(),
 })
 
 export const caseStudyBodySchema = caseStudyFormSchema.extend({
