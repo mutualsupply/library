@@ -48,3 +48,15 @@ dist/
 id_ed25519
 id_ed25519.pub
 uploads
+
+# Compiler files
+packages/chain/cache/
+packages/chain/out/
+
+# Ignores development broadcast logs
+packages/chain/!/broadcast
+packages/chain/packages/chain/broadcast/*/31337/
+packages/chain/broadcast/**/dry-run/
+
+# Docs
+packages/chain/docs/
