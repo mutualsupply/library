@@ -57,6 +57,7 @@ packages/chain/out/
 packages/chain/!/broadcast
 packages/chain/packages/chain/broadcast/*/31337/
 packages/chain/broadcast/**/dry-run/
+packages/chain/foundry/lib
 
 # Docs
 packages/chain/docs/

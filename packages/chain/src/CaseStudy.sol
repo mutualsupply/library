@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-contract CaseStudy {
+import ERC1155 from "solmate/tokens/ERC1155.sol"
+
+contract CaseStudy is ERC1155 {
     uint256 public number;
 
     function setNumber(uint256 newNumber) public {
