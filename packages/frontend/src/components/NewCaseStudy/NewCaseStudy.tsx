@@ -77,31 +77,31 @@ export default function NewCaseStudy() {
             <AccordionItem value="item-0">
               <AccordionTrigger>Case Studies In Progress</AccordionTrigger>
               <AccordionContent>
-                <Link
-                  isExternal
-                  href={"https://github.com/mutualsupply/library/pulls"}
-                  className={cn(
-                    "inline-flex",
-                    "items-center",
-                    "gap-1",
-                    "border-b",
-                    "text-xs",
-                    "no-underline",
-                  )}
-                >
-                  <span>View all on Github</span> <ArrowRightIcon />
-                </Link>
-                {!isLoading && data && (
-                  <div className={cn("flex", "flex-col", "gap-3", "mt-4")}>
-                    {data?.map((pull) => (
-                      <DraftCaseStudy pull={pull} key={pull.number} />
-                    ))}
-                  </div>
+                {!isLoading && data && data.length > 0 && (
+                  <>
+                    <Link
+                      isExternal
+                      href={"https://github.com/mutualsupply/library/pulls"}
+                      className={cn(
+                        "inline-flex",
+                        "items-center",
+                        "gap-1",
+                        "border-b",
+                        "text-xs",
+                        "no-underline",
+                      )}
+                    >
+                      <span>View all on Github</span> <ArrowRightIcon />
+                    </Link>
+                    <div className={cn("flex", "flex-col", "gap-3", "mt-4")}>
+                      {data?.map((pull) => (
+                        <DraftCaseStudy pull={pull} key={pull.number} />
+                      ))}
+                    </div>
+                  </>
                 )}
-                {!isLoading && !data && (
-                  <div className={cn("text-center", "text-primary")}>
-                    No case studies in progress
-                  </div>
+                {!isLoading && (!data || data.length === 0) && (
+                  <div className={cn("text-center", "my-4")}>None found</div>
                 )}
               </AccordionContent>
             </AccordionItem>
