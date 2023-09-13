@@ -15,7 +15,7 @@ import { useQuery } from "@tanstack/react-query"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { getPulls } from "../../lib/api"
+import { getDrafts, getPulls } from "../../lib/api"
 import { isProd } from "../../lib/env"
 import { CreateNewCaseStudyResponse, StudyType } from "../../lib/interfaces"
 import { BooleanStrings, caseStudyFormSchema } from "../../lib/schema"
@@ -125,6 +125,17 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
   const { data: session } = useSession()
   const isLoggedIn = !!session?.user
 
+  const {
+    data: drafts,
+    isLoading: isDraftsLoading,
+    refetch: refetchDrafts,
+  } = useQuery({
+    queryKey: ["drafts"],
+    queryFn: getDrafts,
+    cacheTime: 0,
+    refetchOnWindowFocus: true,
+  })
+
   const defaultValues = isProd()
     ? {
         email: session?.user?.email || "",
@@ -152,15 +163,20 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
     defaultValues,
   })
 
+  const getParsedFormValues = () => {
+    const values = form.getValues()
+    return {
+      ...values,
+      partOfTeam: values.partOfTeam === BooleanStrings.True,
+      url: values.url === "" ? undefined : values.url,
+      markdown: markdown === "" ? undefined : markdown,
+    }
+  }
+
   async function onSubmit(values: z.infer<typeof caseStudyFormSchema>) {
     const res = await fetch("/api/create-case", {
       method: "POST",
-      body: JSON.stringify({
-        ...values,
-        partOfTeam: values.partOfTeam === BooleanStrings.True,
-        url: values.url === "" ? undefined : values.url,
-        markdown: markdown === "" ? undefined : markdown,
-      }),
+      body: JSON.stringify(getParsedFormValues()),
       credentials: "same-origin",
     })
     if (!res.ok) {
@@ -177,6 +193,26 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
         }
       } catch (e) {
         setError("Could not create case study")
+        console.error(e)
+      }
+    }
+  }
+
+  async function onSaveDraft() {
+    const res = await fetch("/api/draft", {
+      method: "POST",
+      body: JSON.stringify(getParsedFormValues()),
+      credentials: "same-origin",
+    })
+    if (!res.ok) {
+      console.error("Could not create save draft", await res.text())
+      setError("Could not not save draft")
+    } else {
+      try {
+        const json = await res.json()
+        console.log("saved draft", json)
+      } catch (e) {
+        setError("Could not save draft")
         console.error(e)
       }
     }
@@ -211,14 +247,30 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
               </Accordion>
               {error && <div className={cn("text-red")}>{error}</div>}
               <div className={cn("flex", "items-center", "gap-2")}>
-                <Button
-                  className={cn("w-full", "rounded-full")}
-                  size="lg"
-                  variant="outline"
-                  disabled={!isLoggedIn}
-                >
-                  Save draft
-                </Button>
+                <div className={cn("w-full")}>
+                  <Button
+                    className={cn("w-full", "rounded-full")}
+                    size="lg"
+                    variant="outline"
+                    disabled={!isLoggedIn}
+                    onClick={onSaveDraft}
+                  >
+                    <div className={cn("flex", "flex-col")}>
+                      <span>Save draft</span>
+                      {drafts && drafts.length > 0 && (
+                        <div
+                          className={cn(
+                            "text-xs",
+                            "text-center",
+                            "text-gray-600",
+                          )}
+                        >
+                          {drafts.length} found
+                        </div>
+                      )}
+                    </div>
+                  </Button>
+                </div>
                 <Button
                   type="submit"
                   className={cn("w-full", "rounded-full")}

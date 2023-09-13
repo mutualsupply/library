@@ -2,23 +2,23 @@
 pragma solidity ^0.8.13;
 
 import {Test, console2} from "forge-std/Test.sol";
-import {Counter} from "../src/Counter.sol";
+import {CaseStudy} from "../src/CaseStudy.sol";
 
-contract CounterTest is Test {
-    Counter public counter;
+contract CaseStudyTest is Test {
+    CaseStudy public caseStudy;
 
     function setUp() public {
-        counter = new Counter();
-        counter.setNumber(0);
+        caseStudy = new CaseStudy();
+        caseStudy.setNumber(0);
     }
 
     function test_Increment() public {
-        counter.increment();
-        assertEq(counter.number(), 1);
+        caseStudy.increment();
+        assertEq(caseStudy.number(), 1);
     }
 
     function testFuzz_SetNumber(uint256 x) public {
-        counter.setNumber(x);
-        assertEq(counter.number(), x);
+        caseStudy.setNumber(x);
+        assertEq(caseStudy.number(), x);
     }
 }

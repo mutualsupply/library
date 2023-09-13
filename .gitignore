@@ -61,3 +61,5 @@ packages/chain/foundry/lib
 
 # Docs
 packages/chain/docs/
+
+packages/chain/src/examples

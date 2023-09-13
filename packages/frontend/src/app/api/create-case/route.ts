@@ -11,7 +11,7 @@ export async function POST(req: Request) {
   try {
     const session = await getServerSession()
     const token = await getToken({
-      req: req as any as NextApiRequest,
+      req: req as unknown as NextApiRequest,
     })
 
     if (!token || !session) {

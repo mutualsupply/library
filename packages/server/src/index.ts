@@ -1,5 +1,6 @@
 import cors from "@koa/cors"
 import multer from "@koa/multer"
+import { ENV } from "@prisma/client"
 import Koa, { Context } from "koa"
 import bodyParser from "koa-bodyparser"
 import json from "koa-json"
@@ -20,6 +21,8 @@ router.get("/", async (ctx, next) => {
   await next()
 })
 
+// router.get("/")
+
 router.get("/user/:email", async (ctx, next) => {
   const { email } = ctx.params
   const user = await prisma.user.findUnique({ where: { email } })
@@ -27,12 +30,14 @@ router.get("/user/:email", async (ctx, next) => {
   await next()
 })
 
-router.get("draft/:email", async (ctx, next) => {
+router.get("/draft/:email", async (ctx, next) => {
+  console.log("getting drafts")
   const { email } = ctx.params
-  const user = await prisma.user.findUnique({ where: { email } })
-  if (!user) {
-    throw new Error("Could not find user")
-  }
+  const user = await prisma.user.upsert({
+    where: { email },
+    create: { email },
+    update: {},
+  })
   const drafts = await prisma.draft.findMany({
     where: { userId: user.id },
   })
@@ -40,17 +45,19 @@ router.get("draft/:email", async (ctx, next) => {
   await next()
 })
 
-router.post("draft/:email", async (ctx, next) => {
-  const { content } = ctx.body
-  const { email } = ctx.params
-  const user = await prisma.user.findUnique({ where: { email } })
-  if (!user) {
-    throw new Error("Could not find user")
-  }
+router.post("draft", async (ctx, next) => {
+  const { isProd, caseStudy, user } = ctx.body
+  const { email } = user
+  const dbUser = await prisma.user.upsert({
+    where: { email },
+    update: {},
+    create: { email },
+  })
   const drafts = await prisma.draft.create({
     data: {
-      userId: user.id,
-      content: JSON.stringify(content),
+      userId: dbUser.id,
+      content: JSON.stringify(caseStudy),
+      env: isProd() ? ENV.PROD : ENV.DEV,
     },
   })
   ctx.body = drafts
