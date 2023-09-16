@@ -1,6 +1,5 @@
 import { cn } from "utils"
 import CasePage from "../../../components/CasePage"
-import { BackLink } from "../../../components/Links"
 import { getCaseFromSlug, getCases } from "../../../lib/server"
 
 export default async function Page({ params }: { params: { slug: string } }) {

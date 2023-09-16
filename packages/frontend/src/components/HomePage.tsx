@@ -2,11 +2,10 @@
 import Link from "next/link"
 import { useMemo, useState } from "react"
 import { cn, startsWithFilter } from "utils"
+import { caseTypeFilterItems } from "../lib/client"
 import { Case, StudyType } from "../lib/interfaces"
 import AlphaToggle from "./AlphaToggle"
 import LabelFilter from "./LabelFilter"
-import { BackLink } from "./Links"
-import { caseTypeFilterItems } from "../lib/client"
 
 interface HomeProps {
   cases: Array<Case>
@@ -47,9 +46,6 @@ export function HomePage({ cases }: HomeProps) {
   return (
     <>
       <div className={cn("my-5", "flex", "items-center", "gap-8")}>
-        <div className={cn("flex", "justify-between", "items-center")}>
-          <BackLink href={"https://mutual.supply"}>Index</BackLink>
-        </div>
         <LabelFilter
           items={caseTypeFilterItems}
           selected={selectedLabel}
