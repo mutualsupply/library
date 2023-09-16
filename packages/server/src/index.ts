@@ -16,6 +16,17 @@ const app = new Koa()
 const router = new Router()
 const upload = multer({ dest: "uploads/" })
 
+app.use(json())
+app.use(bodyParser())
+app.use(logger())
+app.use(cors())
+app.use(router.routes())
+app.use(router.allowedMethods())
+
+app.listen(env.PORT, () => {
+  console.log(`server is running at ${env.PORT}`)
+})
+
 router.get("/", async (ctx, next) => {
   ctx.body = { message: "🍎" }
   await next()
@@ -31,7 +42,6 @@ router.get("/user/:email", async (ctx, next) => {
 })
 
 router.get("/draft/:email", async (ctx, next) => {
-  console.log("getting drafts")
   const { email } = ctx.params
   const user = await prisma.user.upsert({
     where: { email },
@@ -45,8 +55,9 @@ router.get("/draft/:email", async (ctx, next) => {
   await next()
 })
 
-router.post("draft", async (ctx, next) => {
-  const { isProd, caseStudy, user } = ctx.body
+router.post("/draft", async (ctx, next) => {
+  const { isProd, caseStudy, user } = ctx.request
+    .body as PostCaseStudyRequestBody
   const { email } = user
   const dbUser = await prisma.user.upsert({
     where: { email },
@@ -57,7 +68,7 @@ router.post("draft", async (ctx, next) => {
     data: {
       userId: dbUser.id,
       content: JSON.stringify(caseStudy),
-      env: isProd() ? ENV.PROD : ENV.DEV,
+      env: isProd ? ENV.PROD : ENV.DEV,
     },
   })
   ctx.body = drafts
@@ -131,14 +142,3 @@ router.post(
     await next()
   },
 )
-
-app.use(json())
-app.use(bodyParser())
-app.use(logger())
-app.use(cors())
-app.use(router.routes())
-app.use(router.allowedMethods())
-
-app.listen(env.PORT, () => {
-  console.log(`server is running at ${env.PORT}`)
-})

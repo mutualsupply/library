@@ -1,10 +1,10 @@
 import { Metadata } from "next"
 import localFont from "next/font/local"
 import { cn } from "utils"
+import Footer from "../components/Footer"
 import Header from "../components/Header"
 import Providers from "../components/Providers"
 import "../styles/globals.css"
-import Footer from "../components/Footer"
 
 export const metadata: Metadata = {
   title: "Mutual Supply",
@@ -52,7 +52,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "p-8",
+          "p-4",
           "min-h-[calc(100dvh)]",
           "font-sans",
           "flex",
@@ -65,9 +65,7 @@ export default function RootLayout({
       >
         <Providers>
           <div className={cn("flex-grow")}>
-            <div className={cn("mb-4")}>
-              <Header />
-            </div>
+            <Header />
             {children}
           </div>
           <Footer />

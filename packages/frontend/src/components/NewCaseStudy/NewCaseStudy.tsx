@@ -11,13 +11,13 @@ import {
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ArrowRightIcon } from "@radix-ui/react-icons"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { getDrafts, getPulls } from "../../lib/api"
+import { getDrafts, getPulls, saveDraft, submitCaseStudy } from "../../lib/api"
 import { isProd } from "../../lib/env"
-import { CreateNewCaseStudyResponse, StudyType } from "../../lib/interfaces"
+import { CaseStudy, StudyType } from "../../lib/interfaces"
 import { BooleanStrings, caseStudyFormSchema } from "../../lib/schema"
 import { Link } from "../Links"
 import Section from "../Section"
@@ -41,7 +41,7 @@ export default function NewCaseStudy() {
     refetch()
   }
   return (
-    <div className={cn("flex", "gap-x-40", "mt-4", "flex-col", "md:flex-row")}>
+    <div className={cn("flex", "gap-x-40", "flex-col", "md:flex-row")}>
       <div className={cn("md:max-w-xl", "w-full")}>
         <Section title="Create cultrual timestamps" size="lg">
           <div>
@@ -117,23 +117,32 @@ export default function NewCaseStudy() {
 
 const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
   const [view, setView] = useState<"form" | "success">("form")
-  const [receipt, setReceipt] = useState<CreateNewCaseStudyResponse | null>(
-    null,
-  )
-  const [error, setError] = useState<string | null>(null)
   const [markdown, setMarkdown] = useState("")
   const { data: session } = useSession()
   const isLoggedIn = !!session?.user
 
-  const {
-    data: drafts,
-    isLoading: isDraftsLoading,
-    refetch: refetchDrafts,
-  } = useQuery({
+  const { data: drafts, refetch: refetchDrafts } = useQuery({
     queryKey: ["drafts"],
     queryFn: getDrafts,
     cacheTime: 0,
     refetchOnWindowFocus: true,
+  })
+
+  const caseStudyMutation = useMutation({
+    mutationFn: submitCaseStudy,
+    onSuccess(): void {
+      setView("success")
+      if (onSuccess) {
+        onSuccess()
+      }
+    },
+  })
+
+  const draftMutation = useMutation({
+    mutationFn: saveDraft,
+    onSuccess(): void {
+      refetchDrafts()
+    },
   })
 
   const defaultValues = isProd()
@@ -163,7 +172,7 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
     defaultValues,
   })
 
-  const getParsedFormValues = () => {
+  const getParsedFormValues = (): CaseStudy => {
     const values = form.getValues()
     return {
       ...values,
@@ -173,49 +182,12 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
     }
   }
 
-  async function onSubmit(values: z.infer<typeof caseStudyFormSchema>) {
-    const res = await fetch("/api/create-case", {
-      method: "POST",
-      body: JSON.stringify(getParsedFormValues()),
-      credentials: "same-origin",
-    })
-    if (!res.ok) {
-      console.error("Could not create case study", await res.text())
-      setError("Could not create case study")
-    } else {
-      try {
-        const json = await res.json()
-        setError(null)
-        setView("success")
-        setReceipt(json)
-        if (onSuccess) {
-          onSuccess()
-        }
-      } catch (e) {
-        setError("Could not create case study")
-        console.error(e)
-      }
-    }
+  function onSubmit(values: z.infer<typeof caseStudyFormSchema>) {
+    return caseStudyMutation.mutateAsync(getParsedFormValues())
   }
 
-  async function onSaveDraft() {
-    const res = await fetch("/api/draft", {
-      method: "POST",
-      body: JSON.stringify(getParsedFormValues()),
-      credentials: "same-origin",
-    })
-    if (!res.ok) {
-      console.error("Could not create save draft", await res.text())
-      setError("Could not not save draft")
-    } else {
-      try {
-        const json = await res.json()
-        console.log("saved draft", json)
-      } catch (e) {
-        setError("Could not save draft")
-        console.error(e)
-      }
-    }
+  function onSaveDraft() {
+    return draftMutation.mutateAsync(getParsedFormValues())
   }
   return (
     <div>
@@ -238,22 +210,27 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
               <Accordion
                 type="multiple"
                 className={cn("flex", "flex-col", "gap-8", "w-full")}
-                defaultValue={["item-0"]}
               >
                 <SignInAccordion value="item-0" />
                 <ThoughtsAccordion value="item-1" />
                 <RecordAccordion value="item-2" onChange={setMarkdown} />
                 <DetailsAccordion value="item-3" />
               </Accordion>
-              {error && <div className={cn("text-red")}>{error}</div>}
+              {caseStudyMutation.isError &&
+                caseStudyMutation.error instanceof Error && (
+                  <div className={cn("text-red")}>
+                    {caseStudyMutation.error.message}
+                  </div>
+                )}
               <div className={cn("flex", "items-center", "gap-2")}>
                 <div className={cn("w-full")}>
                   <Button
                     className={cn("w-full", "rounded-full")}
                     size="lg"
                     variant="outline"
-                    disabled={!isLoggedIn}
+                    disabled={!isLoggedIn || form.formState.isSubmitting}
                     onClick={onSaveDraft}
+                    loading={draftMutation.isLoading}
                   >
                     <div className={cn("flex", "flex-col")}>
                       <span>Save draft</span>
@@ -272,10 +249,11 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
                   </Button>
                 </div>
                 <Button
+                  size="lg"
                   type="submit"
                   className={cn("w-full", "rounded-full")}
-                  size="lg"
-                  disabled={!isLoggedIn}
+                  disabled={!isLoggedIn || draftMutation.isLoading}
+                  loading={form.formState.isSubmitting}
                 >
                   {isLoggedIn ? "Submit" : "Sign in to submit"}
                 </Button>
@@ -285,14 +263,16 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
         </div>
       )}
 
-      {view === "success" && receipt && (
-        <Section title={receipt.caseStudy.title} size="lg">
+      {view === "success" && caseStudyMutation.data && (
+        <Section title={caseStudyMutation.data.caseStudy.title} size="lg">
           <div>
-            <div className={cn("text-xl")}>by: {receipt?.pr.user.login}</div>
+            <div className={cn("text-xl")}>
+              by: {caseStudyMutation.data?.caseStudy.name}
+            </div>
           </div>
           <Link
             isExternal
-            href={receipt.pr.html_url}
+            href={caseStudyMutation.data.pr.html_url}
             className={cn("text-primary", "underline")}
           >
             View on Github

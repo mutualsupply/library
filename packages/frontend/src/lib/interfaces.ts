@@ -34,10 +34,10 @@ export interface CaseStudy {
   email: string
   title: string
   organizationName: string
-  url: string
   industry: string
   partOfTeam: boolean
   markdown?: string
+  url?: string
 }
 
 export interface PR {

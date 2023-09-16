@@ -22,7 +22,6 @@ export async function POST(req: Request) {
     }
 
     const caseStudy = caseStudyBodySchema.parse(await req.json())
-    console.log(`Saving draft for case study: ${JSON.stringify(caseStudy)}`)
     const res = await fetch(`${env.NEXT_PUBLIC_SERVER_BASE_URL}/draft`, {
       method: "POST",
       headers: {
@@ -38,9 +37,8 @@ export async function POST(req: Request) {
       throw new Error("Could not create case study")
     }
 
-    return NextResponse.json({
-      caseStudy,
-    })
+    const json = await res.json()
+    return NextResponse.json(json)
   } catch (e) {
     if (e instanceof UnauthenticatedError) {
       return NextResponse.json({ error: e.message }, { status: 401 })

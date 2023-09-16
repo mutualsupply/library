@@ -8,9 +8,8 @@ import { cn } from "utils"
 
 export default function Header() {
   const pathname = usePathname()
-  console.log(pathname)
   return (
-    <div className="flex items-center justify-between py-4">
+    <div className="flex items-center justify-between py-4 mb-10">
       <div className={cn("inline-flex", "items-center", "gap-4")}>
         <Link href={"/"}>
           <Image
