@@ -4,3 +4,6 @@
 [submodule "packages/chain/lib/solmate"]
 	path = packages/chain/lib/solmate
 	url = https://github.com/Rari-Capital/solmate
+[submodule "packages/chain/lib/openzeppelin-contracts"]
+	path = packages/chain/lib/openzeppelin-contracts
+	url = https://github.com/openzeppelin/openzeppelin-contracts
