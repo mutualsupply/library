@@ -31,7 +31,9 @@ export default function Header() {
         <NavButton isSelected={pathname === "/create-case"} href="/create-case">
           Submit
         </NavButton>
-        <NavButton href="">Info</NavButton>
+        <NavButton href="https://www.mutual.supply/library#what">
+          Info
+        </NavButton>
       </div>
     </div>
   )
