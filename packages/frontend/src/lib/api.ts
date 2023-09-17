@@ -26,12 +26,16 @@ export async function getDrafts(): Promise<GithubPullResponse> {
   return res.json()
 }
 
-export async function submitCaseStudy(
-  caseStudy: CaseStudy,
-): Promise<CreateNewCaseStudyResponse> {
+export async function submitCaseStudy({
+  caseStudy,
+  signature,
+}: {
+  caseStudy: CaseStudy
+  signature?: string
+}): Promise<CreateNewCaseStudyResponse> {
   const res = await fetch("/api/create-case", {
     method: "POST",
-    body: JSON.stringify(caseStudy),
+    body: JSON.stringify({ caseStudy, signature }),
     credentials: "same-origin",
   })
   if (!res.ok) {

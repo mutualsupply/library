@@ -121,7 +121,7 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
               )}
             >
               <div className={cn("grid", "md:grid-cols-6", "grid-cols-1")}>
-                <div className={cn("col-span-2")}>AUTHOR:</div>
+                <div className={cn("col-span-2")}>Author:</div>
                 <div
                   className={cn(
                     "underline",
@@ -133,10 +133,23 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
                   {caseStudy.author}
                 </div>
               </div>
+              <div className={cn("grid", "md:grid-cols-6", "grid-cols-1")}>
+                <div className={cn("col-span-2")}>Organization:</div>
+                <div
+                  className={cn(
+                    "underline",
+                    "col-span-4",
+                    "font-aspekta",
+                    "font-light",
+                  )}
+                >
+                  {caseStudy.organization}
+                </div>
+              </div>
               <div className={cn("grid", "grid-cols-6")}>
-                <div className={cn("col-span-2")}>CREATED:</div>
+                <div className={cn("col-span-2")}>Submitted:</div>
                 <div className={cn("col-span-4", "font-aspekta", "font-light")}>
-                  {new Date(caseStudy.createdAt).toLocaleString()}
+                  {new Date(caseStudy.submittedOn).toDateString()}
                 </div>
               </div>
               <div className={cn("flex", "items-center", "flex-wrap", "gap-4")}>

@@ -2,10 +2,12 @@ import { NextApiRequest } from "next"
 import { getServerSession } from "next-auth"
 import { getToken } from "next-auth/jwt"
 import { NextResponse } from "next/server"
+import { recoverMessageAddress } from "viem"
 import { GITHUB_OWNER, GITHUB_REPO } from "../../../lib/api"
 import env, { isProd } from "../../../lib/env"
+import { CaseStudy } from "../../../lib/interfaces"
 import { caseStudyBodySchema } from "../../../lib/schema"
-import { UnauthenticatedError } from "../../../lib/server"
+import { UnauthenticatedError, createSlug } from "../../../lib/server"
 
 export async function POST(req: Request) {
   try {
@@ -23,8 +25,26 @@ export async function POST(req: Request) {
         "User must have Github public email to publish a case study",
       )
     }
-    const caseStudy = caseStudyBodySchema.parse(await req.json())
-    console.log(`Creating case study: ${JSON.stringify(caseStudy)}`)
+    const json = (await req.json()) as {
+      caseStudy: CaseStudy
+      signature?: string
+    }
+    const caseStudy = caseStudyBodySchema.parse(json.caseStudy)
+
+    let address = undefined
+    if (json.signature) {
+      address = await recoverMessageAddress({
+        message: JSON.stringify(json.caseStudy),
+        signature: json.signature as `0x${string}`,
+      })
+    }
+
+    console.log(
+      `Creating case study: ${JSON.stringify(caseStudy)} ${
+        address ? `from address: ${address}` : ""
+      }`,
+    )
+
     const res = await fetch(`${env.NEXT_PUBLIC_SERVER_BASE_URL}/case-study`, {
       method: "POST",
       headers: {
@@ -32,8 +52,10 @@ export async function POST(req: Request) {
       },
       body: JSON.stringify({
         caseStudy,
+        address,
         user: session.user,
         isProd: isProd(),
+        slug: createSlug(caseStudy.title),
       }),
     })
     if (!res.ok) {
@@ -51,7 +73,7 @@ export async function POST(req: Request) {
           "X-GitHub-Api-Version": "2022-11-28",
         },
         body: JSON.stringify({
-          title: `New Case Study: ${caseStudy.title}`,
+          title: `Submission: ${caseStudy.title}`,
           body: `${caseStudy.title} by ${caseStudy.email}\n\n[Link](${caseStudy.url})`,
           base: isProd() ? "main" : "dev",
           head,

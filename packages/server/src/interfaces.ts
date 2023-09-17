@@ -35,4 +35,6 @@ export interface PostCaseStudyRequestBody {
   caseStudy: CaseStudy
   user: GithubUser
   isProd: boolean
+  slug: string
+  address?: `0x${string}`
 }

@@ -7,7 +7,6 @@ export enum BooleanStrings {
   True = "true",
   False = "false",
 }
-const BooleanEnum = z.nativeEnum(BooleanStrings)
 
 export const caseStudyFormSchema = z.object({
   type: z.enum([

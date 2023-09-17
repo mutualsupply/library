@@ -121,7 +121,7 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
   const [markdown, setMarkdown] = useState("")
   const { data: session } = useSession()
   const isLoggedIn = !!session?.user
-  const { data, error, isLoading, signMessage, variables } = useSignMessage()
+  const { signMessageAsync } = useSignMessage()
   const { address } = useAccount()
 
   const { data: drafts, refetch: refetchDrafts } = useQuery({
@@ -186,16 +186,14 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
   }
 
   async function onSubmit(values: z.infer<typeof caseStudyFormSchema>) {
+    const caseStudy = getParsedFormValues()
     if (address) {
-      console.log("debug:: signing")
-      const caseStudy = getParsedFormValues()
-      const signedData = signMessage({
+      const signature = await signMessageAsync({
         message: JSON.stringify(caseStudy),
       })
-      console.log("debug:: stuff", signedData)
-      // return caseStudyMutation.mutateAsync(getParsedFormValues())
+      return caseStudyMutation.mutateAsync({ caseStudy, signature })
     } else {
-      return caseStudyMutation.mutateAsync(getParsedFormValues())
+      return caseStudyMutation.mutateAsync({ caseStudy })
     }
   }
 

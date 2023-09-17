@@ -98,6 +98,10 @@
 }
 
 .ProseMirror {
-  height: 350px;
+  height: 100%;
   overflow-y: auto;
+}
+
+div[data-milkdown-root], .milkdown {
+  height: 100%;
 }

@@ -13,7 +13,8 @@ export interface CaseMetadata {
   organization: string
   type: StudyType
   author: string
-  createdAt: DateTime
+  submittedOn: DateTime
+  address?: `0x${string}`
 }
 
 export interface Case extends CaseMetadata {

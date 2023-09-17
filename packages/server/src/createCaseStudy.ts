@@ -9,17 +9,16 @@ function createCaseStudy(
   user: GithubUser,
   caseStudy: CaseStudy,
   isProd: boolean,
+  slug: string,
+  address?: `0x${string}`,
 ) {
   console.log("writing case study submitted by", user.email)
-  let branchName = `${caseStudy.email}/mutual-supply-${Date.now()}`
-  if (!isProd) {
-    branchName += "-dev"
-  }
+  const branchName = `${caseStudy.email}/${slug}`
   const now = new Date()
-  const dirName = `/tmp/new-study-${Date.now()}`
+  const dirName = `/tmp/new-study-${slug}`
   const repoName = "library"
   const pathToFrontendPackage = `${dirName}/${repoName}/packages/frontend`
-  run(`mkdir ${dirName}`)
+  run(`rm -rf ${dirName} && mkdir ${dirName}`)
   run(
     `GIT_SSH_COMMAND="ssh -i /root/.ssh/id_ed25519" git clone git@github.com:mutualsupply/${repoName}.git ${dirName}/${repoName}`,
   )
@@ -36,16 +35,17 @@ Authored by: **${caseStudy.name}** (${caseStudy.email})\n
 Created on: **${now.toISOString()}**\n
 Is Part Of Team: **${caseStudy.partOfTeam ? "Yes" : "No"}**
 `
+  if (address) {
+    markdown += `\n\nAddress: **${address}**`
+  }
   if (caseStudy.url) {
-    markdown += `\nProof of Experience: **[${caseStudy.url}](${caseStudy.url})**`
+    markdown += `\n\nProof of Experience: **[${caseStudy.url}](${caseStudy.url})**`
   }
   if (caseStudy.markdown) {
     markdown += `\n\n${caseStudy.markdown}`
   }
 
-  run(
-    `echo "${markdown}" > ${pathToFrontendPackage}/src/markdown/mutual-supply.mdx`,
-  )
+  run(`echo "${markdown}" > ${pathToFrontendPackage}/src/markdown/${slug}.mdx`)
   run(`cd ${dirName}/${repoName} && git status`)
   run(`cd ${dirName}/${repoName} && git branch ${branchName}`)
   run(`cd ${dirName}/${repoName} && git checkout ${branchName}`)
@@ -53,7 +53,7 @@ Is Part Of Team: **${caseStudy.partOfTeam ? "Yes" : "No"}**
   run(
     `cd ${dirName}/${repoName} && git commit -m 'testing' --author "${user.name} <${user.email}>" `,
   )
-  run(`cd ${dirName}/${repoName} && git push origin -u ${branchName}`)
+  run(`cd ${dirName}/${repoName} && git push origin -u ${branchName} -f`)
   run(`rm -rf ${dirName}`)
   return {
     branchName,

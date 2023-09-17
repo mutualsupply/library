@@ -32,8 +32,6 @@ router.get("/", async (ctx, next) => {
   await next()
 })
 
-// router.get("/")
-
 router.get("/user/:email", async (ctx, next) => {
   const { email } = ctx.params
   const user = await prisma.user.findUnique({ where: { email } })
@@ -81,7 +79,7 @@ router.get("/status", async (ctx, next) => {
 })
 
 router.post("/case-study", async (ctx, next) => {
-  const { caseStudy, user, isProd } = ctx.request
+  const { caseStudy, user, isProd, slug, address } = ctx.request
     .body as PostCaseStudyRequestBody
   if (!user.email) {
     ctx.status = 401
@@ -92,7 +90,13 @@ router.post("/case-study", async (ctx, next) => {
       ctx,
     )
   } else {
-    const { branchName } = createCaseStudy(user, caseStudy, isProd)
+    const { branchName } = createCaseStudy(
+      user,
+      caseStudy,
+      isProd,
+      slug,
+      address,
+    )
 
     const dbUser = await prisma.user.upsert({
       where: { email: user.email },

@@ -6,10 +6,21 @@ import { Case, CaseMetadata, StudyType } from "./interfaces"
 
 const PATH_TO_MARKDOWN = "src/markdown"
 
-export function getCases() {
-  const dir = path.join(process.cwd(), PATH_TO_MARKDOWN)
+function getAllCaseFileNames() {
+  const dir = getAbsolutePathToMarkdown()
   const filenames = fs.readdirSync(dir)
-  return filenames.map((filename) => getCase(dir, filename))
+  return filenames
+}
+
+function getAbsolutePathToMarkdown() {
+  return path.join(process.cwd(), PATH_TO_MARKDOWN)
+}
+
+export function getCases() {
+  const filenames = getAllCaseFileNames()
+  return filenames.map((filename) =>
+    getCase(getAbsolutePathToMarkdown(), filename),
+  )
 }
 
 export async function getCaseFromSlug(slug: string) {
@@ -41,15 +52,40 @@ export function getCase(pathToMarkdownDir: string, filename: string): Case {
   }
 }
 
+function getAllSlugs() {
+  const filenames = getAllCaseFileNames()
+  return filenames.map((file) => file.split(".mdx")[0])
+}
+
+export function createSlug(title: string) {
+  const allSlugs = getAllSlugs()
+  let slug = title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+  const originalSlug = slug
+
+  let count = 1
+  while (allSlugs.includes(slug)) {
+    slug = `${originalSlug}-${count}`
+    count++
+  }
+  return slug
+}
+
 export function parseMarkdown(source: string): CaseMetadata {
   const lexer = new marked.Lexer()
   const tokens = lexer.lex(source)
 
   const getStrongTextStartsWith = (search: string) => {
-    const organizationToken = tokens.find(
+    const token = tokens.find(
       (token) => token.type === "paragraph" && token.text?.startsWith(search),
     ) as marked.Tokens.Paragraph
-    const { text } = organizationToken.tokens.find(
+
+    if (!token) {
+      return undefined
+    }
+    const { text } = token.tokens.find(
       (token) => token.type === "strong",
     ) as marked.Tokens.Strong
     return text
@@ -59,16 +95,20 @@ export function parseMarkdown(source: string): CaseMetadata {
     (token) => token.type === "heading" && token.depth === 1,
   ) as marked.Tokens.Heading
 
-  const organization = getStrongTextStartsWith("Organization")
+  const organization = getStrongTextStartsWith("Organization") as string
   const type = getStrongTextStartsWith("Type") as StudyType
-  const author = getStrongTextStartsWith("Authored by")
-  const createdAt = getStrongTextStartsWith("Created on")
+  const author = getStrongTextStartsWith("Authored by") as string
+  const submittedOn = getStrongTextStartsWith("Submitted on") as string
+  const address = getStrongTextStartsWith("Address") as
+    | `0x${string}`
+    | undefined
   return {
     title,
     organization,
     type,
     author,
-    createdAt,
+    submittedOn,
+    address,
   }
 }
 

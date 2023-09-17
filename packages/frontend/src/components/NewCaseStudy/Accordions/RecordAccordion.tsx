@@ -1,10 +1,10 @@
 import { cn } from "utils"
+import { MilkdownEditorWrapper } from "../../MilkdownEditor"
 import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "../../ui/accordion"
-import { MilkdownEditorWrapper } from "../../MilkdownEditor"
 import { CaseStudyAccordionProps } from "./SignInAccordion"
 
 interface RecordAccordionProps extends CaseStudyAccordionProps {
@@ -29,7 +29,9 @@ export default function RecordAccordion({
           Pro tip : Open the editor below in full-screen mode for a breezy
           editing experience.
         </div>
-        <MilkdownEditorWrapper onChange={onChange} />
+        <div className={cn("h-[500px]")}>
+          <MilkdownEditorWrapper onChange={onChange} />
+        </div>
       </AccordionContent>
     </AccordionItem>
   )
