@@ -27,6 +27,8 @@ function createCaseStudy(
   }
   let markdown = `# ${caseStudy.title}
 
+${caseStudy.markdown ? caseStudy.markdown : ""}
+
 ### Metadata\n
 Organization: **${caseStudy.organizationName}**\n
 Type: **${caseStudy.type}**\n
@@ -34,17 +36,13 @@ Industry: **${caseStudy.industry}**\n
 Authored by: **${caseStudy.name}** (${caseStudy.email})\n
 Created on: **${now.toISOString()}**\n
 Is Part Of Team: **${caseStudy.partOfTeam ? "Yes" : "No"}**
+${address ? `\nAddress: **${address}**` : ""}
+${
+  caseStudy.url
+    ? `\nProof of Experience: **[${caseStudy.url}](${caseStudy.url})**`
+    : ""
+}
 `
-  if (address) {
-    markdown += `\n\nAddress: **${address}**`
-  }
-  if (caseStudy.url) {
-    markdown += `\n\nProof of Experience: **[${caseStudy.url}](${caseStudy.url})**`
-  }
-  if (caseStudy.markdown) {
-    markdown += `\n\n${caseStudy.markdown}`
-  }
-
   run(`echo "${markdown}" > ${pathToFrontendPackage}/src/markdown/${slug}.mdx`)
   run(`cd ${dirName}/${repoName} && git status`)
   run(`cd ${dirName}/${repoName} && git branch ${branchName}`)

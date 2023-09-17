@@ -133,6 +133,21 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
                   {caseStudy.author}
                 </div>
               </div>
+              {caseStudy.address && (
+                <div className={cn("grid", "md:grid-cols-6", "grid-cols-1")}>
+                  <div className={cn("col-span-2")}>Author:</div>
+                  <div
+                    className={cn(
+                      "underline",
+                      "col-span-4",
+                      "font-aspekta",
+                      "font-light",
+                    )}
+                  >
+                    {caseStudy.address}
+                  </div>
+                </div>
+              )}
               <div className={cn("grid", "md:grid-cols-6", "grid-cols-1")}>
                 <div className={cn("col-span-2")}>Organization:</div>
                 <div
