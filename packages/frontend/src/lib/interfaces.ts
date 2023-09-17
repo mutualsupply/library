@@ -1,5 +1,7 @@
 import { MDXRemoteSerializeResult } from "next-mdx-remote"
 
+type DateTime = string
+
 export enum StudyType {
   Signal = "Signal",
   Observation = "Observation",
@@ -10,6 +12,8 @@ export interface CaseMetadata {
   title: string
   organization: string
   type: StudyType
+  author: string
+  createdAt: DateTime
 }
 
 export interface Case extends CaseMetadata {

@@ -130,13 +130,13 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
                     "font-light",
                   )}
                 >
-                  NAME
+                  {caseStudy.author}
                 </div>
               </div>
               <div className={cn("grid", "grid-cols-6")}>
                 <div className={cn("col-span-2")}>CREATED:</div>
                 <div className={cn("col-span-4", "font-aspekta", "font-light")}>
-                  {new Date().toDateString()}
+                  {new Date(caseStudy.createdAt).toLocaleString()}
                 </div>
               </div>
               <div className={cn("flex", "items-center", "flex-wrap", "gap-4")}>

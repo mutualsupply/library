@@ -14,6 +14,7 @@ import { ArrowRightIcon } from "@radix-ui/react-icons"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
+import { useAccount, useSignMessage } from "wagmi"
 import { z } from "zod"
 import { getDrafts, getPulls, saveDraft, submitCaseStudy } from "../../lib/api"
 import { isProd } from "../../lib/env"
@@ -120,6 +121,8 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
   const [markdown, setMarkdown] = useState("")
   const { data: session } = useSession()
   const isLoggedIn = !!session?.user
+  const { data, error, isLoading, signMessage, variables } = useSignMessage()
+  const { address } = useAccount()
 
   const { data: drafts, refetch: refetchDrafts } = useQuery({
     queryKey: ["drafts"],
@@ -182,8 +185,18 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
     }
   }
 
-  function onSubmit(values: z.infer<typeof caseStudyFormSchema>) {
-    return caseStudyMutation.mutateAsync(getParsedFormValues())
+  async function onSubmit(values: z.infer<typeof caseStudyFormSchema>) {
+    if (address) {
+      console.log("debug:: signing")
+      const caseStudy = getParsedFormValues()
+      const signedData = signMessage({
+        message: JSON.stringify(caseStudy),
+      })
+      console.log("debug:: stuff", signedData)
+      // return caseStudyMutation.mutateAsync(getParsedFormValues())
+    } else {
+      return caseStudyMutation.mutateAsync(getParsedFormValues())
+    }
   }
 
   function onSaveDraft() {

@@ -15,12 +15,11 @@ function createCaseStudy(
   if (!isProd) {
     branchName += "-dev"
   }
-  const now = Date.now()
+  const now = new Date()
   const dirName = `/tmp/new-study-${Date.now()}`
   const repoName = "library"
   const pathToFrontendPackage = `${dirName}/${repoName}/packages/frontend`
   run(`mkdir ${dirName}`)
-  run(`echo 'testing this out ${now}' > /tmp/test-${now}.txt`)
   run(
     `GIT_SSH_COMMAND="ssh -i /root/.ssh/id_ed25519" git clone git@github.com:mutualsupply/${repoName}.git ${dirName}/${repoName}`,
   )
@@ -33,7 +32,8 @@ function createCaseStudy(
 Organization: **${caseStudy.organizationName}**\n
 Type: **${caseStudy.type}**\n
 Industry: **${caseStudy.industry}**\n
-Authored by: **${caseStudy.name} (${caseStudy.email})**\n
+Authored by: **${caseStudy.name}** (${caseStudy.email})\n
+Created on: **${now.toISOString()}**\n
 Is Part Of Team: **${caseStudy.partOfTeam ? "Yes" : "No"}**
 `
   if (caseStudy.url) {

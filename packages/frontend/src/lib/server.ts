@@ -1,8 +1,7 @@
 import fs from "fs"
+import { marked } from "marked"
 import { serialize } from "next-mdx-remote/serialize"
 import path from "path"
-import { randomInclusive } from "utils"
-import { marked } from "marked"
 import { Case, CaseMetadata, StudyType } from "./interfaces"
 
 const PATH_TO_MARKDOWN = "src/markdown"
@@ -23,11 +22,17 @@ export async function getCaseFromSlug(slug: string) {
 }
 
 export function getCase(pathToMarkdownDir: string, filename: string): Case {
-  const source = fs
+  let source = fs
     .readFileSync(path.join(pathToMarkdownDir, filename))
     .toString("utf-8")
   const slug = filename.replace(".mdx", "")
   const parsed = parseMarkdown(source)
+
+  // Strip metadata from markdown source
+  const index = source.indexOf("### Metadata")
+  if (index !== -1) {
+    source = source.substring(0, index)
+  }
   return {
     filename,
     slug,
@@ -56,11 +61,14 @@ export function parseMarkdown(source: string): CaseMetadata {
 
   const organization = getStrongTextStartsWith("Organization")
   const type = getStrongTextStartsWith("Type") as StudyType
-
+  const author = getStrongTextStartsWith("Authored by")
+  const createdAt = getStrongTextStartsWith("Created on")
   return {
     title,
     organization,
     type,
+    author,
+    createdAt,
   }
 }
 
