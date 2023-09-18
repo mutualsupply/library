@@ -234,7 +234,7 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
                   </div>
                 )}
               <div className={cn("flex", "items-center", "gap-2")}>
-                <div className={cn("w-full")}>
+                {/* <div className={cn("w-full")}>
                   <Button
                     className={cn("w-full", "rounded-full")}
                     size="lg"
@@ -258,7 +258,7 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
                       )}
                     </div>
                   </Button>
-                </div>
+                </div> */}
                 <Button
                   size="lg"
                   type="submit"

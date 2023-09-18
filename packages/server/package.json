@@ -11,6 +11,7 @@
     "format": "rome format . --write",
     "prisma:migrate:dev": "pnpx prisma migrate dev",
     "prisma:format": "pnpx prisma format",
+    "prisma:generate": "pnpx prisma generate",
     "start:prod": "npx prisma migrate deploy && node dist/index.js"
   },
   "keywords": [],

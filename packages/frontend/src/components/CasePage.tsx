@@ -120,53 +120,18 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
                 "gap-6",
               )}
             >
-              <div className={cn("grid", "md:grid-cols-6", "grid-cols-1")}>
-                <div className={cn("col-span-2")}>Author:</div>
-                <div
-                  className={cn(
-                    "underline",
-                    "col-span-4",
-                    "font-aspekta",
-                    "font-light",
-                  )}
-                >
-                  {caseStudy.author}
-                </div>
-              </div>
+              <Label title="Author" underline>
+                {caseStudy.author}
+              </Label>
+              <Label title="Organization" underline>
+                {caseStudy.organization}
+              </Label>
               {caseStudy.address && (
-                <div className={cn("grid", "md:grid-cols-6", "grid-cols-1")}>
-                  <div className={cn("col-span-2")}>Author:</div>
-                  <div
-                    className={cn(
-                      "underline",
-                      "col-span-4",
-                      "font-aspekta",
-                      "font-light",
-                    )}
-                  >
-                    {caseStudy.address}
-                  </div>
-                </div>
+                <Label title="Address">{caseStudy.address}</Label>
               )}
-              <div className={cn("grid", "md:grid-cols-6", "grid-cols-1")}>
-                <div className={cn("col-span-2")}>Organization:</div>
-                <div
-                  className={cn(
-                    "underline",
-                    "col-span-4",
-                    "font-aspekta",
-                    "font-light",
-                  )}
-                >
-                  {caseStudy.organization}
-                </div>
-              </div>
-              <div className={cn("grid", "grid-cols-6")}>
-                <div className={cn("col-span-2")}>Submitted:</div>
-                <div className={cn("col-span-4", "font-aspekta", "font-light")}>
-                  {new Date(caseStudy.submittedOn).toDateString()}
-                </div>
-              </div>
+              <Label title="Submitted">
+                {new Date(caseStudy.submittedOn).toDateString()}
+              </Label>
               <div className={cn("flex", "items-center", "flex-wrap", "gap-4")}>
                 <div key={caseStudy.title} className={cn("relative")}>
                   <div className={cn("relative", "z-10", "px-2", "rounded-sm")}>
@@ -201,5 +166,18 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
         </div>
       </div>
     </>
+  )
+}
+
+const Label = ({
+  title,
+  children,
+  underline = false,
+}: { title?: string; children: string; underline?: boolean }) => {
+  return (
+    <div className={cn("flex", "items-center", "gap-1")}>
+      <div>{title}:</div>
+      <div className={cn({ underline: underline })}>{children}</div>
+    </div>
   )
 }

@@ -46,8 +46,8 @@ router.get("/draft/:email", async (ctx, next) => {
     create: { email },
     update: {},
   })
-  const drafts = await prisma.draft.findMany({
-    where: { userId: user.id },
+  const drafts = await prisma.caseStudy.findMany({
+    where: { userId: user.id, isDraft: true },
   })
   ctx.body = drafts
   await next()
@@ -62,11 +62,14 @@ router.post("/draft", async (ctx, next) => {
     update: {},
     create: { email },
   })
-  const drafts = await prisma.draft.create({
+  const drafts = await prisma.caseStudy.create({
     data: {
       userId: dbUser.id,
       content: JSON.stringify(caseStudy),
       env: isProd ? ENV.PROD : ENV.DEV,
+      isDraft: true,
+      // @next: think about this more
+      slug: "",
     },
   })
   ctx.body = drafts
@@ -110,10 +113,13 @@ router.post("/case-study", async (ctx, next) => {
       },
     })
 
-    await prisma.draft.create({
+    await prisma.caseStudy.create({
       data: {
         userId: dbUser.id,
         content: JSON.stringify(caseStudy),
+        env: isProd ? ENV.PROD : ENV.DEV,
+        slug,
+        address,
       },
     })
     ctx.body = { branchName }
@@ -146,3 +152,10 @@ router.post(
     await next()
   },
 )
+
+router.post("/github/hook", async (ctx, next) => {
+  const body = ctx.request.body
+  console.log("github hook", body)
+  ctx.body = { status: "ok" }
+  await next()
+})
