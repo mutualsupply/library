@@ -2,6 +2,24 @@ import { MDXRemoteSerializeResult } from "next-mdx-remote"
 
 type DateTime = string
 
+export enum ENV {
+  DEV = "DEV",
+  PROD = "PROD",
+}
+export interface ServerCaseStudy {
+  id: number
+  content: Partial<CaseStudy>
+  isDraft: boolean
+  isApproved: boolean
+  address?: string
+  createdAt: DateTime
+  updatedAt: DateTime
+  deletedAt?: DateTime
+  slug?: string
+  env: ENV
+  userId: number
+}
+
 export enum StudyType {
   Signal = "Signal",
   Observation = "Observation",

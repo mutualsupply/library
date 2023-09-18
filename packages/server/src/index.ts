@@ -1,6 +1,6 @@
 import cors from "@koa/cors"
 import multer from "@koa/multer"
-import { ENV } from "@prisma/client"
+import { ENV, Prisma } from "@prisma/client"
 import Koa, { Context } from "koa"
 import bodyParser from "koa-bodyparser"
 import json from "koa-json"
@@ -49,6 +49,7 @@ router.get("/draft/:email", async (ctx, next) => {
   const drafts = await prisma.caseStudy.findMany({
     where: { userId: user.id, isDraft: true },
   })
+
   ctx.body = drafts
   await next()
 })
@@ -65,11 +66,9 @@ router.post("/draft", async (ctx, next) => {
   const drafts = await prisma.caseStudy.create({
     data: {
       userId: dbUser.id,
-      content: JSON.stringify(caseStudy),
+      content: caseStudy as unknown as Prisma.InputJsonValue,
       env: isProd ? ENV.PROD : ENV.DEV,
       isDraft: true,
-      // @next: think about this more
-      slug: "",
     },
   })
   ctx.body = drafts
@@ -153,6 +152,7 @@ router.post(
   },
 )
 
+// @next: find the case study by slug & update its accepted @ time && status
 router.post("/github/hook", async (ctx, next) => {
   const body = ctx.request.body
   console.log("github hook", body)

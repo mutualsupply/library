@@ -18,7 +18,7 @@ import { useAccount, useSignMessage } from "wagmi"
 import { z } from "zod"
 import { getDrafts, getPulls, saveDraft, submitCaseStudy } from "../../lib/api"
 import { isProd } from "../../lib/env"
-import { CaseStudy, StudyType } from "../../lib/interfaces"
+import { CaseStudy, ServerCaseStudy, StudyType } from "../../lib/interfaces"
 import { BooleanStrings, caseStudyFormSchema } from "../../lib/schema"
 import { Link } from "../Links"
 import Section from "../Section"
@@ -29,12 +29,19 @@ import DetailsAccordion from "./Accordions/DetailsAccordion"
 import RecordAccordion from "./Accordions/RecordAccordion"
 import SignInAccordion from "./Accordions/SignInAccordion"
 import ThoughtsAccordion from "./Accordions/ThoughtsAccordion"
-import DraftCaseStudy from "./DraftCaseStudy"
+import Draft from "./Draft"
+import GithubPr from "./GithubPr"
 
 export default function NewCaseStudy() {
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["pulls"],
     queryFn: getPulls,
+    cacheTime: 0,
+    refetchOnWindowFocus: true,
+  })
+  const { data: drafts, refetch: fetchDrafts } = useQuery({
+    queryKey: ["drafts"],
+    queryFn: getDrafts,
     cacheTime: 0,
     refetchOnWindowFocus: true,
   })
@@ -96,7 +103,7 @@ export default function NewCaseStudy() {
                     </Link>
                     <div className={cn("flex", "flex-col", "gap-3", "mt-4")}>
                       {data?.map((pull) => (
-                        <DraftCaseStudy pull={pull} key={pull.number} />
+                        <GithubPr pull={pull} key={pull.number} />
                       ))}
                     </div>
                   </>
@@ -106,30 +113,52 @@ export default function NewCaseStudy() {
                 )}
               </AccordionContent>
             </AccordionItem>
+            <AccordionItem value="item-1">
+              <AccordionTrigger>Your Drafts</AccordionTrigger>
+              <AccordionContent>
+                {drafts &&
+                  drafts?.length > 0 &&
+                  drafts?.map((draft, index) => (
+                    <Draft
+                      onClick={() => {
+                        console.log("restore from draft", draft.content)
+                      }}
+                      key={`draft-${index}`}
+                      draft={draft}
+                    />
+                  ))}
+              </AccordionContent>
+            </AccordionItem>
           </Accordion>
         </Section>
+        <div>{}</div>
       </div>
       <div className={cn("mt-6", "md:mt-0", "w-full", "max-w-2xl")}>
-        <CreateNewCaseStudy onSuccess={onCreateSuccess} />
+        <CreateNewCaseStudy
+          onSuccess={onCreateSuccess}
+          drafts={drafts}
+          fetchDrafts={fetchDrafts}
+        />
       </div>
     </div>
   )
 }
 
-const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
+const CreateNewCaseStudy = ({
+  onSuccess,
+  drafts,
+  fetchDrafts,
+}: {
+  onSuccess?: () => void
+  drafts?: Array<ServerCaseStudy>
+  fetchDrafts: () => void
+}) => {
   const [view, setView] = useState<"form" | "success">("form")
   const [markdown, setMarkdown] = useState("")
   const { data: session } = useSession()
   const isLoggedIn = !!session?.user
   const { signMessageAsync } = useSignMessage()
   const { address } = useAccount()
-
-  const { data: drafts, refetch: refetchDrafts } = useQuery({
-    queryKey: ["drafts"],
-    queryFn: getDrafts,
-    cacheTime: 0,
-    refetchOnWindowFocus: true,
-  })
 
   const caseStudyMutation = useMutation({
     mutationFn: submitCaseStudy,
@@ -144,7 +173,7 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
   const draftMutation = useMutation({
     mutationFn: saveDraft,
     onSuccess(): void {
-      refetchDrafts()
+      fetchDrafts()
     },
   })
 
@@ -234,7 +263,7 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
                   </div>
                 )}
               <div className={cn("flex", "items-center", "gap-2")}>
-                {/* <div className={cn("w-full")}>
+                <div className={cn("w-full")}>
                   <Button
                     className={cn("w-full", "rounded-full")}
                     size="lg"
@@ -258,7 +287,7 @@ const CreateNewCaseStudy = ({ onSuccess }: { onSuccess?: () => void }) => {
                       )}
                     </div>
                   </Button>
-                </div> */}
+                </div>
                 <Button
                   size="lg"
                   type="submit"

@@ -1,5 +1,9 @@
 import { Endpoints } from "@octokit/types"
-import { CaseStudy, CreateNewCaseStudyResponse } from "./interfaces"
+import {
+  CaseStudy,
+  CreateNewCaseStudyResponse,
+  ServerCaseStudy,
+} from "./interfaces"
 
 export type GithubPullResponse =
   Endpoints["GET /repos/{owner}/{repo}/pulls"]["response"]["data"]
@@ -12,7 +16,7 @@ export async function getPulls(): Promise<GithubPullResponse> {
   return res.json()
 }
 
-export async function getDrafts(): Promise<GithubPullResponse> {
+export async function getDrafts(): Promise<Array<ServerCaseStudy>> {
   const res = await fetch("/api/draft", {
     method: "GET",
     credentials: "include",

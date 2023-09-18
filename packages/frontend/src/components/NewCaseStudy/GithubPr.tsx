@@ -1,12 +1,12 @@
 import { cn } from "utils"
+import { GithubPullResponse } from "../../lib/api"
 import { Link } from "../Links"
-import { GithubPullResponse, getPulls } from "../../lib/api"
 
-interface DraftCaseStudyProps {
+interface GithubPrProps {
   pull: GithubPullResponse[number]
 }
 
-export default function DraftCaseStudy({ pull }: DraftCaseStudyProps) {
+export default function GithubPr({ pull }: GithubPrProps) {
   return (
     <div className={cn("p-4", "border", "flex", "flex-col", "gap-2")}>
       <Link
