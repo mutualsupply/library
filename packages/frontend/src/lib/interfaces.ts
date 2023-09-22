@@ -57,7 +57,7 @@ export interface CaseStudy {
   email: string
   title: string
   organizationName: string
-  industry: string
+  industry?: string
   partOfTeam: boolean
   markdown?: string
   url?: string

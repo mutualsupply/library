@@ -36,20 +36,25 @@ AccordionItem.displayName = "AccordionItem"
 
 const AccordionTrigger = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger> & {
+    leftOfIcon?: React.ReactNode
+  }
+>(({ className, children, leftOfIcon, ...props }, ref) => (
   <AccordionPrimitive.Header className="flex">
     <AccordionPrimitive.Trigger
       ref={ref}
       className={cn(
-        "flex flex-1 items-center justify-between py-4 text-lg font-medium hover:underline p-3 gap-2 text-left",
+        "flex flex-1 items-center justify-between py-4 text-lg font-medium group p-3 gap-2 text-left",
         className,
       )}
       {...props}
     >
-      {children}
-      <Add className={cn("group-data-[state=open]:hidden")} />
-      <Minus className={cn("group-data-[state=closed]:hidden")} />
+      <div className="group-hover:underline">{children}</div>
+      <div className="flex items-center gap-1">
+        {leftOfIcon && leftOfIcon}
+        <Add className={cn("group-data-[state=open]:hidden")} />
+        <Minus className={cn("group-data-[state=closed]:hidden")} />
+      </div>
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ))

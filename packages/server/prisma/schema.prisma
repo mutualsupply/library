@@ -16,27 +16,28 @@ enum ENV {
 }
 
 model User {
-  id            Int          @id @default(autoincrement())
-  email         String       @unique
-  name          String?
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-  deletedAt     DateTime?
-  env           ENV            @default(DEV)
-  caseStudies   CaseStudy[]
+  id          Int         @id @default(autoincrement())
+  email       String      @unique
+  name        String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  deletedAt   DateTime?
+  env         ENV         @default(DEV)
+  caseStudies CaseStudy[]
 }
 
 model CaseStudy {
-  id                  Int            @id @default(autoincrement())
-  content             Json
-  isDraft             Boolean        @default(false)
-  isApproved          Boolean        @default(false)
-  address             String?
-  createdAt           DateTime       @default(now())
-  updatedAt           DateTime       @updatedAt
-  deletedAt           DateTime?
-  slug                String?         @unique
-  env                 ENV            @default(DEV)
-  userId              Int
-  user                User           @relation(fields: [userId], references: [id])
+  id         Int       @id @default(autoincrement())
+  content    Json
+  isDraft    Boolean   @default(false)
+  isApproved Boolean   @default(false)
+  address    String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+  approvedAt DateTime?
+  slug       String?   @unique
+  env        ENV       @default(DEV)
+  userId     Int
+  user       User      @relation(fields: [userId], references: [id])
 }

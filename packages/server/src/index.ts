@@ -48,6 +48,7 @@ router.get("/draft/:email", async (ctx, next) => {
   })
   const drafts = await prisma.caseStudy.findMany({
     where: { userId: user.id, isDraft: true },
+    orderBy: { createdAt: "desc" },
   })
 
   ctx.body = drafts
@@ -153,9 +154,15 @@ router.post(
 )
 
 // @next: find the case study by slug & update its accepted @ time && status
-router.post("/github/hook", async (ctx, next) => {
+router.post("/github/webhook", async (ctx, next) => {
   const body = ctx.request.body
   console.log("github hook", body)
+
+  // get slug from posted body on merged PR
+  // update the accepted at datetime && status
+  // mint an NFT of the case study to the submitter if
+  // there is an address associated
+
   ctx.body = { status: "ok" }
   await next()
 })

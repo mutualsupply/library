@@ -11,10 +11,7 @@ interface RecordAccordionProps extends CaseStudyAccordionProps {
   onChange: (value: string) => void
 }
 
-export default function RecordAccordion({
-  value,
-  onChange,
-}: RecordAccordionProps) {
+export default function RecordAccordion({ onChange }: RecordAccordionProps) {
   return (
     <AccordionItem value="item-2">
       <AccordionTrigger>3. Record your thoughts</AccordionTrigger>

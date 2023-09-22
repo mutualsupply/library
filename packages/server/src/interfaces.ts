@@ -5,7 +5,7 @@ export interface CaseStudy {
   title: string
   organizationName: string
   url?: string
-  industry: string
+  industry?: string
   partOfTeam: boolean
   markdown?: string
 }

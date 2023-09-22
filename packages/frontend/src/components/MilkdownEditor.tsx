@@ -23,7 +23,7 @@ import {
 import { Node, Schema } from "@milkdown/prose/model"
 import { Milkdown, MilkdownProvider, useEditor } from "@milkdown/react"
 import { nord } from "@milkdown/theme-nord"
-import { callCommand } from "@milkdown/utils"
+import { callCommand, replaceAll } from "@milkdown/utils"
 import { FontBoldIcon, FontItalicIcon, QuoteIcon } from "@radix-ui/react-icons"
 import { BiListOl, BiListUl } from "react-icons/bi"
 import { GrRedo, GrUndo } from "react-icons/gr"
@@ -31,6 +31,8 @@ import { LuHeading1, LuHeading2, LuHeading3 } from "react-icons/lu"
 import { cn } from "utils"
 import env from "../lib/env"
 import { Button } from "./ui/button"
+import { forwardRef, useImperativeHandle } from "react"
+import { set } from "zod"
 
 interface MilkdownEditorProps {
   onChange: (value: string) => void
@@ -67,7 +69,7 @@ const uploader: Uploader = async (files: FileList, schema: Schema) => {
   return nodes
 }
 
-const MilkdownEditor = ({ onChange }: MilkdownEditorProps) => {
+const MilkdownEditor = forwardRef(({ onChange }: MilkdownEditorProps, ref) => {
   const { get } = useEditor(
     (root) =>
       Editor.make()
@@ -120,6 +122,12 @@ const MilkdownEditor = ({ onChange }: MilkdownEditorProps) => {
   function call<T>(command: CmdKey<T>, payload?: T) {
     return get()?.action(callCommand(command, payload))
   }
+  function setContent(markdown: string) {
+    return get()?.action(replaceAll(markdown))
+  }
+  useImperativeHandle(ref, () => ({
+    setContent,
+  }))
   return (
     <div className={cn("h-full", "flex", "flex-col")}>
       <div
@@ -207,12 +215,14 @@ const MilkdownEditor = ({ onChange }: MilkdownEditorProps) => {
       <Milkdown />
     </div>
   )
-}
+})
 
-export const MilkdownEditorWrapper = ({ onChange }: MilkdownEditorProps) => {
-  return (
-    <MilkdownProvider>
-      <MilkdownEditor onChange={onChange} />
-    </MilkdownProvider>
-  )
-}
+export const MilkdownEditorWrapper = forwardRef(
+  ({ onChange }: MilkdownEditorProps, ref) => {
+    return (
+      <MilkdownProvider>
+        <MilkdownEditor ref={ref} onChange={onChange} />
+      </MilkdownProvider>
+    )
+  },
+)

@@ -12,7 +12,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ArrowRightIcon } from "@radix-ui/react-icons"
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { useState } from "react"
+import { forwardRef, useImperativeHandle, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useAccount, useSignMessage } from "wagmi"
 import { z } from "zod"
@@ -31,6 +31,7 @@ import SignInAccordion from "./Accordions/SignInAccordion"
 import ThoughtsAccordion from "./Accordions/ThoughtsAccordion"
 import Draft from "./Draft"
 import GithubPr from "./GithubPr"
+import { MilkdownEditorWrapper } from "../MilkdownEditor"
 
 export default function NewCaseStudy() {
   const { data, isLoading, refetch } = useQuery({
@@ -48,6 +49,7 @@ export default function NewCaseStudy() {
   const onCreateSuccess = () => {
     refetch()
   }
+  const ref = useRef()
   return (
     <div className={cn("flex", "gap-x-40", "flex-col", "md:flex-row")}>
       <div className={cn("md:max-w-xl", "w-full")}>
@@ -114,27 +116,43 @@ export default function NewCaseStudy() {
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-1">
-              <AccordionTrigger>Your Drafts</AccordionTrigger>
+              <AccordionTrigger
+                leftOfIcon={
+                  drafts &&
+                  drafts.length > 0 && (
+                    <div className={cn("ml-2", "text-primary", "no-underline")}>
+                      ({drafts.length})
+                    </div>
+                  )
+                }
+              >
+                Your Drafts
+              </AccordionTrigger>
               <AccordionContent>
-                {drafts &&
-                  drafts?.length > 0 &&
-                  drafts?.map((draft, index) => (
-                    <Draft
-                      onClick={() => {
-                        console.log("restore from draft", draft.content)
-                      }}
-                      key={`draft-${index}`}
-                      draft={draft}
-                    />
-                  ))}
+                {drafts && drafts?.length > 0 && (
+                  <div className="flex flex-col gap-4">
+                    {drafts?.map((draft, index) => (
+                      <Draft
+                        onClick={() => {
+                          if (ref.current) {
+                            //@ts-ignore
+                            ref.current.restoreDraft(draft.content)
+                          }
+                        }}
+                        key={`draft-${index}`}
+                        draft={draft}
+                      />
+                    ))}
+                  </div>
+                )}
               </AccordionContent>
             </AccordionItem>
           </Accordion>
         </Section>
-        <div>{}</div>
       </div>
       <div className={cn("mt-6", "md:mt-0", "w-full", "max-w-2xl")}>
         <CreateNewCaseStudy
+          ref={ref}
           onSuccess={onCreateSuccess}
           drafts={drafts}
           fetchDrafts={fetchDrafts}
@@ -144,21 +162,24 @@ export default function NewCaseStudy() {
   )
 }
 
-const CreateNewCaseStudy = ({
-  onSuccess,
-  drafts,
-  fetchDrafts,
-}: {
-  onSuccess?: () => void
-  drafts?: Array<ServerCaseStudy>
-  fetchDrafts: () => void
-}) => {
+const CreateNewCaseStudy = forwardRef(function CreateNewCaseStudy(
+  {
+    onSuccess,
+    fetchDrafts,
+  }: {
+    onSuccess?: () => void
+    drafts?: Array<ServerCaseStudy>
+    fetchDrafts: () => void
+  },
+  ref,
+) {
   const [view, setView] = useState<"form" | "success">("form")
   const [markdown, setMarkdown] = useState("")
   const { data: session } = useSession()
   const isLoggedIn = !!session?.user
   const { signMessageAsync } = useSignMessage()
   const { address } = useAccount()
+  const markdownRef = useRef()
 
   const caseStudyMutation = useMutation({
     mutationFn: submitCaseStudy,
@@ -204,13 +225,28 @@ const CreateNewCaseStudy = ({
     defaultValues,
   })
 
-  const getParsedFormValues = (): CaseStudy => {
-    const values = form.getValues()
+  const parseFormForServer = (values: any): CaseStudy => {
     return {
       ...values,
       partOfTeam: values.partOfTeam === BooleanStrings.True,
       url: values.url === "" ? undefined : values.url,
       markdown: markdown === "" ? undefined : markdown,
+      industry: values.industry === "" ? undefined : values.industry,
+    }
+  }
+
+  const getParsedFormValues = (): CaseStudy => {
+    const values = form.getValues()
+    return parseFormForServer(values)
+  }
+
+  const restoreFromServer = (study: CaseStudy) => {
+    return {
+      ...study,
+      partOfTeam: study.partOfTeam ? BooleanStrings.True : BooleanStrings.False,
+      url: study.url || "",
+      markdown: study.markdown || "",
+      industry: study.industry || "",
     }
   }
 
@@ -229,6 +265,19 @@ const CreateNewCaseStudy = ({
   function onSaveDraft() {
     return draftMutation.mutateAsync(getParsedFormValues())
   }
+
+  useImperativeHandle(ref, () => {
+    return {
+      restoreDraft: (values: CaseStudy) => {
+        const { markdown, ...rest } = values
+        form.reset(restoreFromServer(rest))
+        if (markdownRef.current) {
+          //@ts-ignore
+          markdownRef.current.setContent(markdown)
+        }
+      },
+    }
+  })
   return (
     <div>
       {view === "form" && (
@@ -243,17 +292,34 @@ const CreateNewCaseStudy = ({
           )}
         >
           <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className={cn("space-y-8")}
-            >
+            <form className={cn("space-y-8")}>
               <Accordion
                 type="multiple"
                 className={cn("flex", "flex-col", "gap-8", "w-full")}
               >
                 <SignInAccordion value="item-0" />
                 <ThoughtsAccordion value="item-1" />
-                <RecordAccordion value="item-2" onChange={setMarkdown} />
+                <AccordionItem value="item-2">
+                  <AccordionTrigger>3. Record your thoughts</AccordionTrigger>
+                  <AccordionContent>
+                    <div>
+                      All submissions are subject to a review process by the
+                      MUTUAL team. We suggest starting with our Best Practices
+                      Guide to understand what kind of information to include,
+                      and how to format your thoughts in the editor below.
+                    </div>
+                    <div className={cn("font-bold", "my-6")}>
+                      Pro tip : Open the editor below in full-screen mode for a
+                      breezy editing experience.
+                    </div>
+                    <div className={cn("h-[500px]")}>
+                      <MilkdownEditorWrapper
+                        ref={markdownRef}
+                        onChange={setMarkdown}
+                      />
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
                 <DetailsAccordion value="item-3" />
               </Accordion>
               {caseStudyMutation.isError &&
@@ -269,22 +335,11 @@ const CreateNewCaseStudy = ({
                     size="lg"
                     variant="outline"
                     disabled={!isLoggedIn || form.formState.isSubmitting}
-                    onClick={onSaveDraft}
                     loading={draftMutation.isLoading}
+                    onClick={form.handleSubmit(onSaveDraft)}
                   >
                     <div className={cn("flex", "flex-col")}>
                       <span>Save draft</span>
-                      {drafts && drafts.length > 0 && (
-                        <div
-                          className={cn(
-                            "text-xs",
-                            "text-center",
-                            "text-gray-600",
-                          )}
-                        >
-                          {drafts.length} found
-                        </div>
-                      )}
                     </div>
                   </Button>
                 </div>
@@ -294,6 +349,7 @@ const CreateNewCaseStudy = ({
                   className={cn("w-full", "rounded-full")}
                   disabled={!isLoggedIn || draftMutation.isLoading}
                   loading={form.formState.isSubmitting}
+                  onClick={form.handleSubmit(onSubmit)}
                 >
                   {isLoggedIn ? "Submit" : "Sign in to submit"}
                 </Button>
@@ -336,4 +392,4 @@ const CreateNewCaseStudy = ({
       )}
     </div>
   )
-}
+})
