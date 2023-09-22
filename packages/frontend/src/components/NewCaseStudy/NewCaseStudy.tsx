@@ -330,7 +330,7 @@ const CreateNewCaseStudy = forwardRef(function CreateNewCaseStudy(
                   type="submit"
                   className={cn("w-full", "rounded-full")}
                   disabled={!isLoggedIn || draftMutation.isLoading}
-                  loading={form.formState.isSubmitting}
+                  loading={caseStudyMutation.isLoading}
                   onClick={form.handleSubmit(onSubmit)}
                 >
                   {isLoggedIn ? "Submit" : "Sign in to submit"}

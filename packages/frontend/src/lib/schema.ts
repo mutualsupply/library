@@ -28,7 +28,7 @@ export const caseStudyFormSchema = z.object({
     .string()
     .min(1, { message: "Please include the name of the organization" }),
   url: z.union([z.string().url().optional(), z.literal("")]),
-  industry: z.string(),
+  industry: z.string().optional(),
   partOfTeam: z.string(),
 })
 

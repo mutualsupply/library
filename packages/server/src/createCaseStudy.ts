@@ -25,14 +25,14 @@ function createCaseStudy(
   if (!isProd) {
     run(`cd ${dirName}/${repoName} && git checkout dev`)
   }
-  let markdown = `# ${caseStudy.title}
+  const markdown = `# ${caseStudy.title}
 
 ${caseStudy.markdown ? caseStudy.markdown : ""}
 
 ### Metadata\n
 Organization: **${caseStudy.organizationName}**\n
 Type: **${caseStudy.type}**\n
-Industry: **${caseStudy.industry}**\n
+${caseStudy?.industry ? `Industry: **${caseStudy.industry}**\n` : ""}
 Authored by: **${caseStudy.name}** (${caseStudy.email})\n
 Created on: **${now.toISOString()}**\n
 Is Part Of Team: **${caseStudy.partOfTeam ? "Yes" : "No"}**
