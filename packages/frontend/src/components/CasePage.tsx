@@ -130,26 +130,12 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
                 <Label title="Address">{caseStudy.address}</Label>
               )}
               <Label title="Submitted">
-                {new Date(caseStudy.submittedOn).toDateString()}
+                {new Date(caseStudy.submittedOn).toLocaleString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })}
               </Label>
-              <div className={cn("flex", "items-center", "flex-wrap", "gap-4")}>
-                <div key={caseStudy.title} className={cn("relative")}>
-                  <div className={cn("relative", "z-10", "px-2", "rounded-sm")}>
-                    {caseStudy.type}
-                  </div>
-                  <div
-                    className={cn(
-                      "bg-g",
-                      "absolute",
-                      "inset-0",
-                      "w-full",
-                      "h-full",
-                      "opacity-60",
-                      "rounded-sm",
-                    )}
-                  />
-                </div>
-              </div>
             </div>
           </div>
           <div
