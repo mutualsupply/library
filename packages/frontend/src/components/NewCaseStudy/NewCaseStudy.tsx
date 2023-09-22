@@ -296,7 +296,7 @@ const CreateNewCaseStudy = forwardRef(function CreateNewCaseStudy(
                       Guide to understand what kind of information to include,
                       and how to format your thoughts in the editor below.
                     </div>
-                    <div className={cn("font-bold", "my-6")}>
+                    <div className={cn("font-medium", "my-6")}>
                       Pro tip : Open the editor below in full-screen mode for a
                       breezy editing experience.
                     </div>
