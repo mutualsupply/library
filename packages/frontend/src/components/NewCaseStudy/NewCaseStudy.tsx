@@ -17,8 +17,7 @@ import { useForm } from "react-hook-form"
 import { useAccount, useSignMessage } from "wagmi"
 import { z } from "zod"
 import { getDrafts, getPulls, saveDraft, submitCaseStudy } from "../../lib/api"
-import { isProd } from "../../lib/env"
-import { CaseStudy, ServerCaseStudy, StudyType } from "../../lib/interfaces"
+import { CaseStudy, ServerCaseStudy } from "../../lib/interfaces"
 import { BooleanStrings, caseStudyFormSchema } from "../../lib/schema"
 import { Link } from "../Links"
 import Section from "../Section"
@@ -49,6 +48,7 @@ export default function NewCaseStudy() {
   const onCreateSuccess = () => {
     refetch()
   }
+  const { data: session } = useSession()
   const ref = useRef()
   return (
     <div className={cn("flex", "gap-x-40", "flex-col", "md:flex-row")}>
@@ -115,38 +115,42 @@ export default function NewCaseStudy() {
                 )}
               </AccordionContent>
             </AccordionItem>
-            <AccordionItem value="item-1">
-              <AccordionTrigger
-                leftOfIcon={
-                  drafts &&
-                  drafts.length > 0 && (
-                    <div className={cn("ml-2", "text-primary", "no-underline")}>
-                      ({drafts.length})
+            {session && (
+              <AccordionItem value="item-1">
+                <AccordionTrigger
+                  leftOfIcon={
+                    drafts &&
+                    drafts.length > 0 && (
+                      <div
+                        className={cn("ml-2", "text-primary", "no-underline")}
+                      >
+                        ({drafts.length})
+                      </div>
+                    )
+                  }
+                >
+                  Your Drafts
+                </AccordionTrigger>
+                <AccordionContent>
+                  {drafts && drafts?.length > 0 && (
+                    <div className="flex flex-col gap-4">
+                      {drafts?.map((draft, index) => (
+                        <Draft
+                          onClick={() => {
+                            if (ref.current) {
+                              //@ts-ignore
+                              ref.current.restoreDraft(draft.content)
+                            }
+                          }}
+                          key={`draft-${index}`}
+                          draft={draft}
+                        />
+                      ))}
                     </div>
-                  )
-                }
-              >
-                Your Drafts
-              </AccordionTrigger>
-              <AccordionContent>
-                {drafts && drafts?.length > 0 && (
-                  <div className="flex flex-col gap-4">
-                    {drafts?.map((draft, index) => (
-                      <Draft
-                        onClick={() => {
-                          if (ref.current) {
-                            //@ts-ignore
-                            ref.current.restoreDraft(draft.content)
-                          }
-                        }}
-                        key={`draft-${index}`}
-                        draft={draft}
-                      />
-                    ))}
-                  </div>
-                )}
-              </AccordionContent>
-            </AccordionItem>
+                  )}
+                </AccordionContent>
+              </AccordionItem>
+            )}
           </Accordion>
         </Section>
       </div>
