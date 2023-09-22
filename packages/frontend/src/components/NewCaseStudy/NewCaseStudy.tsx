@@ -26,12 +26,12 @@ import Add from "../icons/Add"
 import { Button } from "../ui/button"
 import { Form } from "../ui/form"
 import DetailsAccordion from "./Accordions/DetailsAccordion"
-import RecordAccordion from "./Accordions/RecordAccordion"
 import SignInAccordion from "./Accordions/SignInAccordion"
 import ThoughtsAccordion from "./Accordions/ThoughtsAccordion"
 import Draft from "./Draft"
 import GithubPr from "./GithubPr"
 import { MilkdownEditorWrapper } from "../MilkdownEditor"
+import { getDefaultValues } from "./utils"
 
 export default function NewCaseStudy() {
   const { data, isLoading, refetch } = useQuery({
@@ -198,31 +198,9 @@ const CreateNewCaseStudy = forwardRef(function CreateNewCaseStudy(
     },
   })
 
-  const defaultValues = isProd()
-    ? {
-        email: session?.user?.email || "",
-        name: session?.user?.name || "",
-        organizationName: "",
-        title: "",
-        industry: "",
-        partOfTeam: "",
-        url: "",
-        type: StudyType.Signal,
-      }
-    : {
-        email: session?.user?.email || "",
-        name: session?.user?.name || "",
-        title: "How to make a Case Study",
-        organizationName: "MUTUAL",
-        industry: "Knowledge",
-        partOfTeam: BooleanStrings.True,
-        url: "https://dev.mutual.supply",
-        type: StudyType.Signal,
-      }
-
   const form = useForm({
     resolver: zodResolver(caseStudyFormSchema),
-    defaultValues,
+    defaultValues: getDefaultValues(session),
   })
 
   const parseFormForServer = (values: any): CaseStudy => {
@@ -272,7 +250,7 @@ const CreateNewCaseStudy = forwardRef(function CreateNewCaseStudy(
         const { markdown, ...rest } = values
         form.reset(restoreFromServer(rest))
         if (markdownRef.current) {
-          //@ts-ignore
+          //@ts-expect-error
           markdownRef.current.setContent(markdown)
         }
       },
