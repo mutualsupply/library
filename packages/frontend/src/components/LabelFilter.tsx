@@ -27,6 +27,10 @@ export default function LabelFilter({
             "uppercase",
             "border-sm",
             "border-black",
+            "py-1.5",
+            "px-3",
+            "font-light",
+            "font-sans",
             {
               [cn("bg-black", "text-white", "border-transparent")]:
                 selected?.includes(item.key),
@@ -41,11 +45,11 @@ export default function LabelFilter({
         <Button
           onClick={onClearClick}
           variant="outlineWhite"
-          className="inline-flex items-center gap-0.5 border-dashed rounded-full"
+          className="inline-flex items-center gap-0.5 border-dashed rounded-full font-sans font-light"
           size={"xs"}
         >
           <Close width={20} />
-          <div className={cn("uppercase")}>clear</div>
+          <div className={cn("lowercase")}>clear</div>
         </Button>
       )}
     </div>

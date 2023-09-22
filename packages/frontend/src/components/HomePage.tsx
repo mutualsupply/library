@@ -45,7 +45,7 @@ export function HomePage({ cases }: HomeProps) {
 
   return (
     <>
-      <div className={cn("my-5", "flex", "items-center", "gap-8")}>
+      <div className={cn("mb-12", "mt-8", "flex", "items-center", "gap-8")}>
         <LabelFilter
           items={caseTypeFilterItems}
           selected={selectedLabel}
