@@ -10,7 +10,7 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group"
 
 interface RadioGroupInputProps {
   name: string
-  items: { value: string; label: string; disabled?: boolean }[]
+  items: { value: string; label: React.ReactNode; disabled?: boolean }[]
 }
 
 export default function RadioGroupInput({ name, items }: RadioGroupInputProps) {

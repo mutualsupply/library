@@ -21,7 +21,17 @@ export default function Section({
           {title}
         </div>
       )}
-      <div className={cn("flex", "flex-col", "gap-8")}>{children}</div>
+      <div
+        className={cn(
+          "flex",
+          "flex-col",
+          "gap-4",
+          "font-aspekta",
+          "font-light",
+        )}
+      >
+        {children}
+      </div>
     </div>
   )
 }

@@ -20,12 +20,14 @@ export default function SignInAccordion({ value }: CaseStudyAccordionProps) {
   const isLoggedIn = session?.user?.name
   return (
     <AccordionItem value={value}>
-      <AccordionTrigger>1. Sign in</AccordionTrigger>
+      <AccordionTrigger className="font-otBrut text-primary text-2xl">
+        1. Sign in
+      </AccordionTrigger>
       <AccordionContent>
-        <div className={cn()}>
+        <div className={cn("font-aspekta")}>
           {isLoggedIn && (
             <div className={cn("flex", "flex-col", "gap-3")}>
-              <div className={cn("text-lg", "font-bold")}>
+              <div className={cn("text-lg", "font-medium")}>
                 Signed into Github
               </div>
               <div className={cn("flex", "flex-col", "items-start")}>
@@ -60,7 +62,7 @@ export default function SignInAccordion({ value }: CaseStudyAccordionProps) {
                 <Button
                   variant="link"
                   onClick={() => signOut()}
-                  className={cn("p-0")}
+                  className={cn("p-0", "font-light")}
                 >
                   Logout
                 </Button>
@@ -69,7 +71,7 @@ export default function SignInAccordion({ value }: CaseStudyAccordionProps) {
           )}
           {!isLoggedIn && (
             <div className={cn("flex", "flex-col", "gap-3")}>
-              <div className={cn("text-lg", "font-bold")}>
+              <div className={cn("text-lg", "font-medium", "font-aspekta")}>
                 Sign in to Github (required)
               </div>
               <div>
@@ -107,8 +109,10 @@ export default function SignInAccordion({ value }: CaseStudyAccordionProps) {
               </div>
             </div>
           )}
-          <div className={cn("flex", "flex-col", "gap-3", "mt-6")}>
-            <div className={cn("text-lg", "font-bold")}>
+          <div
+            className={cn("flex", "flex-col", "gap-3", "mt-6", "font-light")}
+          >
+            <div className={cn("text-lg", "font-medium")}>
               Connect to Optimism (optional)
             </div>
             <div>
@@ -116,9 +120,12 @@ export default function SignInAccordion({ value }: CaseStudyAccordionProps) {
               reports accepted into the library.
             </div>
             <div>
-              Contributors can also receive $OP from our (Box Tops for Education
-              vibes) rewards program for submissions analyzing product
-              experiences inside the Optimism ecosystem.{" "}
+              <span className="font-medium">
+                Contributors can also receive $OP from our (Box Tops for
+                Education vibes) rewards program
+              </span>{" "}
+              for submissions analyzing product experiences inside the Optimism
+              ecosystem.{" "}
               <Link isExternal href="https://mutual.supply">
                 Learn more.
               </Link>

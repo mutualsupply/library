@@ -12,7 +12,9 @@ import { CaseStudyAccordionProps } from "./SignInAccordion"
 export default function DetailsAccordion({ value }: CaseStudyAccordionProps) {
   return (
     <AccordionItem value={value}>
-      <AccordionTrigger>4. Details</AccordionTrigger>
+      <AccordionTrigger className="font-otBrut text-primary text-2xl">
+        4. Details
+      </AccordionTrigger>
       <AccordionContent>
         <div className={cn("flex", "flex-col", "gap-6")}>
           <TextInput

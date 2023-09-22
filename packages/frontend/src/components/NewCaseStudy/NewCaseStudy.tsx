@@ -54,7 +54,7 @@ export default function NewCaseStudy() {
     <div className={cn("flex", "gap-x-40", "flex-col", "md:flex-row")}>
       <div className={cn("md:max-w-xl", "w-full")}>
         <Section title="Create cultrual timestamps" size="lg">
-          <div>
+          <div className="mt-4">
             This public database offers a collaborative environment for builders
             and researchers of all backgrounds to learn from and interact with
             each other.
@@ -70,22 +70,56 @@ export default function NewCaseStudy() {
             evolution of user-centered design in blockchain enabled products.
           </div>
           <div>
-            Before submitting, read the Best Practices Guide to understand
-            requirements and internal standards. All submissions are subject to
-            a review process by the MUTUAL team.
+            Before submitting, read the{" "}
+            <Link href="">Best Practices Guide</Link> to understand requirements
+            and internal standards. All submissions are subject to a review
+            process by the MUTUAL team.
           </div>
-          <Link
-            href=""
-            className="border-dashed border border-red-op text-red-op p-3 text-lg no-underline"
-          >
-            Earn $OP rewards & on-chain reputation →
-          </Link>
           <Accordion
             type="multiple"
-            className={cn("flex", "flex-col", "gap-8")}
+            className={cn("flex", "flex-col", "gap-8", "mt-8")}
           >
+            {session && drafts && drafts?.length > 0 && (
+              <AccordionItem value="item-1">
+                <AccordionTrigger
+                  className="p-4"
+                  leftOfIcon={
+                    drafts &&
+                    drafts.length > 0 && (
+                      <div
+                        className={cn("ml-2", "text-primary", "no-underline")}
+                      >
+                        ({drafts.length})
+                      </div>
+                    )
+                  }
+                >
+                  My Drafts
+                </AccordionTrigger>
+                <AccordionContent>
+                  {drafts && drafts?.length > 0 && (
+                    <div className="flex flex-col gap-4">
+                      {drafts?.map((draft, index) => (
+                        <Draft
+                          onClick={() => {
+                            if (ref.current) {
+                              //@ts-ignore
+                              ref.current.restoreDraft(draft.content)
+                            }
+                          }}
+                          key={`draft-${index}`}
+                          draft={draft}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </AccordionContent>
+              </AccordionItem>
+            )}
             <AccordionItem value="item-0">
-              <AccordionTrigger>Case Studies In Progress</AccordionTrigger>
+              <AccordionTrigger className="p-4">
+                Case Studies In Progress
+              </AccordionTrigger>
               <AccordionContent>
                 {!isLoading && data && data.length > 0 && (
                   <>
@@ -115,43 +149,13 @@ export default function NewCaseStudy() {
                 )}
               </AccordionContent>
             </AccordionItem>
-            {session && drafts && drafts?.length > 0 && (
-              <AccordionItem value="item-1">
-                <AccordionTrigger
-                  leftOfIcon={
-                    drafts &&
-                    drafts.length > 0 && (
-                      <div
-                        className={cn("ml-2", "text-primary", "no-underline")}
-                      >
-                        ({drafts.length})
-                      </div>
-                    )
-                  }
-                >
-                  Your Drafts
-                </AccordionTrigger>
-                <AccordionContent>
-                  {drafts && drafts?.length > 0 && (
-                    <div className="flex flex-col gap-4">
-                      {drafts?.map((draft, index) => (
-                        <Draft
-                          onClick={() => {
-                            if (ref.current) {
-                              //@ts-ignore
-                              ref.current.restoreDraft(draft.content)
-                            }
-                          }}
-                          key={`draft-${index}`}
-                          draft={draft}
-                        />
-                      ))}
-                    </div>
-                  )}
-                </AccordionContent>
-              </AccordionItem>
-            )}
           </Accordion>
+          <Link
+            href=""
+            className="border-dashed border border-red-op text-red-op p-4 text-lg no-underline"
+          >
+            Earn $OP rewards & on-chain reputation →
+          </Link>
         </Section>
       </div>
       <div className={cn("mt-6", "md:mt-0", "w-full", "max-w-2xl")}>
@@ -282,7 +286,9 @@ const CreateNewCaseStudy = forwardRef(function CreateNewCaseStudy(
                 <SignInAccordion value="item-0" />
                 <ThoughtsAccordion value="item-1" />
                 <AccordionItem value="item-2">
-                  <AccordionTrigger>3. Record your thoughts</AccordionTrigger>
+                  <AccordionTrigger className="font-otBrut text-primary text-2xl">
+                    3. Record your thoughts
+                  </AccordionTrigger>
                   <AccordionContent>
                     <div>
                       All submissions are subject to a review process by the
@@ -333,7 +339,7 @@ const CreateNewCaseStudy = forwardRef(function CreateNewCaseStudy(
                   loading={caseStudyMutation.isLoading}
                   onClick={form.handleSubmit(onSubmit)}
                 >
-                  {isLoggedIn ? "Submit" : "Sign in to submit"}
+                  {isLoggedIn ? "Submit for review" : "Sign in to submit"}
                 </Button>
               </div>
             </form>
