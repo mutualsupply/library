@@ -115,7 +115,7 @@ export default function NewCaseStudy() {
                 )}
               </AccordionContent>
             </AccordionItem>
-            {session && (
+            {session && drafts && drafts?.length > 0 && (
               <AccordionItem value="item-1">
                 <AccordionTrigger
                   leftOfIcon={
