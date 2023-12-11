@@ -28,7 +28,6 @@ export const alphabet = "abcdefghijklmnopqrstuvwxyz"
   .split("")
   .map((char) => char.toUpperCase())
 
-// Filter by starts with
 export function startsWithFilter<T, K extends keyof T>(
   items: Array<T>,
   query: string,

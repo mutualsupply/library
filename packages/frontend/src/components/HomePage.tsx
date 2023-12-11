@@ -53,9 +53,6 @@ export function HomePage({ cases }: HomeProps) {
           onClearClick={() => setSelectedLabel([])}
         />
       </div>
-      <div className={cn("mb-10", "mt-5")}>
-        <AlphaToggle selected={selectedChar} onClick={onAlphaToggleClick} />
-      </div>
       <div className={cn("flex", "flex-col")}>
         {filteredData.map((caseFile, index) => (
           <Link

@@ -5,12 +5,13 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { PropsWithChildren } from "react"
 import { cn } from "utils"
+import { isDev } from "../lib/env"
 
 export default function Header() {
   const pathname = usePathname()
   return (
     <div className="flex items-center justify-between py-4 mb-10">
-      <div className={cn("inline-flex", "items-center", "gap-4")}>
+      <div className={cn("inline-flex", "items-center")}>
         <Link href={"/"}>
           <Image
             src={"/images/glasses.png"}
@@ -19,12 +20,9 @@ export default function Header() {
             height={48}
           />
         </Link>
-        <div className={cn("font-aspekta", "flex", "items-center", "gap-3")}>
-          <span>MUTUAL Research Library</span>
-          <span className={cn("bg-[#97FFC1]", "p-1", "rounded")}>BETA</span>
-        </div>
       </div>
       <div className={cn("items-center", "gap-4", "hidden", "md:flex")}>
+        {isDev() && <NavButton isSelected={pathname === "/dev"} href="/dev">Dev</NavButton>}
         <NavButton isSelected={pathname === "/"} href="/">
           Index
         </NavButton>
