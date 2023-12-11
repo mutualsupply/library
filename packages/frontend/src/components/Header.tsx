@@ -22,7 +22,11 @@ export default function Header() {
         </Link>
       </div>
       <div className={cn("items-center", "gap-4", "hidden", "md:flex")}>
-        {isDev() && <NavButton isSelected={pathname === "/dev"} href="/dev">Dev</NavButton>}
+        {isDev() && (
+          <NavButton isSelected={pathname === "/dev"} href="/dev">
+            Dev
+          </NavButton>
+        )}
         <NavButton isSelected={pathname === "/"} href="/">
           Index
         </NavButton>

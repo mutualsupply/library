@@ -10,11 +10,10 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default:
-          "bg-primary text-primary-foreground hover:bg-primary/90",
+        default: "bg-primary text-primary-foreground hover:bg-primary/90",
         outline:
           "border border-black border-dashed bg-transparent rounded-none p-1",
-        link: "text-black underline-offset-4 underline"
+        link: "text-black underline-offset-4 underline",
       },
       size: {
         default: "h-9 px-4 py-2 rounded-sm",
@@ -52,9 +51,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         type={type}
       >
         <>
-          {loading && <div className="absolute inset-0 flex justify-center align-items-center">
-            <Spinner />
-          </div>}
+          {loading && (
+            <div className="absolute inset-0 flex justify-center align-items-center">
+              <Spinner />
+            </div>
+          )}
           {children}
         </>
       </button>
@@ -63,22 +64,18 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 )
 Button.displayName = "Button"
 
-const Submit = React.forwardRef<HTMLButtonElement, Exclude<ButtonProps, 'type'>>(
-  (
-    {
-      children, ...props
-    },
-    ref,
-  ) => {
-    const { formState } = useFormContext()
-    const isLoading = formState.isSubmitting || formState.isValidating
-    return (
-      <Button type="submit" disabled={isLoading} loading={isLoading} {...props}>
-        {children ? children : "Submit"}
-      </Button>
-    )
-  },
-)
+const Submit = React.forwardRef<
+  HTMLButtonElement,
+  Exclude<ButtonProps, "type">
+>(({ children, ...props }, ref) => {
+  const { formState } = useFormContext()
+  const isLoading = formState.isSubmitting || formState.isValidating
+  return (
+    <Button type="submit" disabled={isLoading} loading={isLoading} {...props}>
+      {children ? children : "Submit"}
+    </Button>
+  )
+})
 Submit.displayName = "Submit"
 
 export { Submit, Button, buttonVariants }
