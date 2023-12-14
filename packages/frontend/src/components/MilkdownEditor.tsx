@@ -141,54 +141,34 @@ const MilkdownEditor = forwardRef(({ onChange }: MilkdownEditorProps, ref) => {
           "border-b-0",
         )}
       >
-        <Button
-          onClick={() => call(undoCommand.key)}
-        >
+        <Button onClick={() => call(undoCommand.key)}>
           <GrUndo />
         </Button>
-        <Button
-          onClick={() => call(redoCommand.key)}
-        >
+        <Button onClick={() => call(redoCommand.key)}>
           <GrRedo />
         </Button>
-        <Button
-          onClick={() => call(toggleStrongCommand.key)}
-        >
+        <Button onClick={() => call(toggleStrongCommand.key)}>
           <FontBoldIcon />
         </Button>
-        <Button
-          onClick={() => call(toggleEmphasisCommand.key)}
-        >
+        <Button onClick={() => call(toggleEmphasisCommand.key)}>
           <FontItalicIcon />
         </Button>
-        <Button
-          onClick={() => call(wrapInBulletListCommand.key)}
-        >
+        <Button onClick={() => call(wrapInBulletListCommand.key)}>
           <BiListUl />
         </Button>
-        <Button
-          onClick={() => call(wrapInOrderedListCommand.key)}
-        >
+        <Button onClick={() => call(wrapInOrderedListCommand.key)}>
           <BiListOl />
         </Button>
-        <Button
-          onClick={() => call(wrapInBlockquoteCommand.key)}
-        >
+        <Button onClick={() => call(wrapInBlockquoteCommand.key)}>
           <QuoteIcon />
         </Button>
-        <Button
-          onClick={() => call(wrapInHeadingCommand.key, 1)}
-        >
+        <Button onClick={() => call(wrapInHeadingCommand.key, 1)}>
           <LuHeading1 />
         </Button>
-        <Button
-          onClick={() => call(wrapInHeadingCommand.key, 2)}
-        >
+        <Button onClick={() => call(wrapInHeadingCommand.key, 2)}>
           <LuHeading2 />
         </Button>
-        <Button
-          onClick={() => call(wrapInHeadingCommand.key, 3)}
-        >
+        <Button onClick={() => call(wrapInHeadingCommand.key, 3)}>
           <LuHeading3 />
         </Button>
       </div>
