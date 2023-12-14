@@ -1,7 +1,7 @@
 "use client"
 
 import { PropsWithChildren, useEffect } from "react"
-import { Button, Submit } from "../../components/ui/button"
+import { Button, OPButton, Submit } from "../../components/ui/button"
 import {
   Accordion,
   AccordionContent,
@@ -18,9 +18,11 @@ import RadioGroupInput from "../../components/inputs/RadioGroupInput"
 import { Input } from "../../components/ui/input"
 import { Label } from "../../components/ui/label"
 import { RadioGroup, RadioGroupItem } from "../../components/ui/radio-group"
+import Dev from "../../components/Dev"
+import { Badge } from "../../components/ui/badge"
 
-const buttonVariants = ["default", "outline", "link"] as const
-const buttonSizes = ["default", "lg", "icon"] as const
+const buttonVariants = ["default", "outline", "link", "op"] as const
+const buttonSizes = ["default", "lg", "pill"] as const
 
 export default function DevPage() {
   const form = useForm()
@@ -28,20 +30,12 @@ export default function DevPage() {
     await sleep(1)
     alert(JSON.stringify(values, null, 2))
   }
-  return (
+  return <Dev>
     <div className="flex flex-col space-y-8">
-      <Section title="Accordion">
-        <Accordion type="single" collapsible>
-          <AccordionItem value="item-1">
-            <AccordionTrigger>Accordion</AccordionTrigger>
-            <AccordionContent>🪗🪗🪗 we do a lil 🪗🪗🪗</AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </Section>
       <Section title="Button">
-        <div className="grid md:grid-cols-3 grid-cols-1 space-y-3">
+        <div className="flex justify-between">
           {buttonVariants.map((variant) => (
-            <>
+            <div className="flex flex-col gap-2">
               {buttonSizes.map((size) => (
                 <div className="flex justify-center">
                   <Button variant={variant} size={size}>
@@ -49,9 +43,28 @@ export default function DevPage() {
                   </Button>
                 </div>
               ))}
-            </>
+            </div>
           ))}
         </div>
+      </Section>
+
+      <Section title="OP Button">
+        <OPButton />
+      </Section>
+
+
+      <Section title="Badge">
+        <Badge>MUTUAL</Badge>
+      </Section>
+
+
+      <Section title="Accordion">
+        <Accordion type="single" collapsible>
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Accordion</AccordionTrigger>
+            <AccordionContent>🪗🪗🪗 we do a lil 🪗🪗🪗</AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </Section>
 
       <Section title="Radio Group">
@@ -107,7 +120,7 @@ export default function DevPage() {
         <Button>Primary</Button>
       </Section>
     </div>
-  )
+  </Dev>
 }
 
 interface SectionProps {

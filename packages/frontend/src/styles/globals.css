@@ -5,7 +5,7 @@
 @layer base {
   :root {
     /* surface-primary */
-    --background: 60 4% 96%;
+    --background: 60 14% 96%;
     
     --foreground: 60 2% 8%;
  
@@ -41,13 +41,15 @@
 
     --g: 205, 6%, 85%;
 
-    --red: 353, 100%, 51%;
+    --red: 4, 86%, 58%;
 
     --purple: 265, 83%, 63%;
+
+    --black: 60, 12%, 8%;
   }
  
   .dark {
-    --background: 0 0% 9%;
+    --background: 60 14% 96%;
     --foreground: 0 0% 98%;
  
     --muted: 0 0% 14.9%;

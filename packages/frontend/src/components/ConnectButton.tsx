@@ -1,6 +1,6 @@
 import { ConnectKitButton } from "connectkit"
 import { cn, shortenAddress } from "utils"
-import Optimism from "./icons/Optimism"
+import OptimismLogo from "./icons/Optimism"
 import { Button } from "./ui/button"
 
 const ConnectButton = () => {
@@ -20,7 +20,7 @@ const ConnectButton = () => {
             variant={"outline"}
             onClick={show}
           >
-            <Optimism />
+            <OptimismLogo />
             <div className={cn("text-black")}>
               {isConnected ? displayName : "Connect to Optimism"}
             </div>

@@ -4,21 +4,24 @@ import * as React from "react"
 import { cn } from "utils"
 import Spinner from "../Spinner"
 import { useFormContext } from "react-hook-form"
+import OptimismLogo from "../icons/Optimism"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed relative",
+  "inline-flex items-center justify-center font-light focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed relative text-base font-aspekta",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default: "bg-transparent text-primary border",
         outline:
-          "border border-black border-dashed bg-transparent rounded-none p-1",
+          // @note -- ask about focus state here -- do we want font-medium? 
+          "border border-black border-dashed bg-transparent rounded-none p-1 hover:border-primary hover:text-primary",
         link: "text-black underline-offset-4 underline",
+        op: "text-black border border-dashed border-red bg-background hover:border-solid hover:text-red"
       },
       size: {
-        default: "h-9 px-4 py-2 rounded-sm",
+        default: "h-9 px-4 py-3 rounded-sm min-w-[128px]",
         lg: "h-12 rounded-2xl px-8",
-        icon: "h-6 w-6",
+        pill: "rounded-full px-2 py-1"
       },
     },
     defaultVariants: {
@@ -71,11 +74,26 @@ const Submit = React.forwardRef<
   const { formState } = useFormContext()
   const isLoading = formState.isSubmitting || formState.isValidating
   return (
-    <Button type="submit" disabled={isLoading} loading={isLoading} {...props}>
+    <Button ref={ref} type="submit" disabled={isLoading} loading={isLoading} {...props}>
       {children ? children : "Submit"}
     </Button>
   )
 })
 Submit.displayName = "Submit"
 
-export { Submit, Button, buttonVariants }
+const OPButton = React.forwardRef<
+  HTMLButtonElement,
+  ButtonProps
+>(({ children, ...props }, ref) => {
+  return (
+    <Button ref={ref} variant="op" size="pill" {...props}>
+      <span className="inline-flex items-center gap-2">
+        <OptimismLogo />
+        <span className="text-base font-aspekta font-medium">Earn $OP for your thoughts</span>
+      </span>
+    </Button>
+  )
+})
+Submit.displayName = "Submit"
+
+export { Submit, Button, OPButton, buttonVariants }
