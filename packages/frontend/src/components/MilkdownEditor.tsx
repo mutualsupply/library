@@ -143,71 +143,51 @@ const MilkdownEditor = forwardRef(({ onChange }: MilkdownEditorProps, ref) => {
       >
         <Button
           onClick={() => call(undoCommand.key)}
-          variant={"outlineWhite"}
-          size="icon"
         >
           <GrUndo />
         </Button>
         <Button
           onClick={() => call(redoCommand.key)}
-          variant="outlineWhite"
-          size="icon"
         >
           <GrRedo />
         </Button>
         <Button
           onClick={() => call(toggleStrongCommand.key)}
-          variant="outlineWhite"
-          size="icon"
         >
           <FontBoldIcon />
         </Button>
         <Button
           onClick={() => call(toggleEmphasisCommand.key)}
-          variant="outlineWhite"
-          size="icon"
         >
           <FontItalicIcon />
         </Button>
         <Button
           onClick={() => call(wrapInBulletListCommand.key)}
-          variant="outlineWhite"
-          size="icon"
         >
           <BiListUl />
         </Button>
         <Button
           onClick={() => call(wrapInOrderedListCommand.key)}
-          variant="outlineWhite"
-          size="icon"
         >
           <BiListOl />
         </Button>
         <Button
           onClick={() => call(wrapInBlockquoteCommand.key)}
-          variant="outlineWhite"
-          size="icon"
         >
           <QuoteIcon />
         </Button>
         <Button
           onClick={() => call(wrapInHeadingCommand.key, 1)}
-          variant="outlineWhite"
-          size="icon"
         >
           <LuHeading1 />
         </Button>
         <Button
           onClick={() => call(wrapInHeadingCommand.key, 2)}
-          variant="outlineWhite"
-          size="icon"
         >
           <LuHeading2 />
         </Button>
         <Button
           onClick={() => call(wrapInHeadingCommand.key, 3)}
-          variant="outlineWhite"
-          size="icon"
         >
           <LuHeading3 />
         </Button>

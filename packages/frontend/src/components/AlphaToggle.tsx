@@ -11,8 +11,6 @@ export default function AlphaToggle({ onClick, selected }: AlphaToggleProps) {
     <div className={cn("flex", "items-center", "gap-3", "flex-wrap")}>
       {alphabet.map((char, index) => (
         <Button
-          variant="outlineWhite"
-          size={"xs"}
           key={`${char}-${index}`}
           onClick={() => onClick(char)}
           className={cn(
