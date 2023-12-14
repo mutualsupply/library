@@ -9,13 +9,13 @@ const badgeVariants = cva(
     variants: {
       variant: {
         default:
-          "border-transparent bg-primary/20 text-primary rounded-full px-2 hover:bg-primary hover:text-white"
+          "border-transparent bg-primary/20 text-primary rounded-full px-2 hover:bg-primary hover:text-white",
       },
     },
     defaultVariants: {
       variant: "default",
     },
-  }
+  },
 )
 
 export interface BadgeProps
@@ -25,9 +25,7 @@ export interface BadgeProps
 function Badge({ className, variant, children, ...props }: BadgeProps) {
   return (
     <div className={cn(badgeVariants({ variant }), className)} {...props}>
-      <span className="font-aspekta">
-        {children}
-      </span>
+      <span className="font-aspekta">{children}</span>
     </div>
   )
 }

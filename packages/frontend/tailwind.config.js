@@ -72,8 +72,8 @@ module.exports = {
           DEFAULT: "hsl(var(--purple))",
         },
         black: {
-          DEFAULT: "hsl(var(--black))"
-        }
+          DEFAULT: "hsl(var(--black))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

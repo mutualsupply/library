@@ -1,6 +1,10 @@
 import { SvgProps } from "./Logo"
 
-const OptimismLogo = ({ width = "21", className, fill = "#FF0420" }: SvgProps) => {
+const OptimismLogo = ({
+  width = "21",
+  className,
+  fill = "#FF0420",
+}: SvgProps) => {
   return (
     <svg
       width={width}

@@ -13,15 +13,15 @@ const buttonVariants = cva(
       variant: {
         default: "bg-transparent text-primary border",
         outline:
-          // @note -- ask about focus state here -- do we want font-medium? 
+          // @note -- ask about focus state here -- do we want font-medium?
           "border border-black border-dashed bg-transparent rounded-none p-1 hover:border-primary hover:text-primary",
         link: "text-black underline-offset-4 underline",
-        op: "text-black border border-dashed border-red bg-background hover:border-solid hover:text-red"
+        op: "text-black border border-dashed border-red bg-background hover:border-solid hover:text-red",
       },
       size: {
         default: "h-9 px-4 py-3 rounded-sm min-w-[128px]",
         lg: "h-12 rounded-2xl px-8",
-        pill: "rounded-full px-2 py-1"
+        pill: "rounded-full px-2 py-1",
       },
     },
     defaultVariants: {
@@ -74,26 +74,33 @@ const Submit = React.forwardRef<
   const { formState } = useFormContext()
   const isLoading = formState.isSubmitting || formState.isValidating
   return (
-    <Button ref={ref} type="submit" disabled={isLoading} loading={isLoading} {...props}>
+    <Button
+      ref={ref}
+      type="submit"
+      disabled={isLoading}
+      loading={isLoading}
+      {...props}
+    >
       {children ? children : "Submit"}
     </Button>
   )
 })
 Submit.displayName = "Submit"
 
-const OPButton = React.forwardRef<
-  HTMLButtonElement,
-  ButtonProps
->(({ children, ...props }, ref) => {
-  return (
-    <Button ref={ref} variant="op" size="pill" {...props}>
-      <span className="inline-flex items-center gap-2">
-        <OptimismLogo />
-        <span className="text-base font-aspekta font-medium">Earn $OP for your thoughts</span>
-      </span>
-    </Button>
-  )
-})
+const OPButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ children, ...props }, ref) => {
+    return (
+      <Button ref={ref} variant="op" size="pill" {...props}>
+        <span className="inline-flex items-center gap-2">
+          <OptimismLogo />
+          <span className="text-base font-aspekta font-medium">
+            Earn $OP for your thoughts
+          </span>
+        </span>
+      </Button>
+    )
+  },
+)
 Submit.displayName = "Submit"
 
 export { Submit, Button, OPButton, buttonVariants }
