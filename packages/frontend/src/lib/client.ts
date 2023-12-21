@@ -1,6 +1,6 @@
-import { Case, StudyType } from "./interfaces"
+import { Case, StudyType } from "./interfaces";
 
 export const caseTypeFilterItems = Object.values(StudyType).map((title) => ({
-  title,
-  key: title,
-}))
+	title,
+	key: title,
+}));

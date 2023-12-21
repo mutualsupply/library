@@ -1,7 +1,7 @@
-import NewCaseStudy from "../../components/NewCaseStudy/NewCaseStudy"
+import NewCaseStudy from "../../components/NewCaseStudy/NewCaseStudy";
 
 const NewCaseStudyPage = () => {
-  return <NewCaseStudy />
-}
+	return <NewCaseStudy />;
+};
 
-export default NewCaseStudyPage
+export default NewCaseStudyPage;
