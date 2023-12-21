@@ -42,7 +42,10 @@ export function HomePage({ cases }: HomeProps) {
 		<>
 			<div className={cn("mb-12", "mt-8", "flex", "items-center", "gap-8")}>
 				<div>
-					<Input placeholder="Search" leftOfInput={<Search className="h-6 w-6"/>}/>
+					<Input
+						placeholder="Search"
+						leftOfInput={<Search className="h-6 w-6" />}
+					/>
 				</div>
 				<LabelFilter
 					items={caseTypeFilterItems}
