@@ -32,7 +32,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 		ref,
 	) => {
 		return (
-			<span className={cn("inline-flex", "items-center")}>
+			<span className={cn("flex", "items-center", "grow")}>
 				{leftOfInput && (
 					<span className={cn("absolute left-8")}>{leftOfInput}</span>
 				)}

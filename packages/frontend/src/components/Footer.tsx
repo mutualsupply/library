@@ -4,7 +4,7 @@ import { Badge } from "./ui/badge";
 
 export default function Footer() {
 	return (
-		<div className={cn("mt-24", "flex", "justify-center")}>
+		<div className={cn("flex", "justify-center", "bg-white", "p-4")}>
 			<div className={cn("flex", "items-center", "gap-1")}>
 				<Image
 					alt="apple-logo"

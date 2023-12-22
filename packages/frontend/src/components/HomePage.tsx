@@ -41,18 +41,19 @@ export function HomePage({ cases }: HomeProps) {
 	return (
 		<>
 			<div className={cn("mb-12", "mt-8", "flex", "items-center", "gap-8")}>
-				<div>
-					<Input
-						placeholder="Search"
-						leftOfInput={<Search className="h-6 w-6" />}
+				<Input
+					placeholder="Search"
+					leftOfInput={<Search className="h-6 w-6" />}
+					className="w-full md:w-96"
+				/>
+				<div className="hidden lg:block">
+					<LabelFilter
+						items={caseTypeFilterItems}
+						selected={selectedLabel}
+						onClick={onLabelFilterClick}
+						onClearClick={() => setSelectedLabel([])}
 					/>
 				</div>
-				<LabelFilter
-					items={caseTypeFilterItems}
-					selected={selectedLabel}
-					onClick={onLabelFilterClick}
-					onClearClick={() => setSelectedLabel([])}
-				/>
 			</div>
 			<div className={cn("flex", "flex-col")}>
 				{filteredData.map((caseFile, index) => (

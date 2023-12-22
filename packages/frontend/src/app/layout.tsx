@@ -73,7 +73,6 @@ export default function RootLayout({
 		<html lang="en">
 			<body
 				className={cn(
-					"p-4",
 					"min-h-[calc(100dvh)]",
 					"font-sans",
 					"flex",
@@ -86,7 +85,7 @@ export default function RootLayout({
 				)}
 			>
 				<Providers>
-					<div className={cn("flex-grow")}>
+					<div className={cn("flex-grow p-4")}>
 						<Header />
 						{children}
 					</div>
