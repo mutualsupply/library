@@ -10,6 +10,7 @@ import Github from "../../icons/Github";
 import Image from "next/image";
 import ConnectButton from "../../ConnectButton";
 import { Link } from "../../Links";
+import { useRouter } from "next/navigation";
 
 export interface CaseStudyAccordionProps {
 	value: string;
@@ -17,6 +18,7 @@ export interface CaseStudyAccordionProps {
 
 export default function SignInAccordion({ value }: CaseStudyAccordionProps) {
 	const { data: session } = useSession();
+	const router = useRouter();
 	const isLoggedIn = session?.user?.name;
 	return (
 		<AccordionItem value={value}>
@@ -101,6 +103,12 @@ export default function SignInAccordion({ value }: CaseStudyAccordionProps) {
 									onClick={() => {
 										signIn("github", {
 											callbackUrl: `${window.location.origin}/create-case`,
+										}).then((res) => {
+											if (res?.error) {
+												console.error(res.error);
+											} else {
+												router.push("/create-case");
+											}
 										});
 									}}
 								>
