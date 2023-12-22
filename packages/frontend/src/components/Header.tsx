@@ -144,7 +144,7 @@ const NavButton = ({
 			<Button
 				size="lg"
 				variant={isSelected ? "blueOutline" : "outline"}
-				className={cn("w-32")}
+				className={cn("w-32", isSelected && "font-medium")}
 			>
 				{children}
 			</Button>
