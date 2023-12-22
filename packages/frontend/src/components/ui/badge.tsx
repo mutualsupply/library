@@ -9,7 +9,7 @@ const badgeVariants = cva(
 		variants: {
 			variant: {
 				default:
-					"border-transparent bg-[#D1E8FA40] text-primary rounded-full px-2 hover:bg-primary hover:text-white hover:cursor-pointer",
+					"border-transparent bg-[#D1E8FA40] text-primary rounded-full px-2",
 			},
 		},
 		defaultVariants: {
