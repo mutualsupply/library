@@ -22,7 +22,7 @@ export default function Header() {
 			setShowMenu(false);
 			setCurrentPath(pathname);
 		}
-  }, [pathname, currentPath]);
+	}, [pathname, currentPath]);
 	return (
 		<div className="flex items-center justify-between mb-10">
 			<div className={cn("inline-flex", "items-center")}>
@@ -40,48 +40,57 @@ export default function Header() {
 				<NavLinks />
 			</div>
 			<div className={cn("block lg:hidden")}>
-				<Button variant="outline" size="lg" onClick={() => setShowMenu(!showMenu)} className={cn("w-20 p-0")}>
-					<Hamburger className="w-6"/>
+				<Button
+					variant="outline"
+					size="lg"
+					onClick={() => setShowMenu(!showMenu)}
+					className={cn("w-20 p-0")}
+				>
+					<Hamburger className="w-6" />
 				</Button>
 			</div>
-			<MobileMenu show={showMenu} onHide={() => setShowMenu(false)}/>
+			<MobileMenu show={showMenu} onHide={() => setShowMenu(false)} />
 		</div>
 	);
 }
 
 function OPLink() {
-	return <Link href="https://www.mutual.supply/library#second">
-		<OPButton />
-	</Link>
+	return (
+		<Link href="https://www.mutual.supply/library#second">
+			<OPButton />
+		</Link>
+	);
 }
 
 function NavLinks() {
 	const pathname = usePathname();
-	return <>
-		{isDev() && (
-					<Link href="/dev">
-						<Button
-							className={cn({
-								"text-white hover:text-white border-solid bg-red":
-									pathname === "/dev",
-							})}
-							size="lg"
-							variant="op"
-						>
-							Dev
-						</Button>
-					</Link>
-				)}
-				<NavButton isSelected={pathname === "/"} href="/">
-					Index
-				</NavButton>
-				<NavButton isSelected={pathname === "/create-case"} href="/create-case">
-					Submit
-				</NavButton>
-				<NavButton href="https://www.mutual.supply/library#what">
-					Information
-				</NavButton>
-	</>
+	return (
+		<>
+			{isDev() && (
+				<Link href="/dev">
+					<Button
+						className={cn({
+							"text-white hover:text-white border-solid bg-red":
+								pathname === "/dev",
+						})}
+						size="lg"
+						variant="op"
+					>
+						Dev
+					</Button>
+				</Link>
+			)}
+			<NavButton isSelected={pathname === "/"} href="/">
+				Index
+			</NavButton>
+			<NavButton isSelected={pathname === "/create-case"} href="/create-case">
+				Submit
+			</NavButton>
+			<NavButton href="https://www.mutual.supply/library#what">
+				Information
+			</NavButton>
+		</>
+	);
 }
 
 interface MobileMenuProps {
@@ -90,11 +99,22 @@ interface MobileMenuProps {
 }
 
 function MobileMenu({ show, onHide }: MobileMenuProps) {
-	return <div className={cn("absolute inset-0 z-50 bg-[#D1E8FA]", show ? "flex flex-col" : "hidden")}>
+	return (
+		<div
+			className={cn(
+				"absolute inset-0 z-50 bg-[#D1E8FA]",
+				show ? "flex flex-col" : "hidden",
+			)}
+		>
 			<div className={cn("p-4 grow flex flex-col")}>
 				<div className={cn("flex justify-end")}>
-					<Button variant="blueOutline" size="lg" onClick={onHide} className={cn("w-20 p-0")}>
-						<Close className={cn("h-4")}/>
+					<Button
+						variant="blueOutline"
+						size="lg"
+						onClick={onHide}
+						className={cn("w-20 p-0")}
+					>
+						<Close className={cn("h-4")} />
 					</Button>
 				</div>
 				<div className="flex flex-col space-y-4 items-center justify-center grow">
@@ -106,6 +126,7 @@ function MobileMenu({ show, onHide }: MobileMenuProps) {
 			</div>
 			<Footer />
 		</div>
+	);
 }
 
 interface NavButtonProps {
@@ -120,7 +141,11 @@ const NavButton = ({
 }: PropsWithChildren<NavButtonProps>) => {
 	return (
 		<Link href={href}>
-			<Button size="lg" variant={isSelected ? "blueOutline" : "outline"} className={cn("w-32")}>
+			<Button
+				size="lg"
+				variant={isSelected ? "blueOutline" : "outline"}
+				className={cn("w-32")}
+			>
 				{children}
 			</Button>
 		</Link>

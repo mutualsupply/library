@@ -1,6 +1,6 @@
 import { cn } from "utils";
 
-export type SvgProps = React.SVGProps<SVGSVGElement>
+export type SvgProps = React.SVGProps<SVGSVGElement>;
 
 const Logo = ({ fill = "#0064FB", className }: SvgProps) => {
 	return (
