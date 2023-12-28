@@ -2,8 +2,8 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { cn, startsWithFilter } from "utils";
-import { categorySelectItems } from "../app/create/page";
 import { Case } from "../lib/interfaces";
+import { categorySelectItems } from "./CreateCase";
 import LabelFilter from "./LabelFilter";
 import Search from "./icons/Search";
 import { Input } from "./ui/input";
@@ -92,10 +92,8 @@ export function HomePage({ cases }: HomeProps) {
 								"group-hover:text-primary",
 							)}
 						>
-							<span className={cn("text-sm")}>
-								<span className={cn("font-spline text-sm")}>
-									{index < 10 && "0"}
-								</span>
+							<span className={cn("text-sm font-spline")}>
+								<span>{index < 10 && "0"}</span>
 								{index + 1}
 							</span>
 							<span className={cn("text-2xl", "font-otBrut")}>
@@ -105,9 +103,7 @@ export function HomePage({ cases }: HomeProps) {
 						{(index + 1) % 2 === 0 && (
 							<div className={cn("absolute", "inset-0", "bg-tertiary/25")} />
 						)}
-						<div className={cn("hidden", "group-hover:block")}>
-							{caseFile.organization}
-						</div>
+						<div className={cn("text-primary")}>{caseFile.author}</div>
 					</Link>
 				))}
 			</div>

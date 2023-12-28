@@ -1,4 +1,10 @@
-import { CmdKey, Editor, editorViewOptionsCtx, rootCtx } from "@milkdown/core";
+import {
+	CmdKey,
+	Editor,
+	defaultValueCtx,
+	editorViewOptionsCtx,
+	rootCtx,
+} from "@milkdown/core";
 import { clipboard } from "@milkdown/plugin-clipboard";
 import { cursor } from "@milkdown/plugin-cursor";
 import { emoji } from "@milkdown/plugin-emoji";
@@ -37,6 +43,7 @@ import { placeholderCtx, placeholder as placeholderPlugin } from "./plugins";
 interface MilkdownEditorProps {
 	onChange?: (value: string) => void;
 	placeholder?: string;
+	defaultValue?: string;
 }
 
 const uploader: Uploader = async (files: FileList, schema: Schema) => {
@@ -70,11 +77,15 @@ const uploader: Uploader = async (files: FileList, schema: Schema) => {
 };
 
 const BaseMilkdownEditor = forwardRef(
-	({ onChange, placeholder }: MilkdownEditorProps, ref) => {
+	({ onChange, placeholder, defaultValue }: MilkdownEditorProps, ref) => {
 		const { get } = useEditor(
 			(root) =>
 				Editor.make()
 					.config((ctx) => {
+						if (defaultValue) {
+							ctx.set(defaultValueCtx, defaultValue);
+						}
+
 						const listener = ctx.get(listenerCtx);
 						listener.markdownUpdated((ctx, markdown, prevMarkdown) => {
 							if (markdown !== prevMarkdown) {
@@ -108,7 +119,7 @@ const BaseMilkdownEditor = forwardRef(
 							uploader,
 						}));
 
-						ctx.set(placeholderCtx, placeholder ? placeholder : "hello");
+						ctx.set(placeholderCtx, placeholder ? placeholder : "");
 					})
 					.config(nord)
 					.use(clipboard)

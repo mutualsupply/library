@@ -2,7 +2,7 @@ import { NextApiRequest } from "next";
 import { getServerSession } from "next-auth";
 import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
-import env, { isProd } from "../../../lib/env";
+import env from "../../../lib/env";
 import { postCaseStudyBodySchema } from "../../../lib/schema";
 import { UnauthenticatedError } from "../../../lib/server";
 
@@ -33,7 +33,6 @@ export async function POST(req: Request) {
 			body: JSON.stringify({
 				caseStudy,
 				user: session.user,
-				isProd: isProd(),
 			}),
 		});
 		if (!res.ok) {

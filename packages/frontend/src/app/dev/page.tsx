@@ -2,6 +2,7 @@
 
 import { PropsWithChildren, useRef } from "react";
 import { useForm } from "react-hook-form";
+import sleep from "utils";
 import Dev from "../../components/Dev";
 import MarkdownEditor from "../../components/MarkdownEditor/InitializedMDXEditor";
 import MilkdownEditor from "../../components/MilkdownEditor/MilkdownEditor";
@@ -27,7 +28,6 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "../../components/ui/select";
-import sleep from "../../lib/sleep";
 
 const buttonVariants = [
 	"default",

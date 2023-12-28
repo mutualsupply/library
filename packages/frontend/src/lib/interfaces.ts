@@ -7,6 +7,7 @@ export interface DBCaseStudy {
 	content: CaseStudy;
 	slug?: string;
 	signerAddress?: string;
+	githubBranchName?: string;
 
 	submitted: boolean;
 	approved: boolean | null;

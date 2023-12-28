@@ -26,9 +26,13 @@ export async function getDrafts(): Promise<Array<DBCaseStudy>> {
 		},
 	});
 	if (!res.ok) {
-		throw new Error("Failed to fetch pulls");
+		throw new Error("Failed to fetch drafts");
 	}
 	return res.json();
+}
+
+export async function getDraft(id: number): Promise<DBCaseStudy | undefined> {
+	return getDrafts().then((drafts) => drafts.find((d) => d.id === id));
 }
 
 export async function submitCaseStudy(
@@ -56,7 +60,7 @@ export async function saveDraft(
 	});
 	if (!res.ok) {
 		console.error("Could not create save draft", await res.text());
-		throw new Error("Could not save drafe");
+		throw new Error("Could not save draft");
 	}
 	return res.json();
 }

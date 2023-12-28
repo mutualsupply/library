@@ -58,6 +58,17 @@ router.get("/draft/:email", async (ctx, next) => {
 router.post("/draft", async (ctx, next) => {
 	const { caseStudy, user } = ctx.request.body as PostCaseStudyRequestBody;
 	const { email } = user;
+	if (!email) {
+		ctx.status = 401;
+		ctx.body = "User must have an email to publish a case study";
+		ctx.app.emit(
+			"error",
+			new Error("User must have an email to publish a case study"),
+			ctx,
+		);
+		return await next();
+	}
+
 	const dbUser = await prisma.user.upsert({
 		where: { email },
 		update: {},
@@ -89,38 +100,35 @@ router.post("/case-study", async (ctx, next) => {
 			new Error("User must have an email to publish a case study"),
 			ctx,
 		);
-	} else {
-		const dbUser = await prisma.user.upsert({
-			where: { email: user.email },
-			update: {
-				name: user.name,
-				email: user.email,
-			},
-			create: {
-				name: user.name,
-				email: user.email,
-			},
-		});
-
-		const dbCaseStudy = await prisma.caseStudy.create({
-			data: {
-				userId: dbUser.id,
-				content: JSON.stringify(caseStudy),
-				signerAddress,
-				slug,
-			},
-		});
-
-		const { branchName } = createCaseStudy(
-			user,
-			caseStudy,
-			slug,
-			signerAddress,
-		);
-
-		ctx.body = { branchName };
-		await next();
+		return await next();
 	}
+
+	const dbUser = await prisma.user.upsert({
+		where: { email: user.email },
+		update: {
+			name: user.name,
+			email: user.email,
+		},
+		create: {
+			name: user.name,
+			email: user.email,
+		},
+	});
+
+	const { branchName } = createCaseStudy(user, caseStudy, slug, signerAddress);
+
+	const dbCaseStudy = await prisma.caseStudy.create({
+		data: {
+			userId: dbUser.id,
+			content: JSON.stringify(caseStudy),
+			githubBranchName: branchName,
+			signerAddress,
+			slug,
+		},
+	});
+
+	ctx.body = { branchName };
+	await next();
 });
 
 router.post(

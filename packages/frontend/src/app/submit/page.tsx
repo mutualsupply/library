@@ -7,7 +7,8 @@ import { cn, shortenAddress } from "utils";
 import { Button, OPButton } from "../../components/ui/button";
 
 import Image from "next/image";
-import { useState } from "react";
+import Link from "next/link";
+import { useCallback, useState } from "react";
 import Github from "../../components/icons/Github";
 import OptimismLogo from "../../components/icons/Optimism";
 import Plus from "../../components/icons/Plus";
@@ -30,7 +31,7 @@ const Submit = () => {
 	const closeLogin = () => setAccordionValue("");
 	const { data: drafts } = useDrafts();
 	return (
-		<div className={cn("flex-col md:flex gap-4")}>
+		<div className={cn("flex flex-col md:flex-row md:gap-6")}>
 			<div className={cn("md:max-w-[320px] w-full")}>
 				<Accordion
 					value={accordionValue}
@@ -166,7 +167,7 @@ const Submit = () => {
 					<div className={cn("flex justify-between items-center")}>
 						<span className={cn("font-otBrut text-primary flex gap-2")}>
 							<span className={cn("text-2xl")}>Thoughts</span>
-							{drafts?.length && (
+							{drafts && drafts.length > 0 && (
 								<span className={cn("text-base")}>{drafts.length}</span>
 							)}
 						</span>
@@ -190,7 +191,7 @@ const Submit = () => {
 						</Button>
 					</div>
 
-					{drafts?.length && (
+					{drafts && drafts.length > 0 && (
 						<div className={cn("mt-6")}>
 							{drafts.map((draft, index) => (
 								<div
@@ -201,16 +202,7 @@ const Submit = () => {
 									)}
 								>
 									<div className={cn("text-sm")}>{draft.content?.title}</div>
-									<div className={cn("grid grid-cols-2 space-x-1")}>
-										<span className={cn("text-xs flex items-center")}>
-											<StatusIndicator draft={draft} />
-										</span>
-										<span className={cn("flex items-center")}>
-											<Button size="pill" variant="outline">
-												test
-											</Button>
-										</span>
-									</div>
+									<StatusIndicator draft={draft} />
 								</div>
 							))}
 						</div>
@@ -221,31 +213,100 @@ const Submit = () => {
 	);
 };
 
+enum Status {
+	Draft = "draft",
+	Submitted = "submitted",
+	Approved = "approved",
+	Rejected = "rejected",
+}
+
+const StatusMap = {
+	[Status.Draft]: {
+		color: "#171712",
+		text: "Draft",
+	},
+	[Status.Submitted]: {
+		color: "#F79009",
+		text: "In Review",
+	},
+	[Status.Approved]: {
+		color: "#00A181",
+		text: "Accepted",
+	},
+	[Status.Rejected]: {
+		color: "#EF4444",
+		text: "Rejected",
+	},
+};
+
 interface StatusIndicatorProps {
 	draft: DBCaseStudy;
 }
 
 function StatusIndicator({ draft }: StatusIndicatorProps) {
 	const { submitted, approved } = draft;
-	let color = "bg-[#00A181]";
-	let text = "Accepted";
-	if (submitted) {
-		if (approved === null) {
-			color = "bg-[#F79009]";
-			text = "In Review";
-		} else if (approved === false) {
-			color = "bg-red-500";
-			text = "Rejected";
-		}
+	let status = Status.Approved;
+
+	if (!submitted) {
+		status = Status.Draft;
+	} else if (approved === null) {
+		status = Status.Submitted;
 	} else {
-		color = "bg-[#171712]";
-		text = "Draft";
+		status = Status.Rejected;
 	}
 
+	const text = StatusMap[status].text;
+	const background = StatusMap[status].color;
+
+	const renderButton = useCallback((status: Status, draft: DBCaseStudy) => {
+		if (status === Status.Draft) {
+			return (
+				<Link href={`/create/${draft.id}`}>
+					<Button
+						size="pill"
+						className={cn(
+							"bg-primary text-white font-aspekta text-xs w-16 py-1",
+						)}
+					>
+						Edit
+					</Button>
+				</Link>
+			);
+		}
+
+		if (status === Status.Submitted) {
+			return (
+				<Link
+					href={`https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/pull/${draft.githubBranchName}`}
+				>
+					Edit
+				</Link>
+			);
+		}
+
+		if (status === Status.Approved) {
+			return <Link href={`/case/${draft.slug}`}>Edit</Link>;
+		}
+
+		if (status === Status.Rejected) {
+			return <span>😓</span>;
+		}
+	}, []);
+
 	return (
-		<div className={cn("inline-flex items-center gap-1")}>
-			<span className={cn("w-2 h-2 rounded-full inline-block", color)} />
-			<span className={cn("text-xs font-aspekta")}>{text}</span>
+		<div className={cn("grid grid-cols-2 space-x-1")}>
+			<span className={cn("text-xs flex items-center")}>
+				<div className={cn("inline-flex items-center gap-1")}>
+					<span
+						className={cn("w-2 h-2 rounded-full inline-block")}
+						style={{ background }}
+					/>
+					<span className={cn("text-xs font-aspekta")}>{text}</span>
+				</div>
+			</span>
+			<span className={cn("flex items-center")}>
+				{renderButton(status, draft)}
+			</span>
 		</div>
 	);
 }

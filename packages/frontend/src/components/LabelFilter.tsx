@@ -20,10 +20,10 @@ export default function LabelFilter({
 			{items.map((item, index) => (
 				<Button
 					key={`label-${item.key}-${index}`}
-					onClick={() => onClick?.(item.key)}
+					onClick={() => onClick?.(item.name)}
 					className={cn("min-w-min", {
 						[cn("bg-black", "text-white", "border-transparent")]:
-							selected?.includes(item.key),
+							selected?.includes(item.name),
 					})}
 				>
 					<span className={cn("font-spline text-xs")}>{item.name}</span>
@@ -34,11 +34,11 @@ export default function LabelFilter({
 					onClick={onClearClick}
 					variant="outline"
 					size="pill"
-					className="px-4 inline-flex items-center gap-1"
+					className="px-3 py-1.5 inline-flex items-center gap-2 bg-background"
 				>
-					<Close className="h-3" />
+					<Close className="h-2" />
 					<span
-						className={cn("lowercase", "font-aspecta", "text-sm", "leading-5")}
+						className={cn("lowercase", "font-spline", "text-sm", "leading-5")}
 					>
 						clear
 					</span>

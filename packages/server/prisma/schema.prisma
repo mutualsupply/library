@@ -21,19 +21,20 @@ model User {
 }
 
 model CaseStudy {
-  id            Int       @id @default(autoincrement())
+  id            Int     @id @default(autoincrement())
   content       Json
-  slug          String?   @unique
+  slug          String? @unique
   signerAddress String?
+  githubBranchName   String?
 
-  submitted     Boolean   @default(false)
-  approved      Boolean  
-  featured      Boolean   @default(false)
+  submitted Boolean @default(false)
+  approved  Boolean?
+  featured  Boolean @default(false)
 
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  deletedAt     DateTime?
-  approvedAt    DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+  approvedAt DateTime?
 
   userId Int
   user   User @relation(fields: [userId], references: [id])

@@ -47,7 +47,6 @@ const handler = NextAuth({
 			return jwt.token;
 		},
 		async session(sesh) {
-			console.log("SESSION!", sesh);
 			return sesh.session;
 		},
 	},
