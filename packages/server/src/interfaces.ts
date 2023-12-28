@@ -1,19 +1,17 @@
 export interface CaseStudy {
-	type: StudyType;
+	title: string;
 	name: string;
 	email: string;
-	title: string;
-	organizationName: string;
-	url?: string;
-	industry?: string;
-	partOfTeam: boolean;
+	category: string;
+	experienceUrl: string;
 	markdown?: string;
 }
 
-enum StudyType {
-	Signal = "Signal",
-	Observation = "Observation",
-	Exploration = "Exploration",
+export interface PostCaseStudyRequestBody {
+	caseStudy: CaseStudy;
+	user: GithubUser;
+	slug: string;
+	signerAddress?: `0x${string}`;
 }
 
 export interface GithubUser {
@@ -30,11 +28,3 @@ export interface GithubEmail {
 }
 
 export type GithubEmailsRepsonse = Array<GithubEmail>;
-
-export interface PostCaseStudyRequestBody {
-	caseStudy: CaseStudy;
-	user: GithubUser;
-	isProd: boolean;
-	slug: string;
-	address?: `0x${string}`;
-}

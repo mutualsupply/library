@@ -1,6 +1,3 @@
--- CreateEnum
-CREATE TYPE "ENV" AS ENUM ('PROD', 'DEV');
-
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
@@ -9,7 +6,6 @@ CREATE TABLE "User" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "deletedAt" TIMESTAMP(3),
-    "env" "ENV" NOT NULL DEFAULT 'DEV',
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -18,14 +14,15 @@ CREATE TABLE "User" (
 CREATE TABLE "CaseStudy" (
     "id" SERIAL NOT NULL,
     "content" JSONB NOT NULL,
-    "isDraft" BOOLEAN NOT NULL DEFAULT false,
-    "isApproved" BOOLEAN NOT NULL DEFAULT false,
-    "address" TEXT,
+    "slug" TEXT,
+    "signerAddress" TEXT,
+    "submitted" BOOLEAN NOT NULL DEFAULT false,
+    "approved" BOOLEAN NOT NULL DEFAULT false,
+    "featured" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "deletedAt" TIMESTAMP(3),
-    "slug" TEXT,
-    "env" "ENV" NOT NULL DEFAULT 'DEV',
+    "approvedAt" TIMESTAMP(3),
     "userId" INTEGER NOT NULL,
 
     CONSTRAINT "CaseStudy_pkey" PRIMARY KEY ("id")

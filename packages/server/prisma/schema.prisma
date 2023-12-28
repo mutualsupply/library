@@ -10,11 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum ENV {
-  PROD
-  DEV
-}
-
 model User {
   id          Int         @id @default(autoincrement())
   email       String      @unique
@@ -22,22 +17,24 @@ model User {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   deletedAt   DateTime?
-  env         ENV         @default(DEV)
   caseStudies CaseStudy[]
 }
 
 model CaseStudy {
-  id         Int       @id @default(autoincrement())
-  content    Json
-  isDraft    Boolean   @default(false)
-  isApproved Boolean   @default(false)
-  address    String?
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  deletedAt  DateTime?
-  approvedAt DateTime?
-  slug       String?   @unique
-  env        ENV       @default(DEV)
-  userId     Int
-  user       User      @relation(fields: [userId], references: [id])
+  id            Int       @id @default(autoincrement())
+  content       Json
+  slug          String?   @unique
+  signerAddress String?
+
+  submitted     Boolean   @default(false)
+  approved      Boolean  
+  featured      Boolean   @default(false)
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
+  approvedAt    DateTime?
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
 }

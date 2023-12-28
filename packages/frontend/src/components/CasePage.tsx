@@ -1,11 +1,7 @@
 "use client";
 
-import Link from "next/link";
-import { useMemo, useState } from "react";
-import { cn, objectKeys } from "utils";
-import { caseTypeFilterItems } from "../lib/client";
-import { Case, CaseSource, StudyType } from "../lib/interfaces";
-import LabelFilter from "./LabelFilter";
+import { cn } from "utils";
+import { Case, CaseSource } from "../lib/interfaces";
 import { BackLink } from "./Links";
 import RemoteMDX from "./RemoteMDX";
 
@@ -15,50 +11,50 @@ interface CaseProps {
 }
 
 export default function CasePage({ cases, caseStudy }: CaseProps) {
-	const [selectedType, setSelectedType] = useState<Array<StudyType>>([
-		caseStudy.type,
-	]);
+	// const [selectedType, setSelectedType] = useState<Array<StudyType>>([
+	// 	caseStudy.type,
+	// ]);
 
-	const filteredCasesByType = useMemo(() => {
-		if (selectedType.length === 0) {
-			return cases;
-		}
-		return cases.filter((c) => selectedType.includes(c.type));
-	}, [cases, selectedType]);
+	// const filteredCasesByType = useMemo(() => {
+	// 	if (selectedType.length === 0) {
+	// 		return cases;
+	// 	}
+	// 	return cases.filter((c) => selectedType.includes(c.type));
+	// }, [cases, selectedType]);
 
-	const casesByFirstLetter = filteredCasesByType.reduce(
-		(acc, currCase) => {
-			const firstLetter = currCase.title[0].toUpperCase();
-			if (!acc[firstLetter]) {
-				acc[firstLetter] = [];
-			}
-			acc[firstLetter].push(currCase);
-			return acc;
-		},
-		{} as Record<string, Case[]>,
-	);
+	// const casesByFirstLetter = filteredCasesByType.reduce(
+	// 	(acc, currCase) => {
+	// 		const firstLetter = currCase.title[0].toUpperCase();
+	// 		if (!acc[firstLetter]) {
+	// 			acc[firstLetter] = [];
+	// 		}
+	// 		acc[firstLetter].push(currCase);
+	// 		return acc;
+	// 	},
+	// 	{} as Record<string, Case[]>,
+	// );
 
-	const onLabelFilterClick = (label: StudyType) => {
-		if (selectedType?.includes(label)) {
-			setSelectedType(selectedType.filter((l) => l !== label));
-		} else {
-			setSelectedType((selectedType || []).concat(label));
-		}
-	};
+	// const onLabelFilterClick = (label: StudyType) => {
+	// 	if (selectedType?.includes(label)) {
+	// 		setSelectedType(selectedType.filter((l) => l !== label));
+	// 	} else {
+	// 		setSelectedType((selectedType || []).concat(label));
+	// 	}
+	// };
 	return (
 		<>
 			<div className={cn("my-5", "flex", "items-center", "gap-8")}>
 				<BackLink href={"/"}>Index</BackLink>
-				<LabelFilter
+				{/* <LabelFilter
 					items={caseTypeFilterItems}
 					selected={selectedType}
 					onClick={onLabelFilterClick}
 					onClearClick={() => setSelectedType([])}
-				/>
+				/> */}
 			</div>
 			<div className={cn("grid", "grid-cols-12", "grow")}>
 				<div className={cn("col-span-2", "flex", "flex-col", "gap-2")}>
-					{objectKeys(casesByFirstLetter).map((firstLetter, index) => (
+					{/* {objectKeys(casesByFirstLetter).map((firstLetter, index) => (
 						<div key={`letter-${firstLetter}-${index}`}>
 							<span
 								className={cn(
@@ -93,7 +89,7 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
 								))}
 							</div>
 						</div>
-					))}
+					))} */}
 				</div>
 				<div
 					className={cn(

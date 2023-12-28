@@ -1,9 +1,9 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 
+import { useFormContext } from "react-hook-form";
 import { cn } from "utils";
 import Spinner from "../Spinner";
-import { useFormContext } from "react-hook-form";
 import OptimismLogo from "../icons/Optimism";
 
 const buttonVariants = cva(
@@ -17,13 +17,16 @@ const buttonVariants = cva(
 					"border border-black border-dashed bg-transparent rounded-none p-1 hover:border-primary hover:text-primary",
 				blueOutline:
 					"border border-primary border-dashed bg-white text-primary",
+				blackOutline: "border border-black border-solid  text-black",
 				link: "text-black underline-offset-4 underline",
 				op: "text-black border border-dashed border-red bg-background hover:border-solid hover:text-red",
+				purple: "rounded-sm text-purple border-solid border-purple border",
 			},
 			size: {
 				default: "h-9 px-4 py-3 rounded-sm min-w-[128px]",
 				lg: "h-12 rounded-2xl px-8",
-				pill: "rounded-full px-2 py-1",
+				pill: "rounded-full px-2 py-0.5 leading-6",
+				icon: "px-1 py-1 w-6",
 			},
 		},
 		defaultVariants: {
@@ -43,30 +46,30 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    { className, variant, size, loading, children, type = "button", ...props },
-    ref,
-  ) => {
-    return (
-      <button
-        {...props}
-        className={cn(buttonVariants({ variant, size }), className)}
-        disabled={loading || props.disabled}
-        ref={ref}
-        type={type}
-      >
-        <>
-          {loading && (
-            <div className="absolute inset-0 flex justify-center align-items-center">
-              <Spinner />
-            </div>
-          )}
-          {children}
-        </>
-      </button>
-    )
-  },
-)
+	(
+		{ className, variant, size, loading, children, type = "button", ...props },
+		ref,
+	) => {
+		return (
+			<button
+				{...props}
+				className={cn(buttonVariants({ variant, size }), className)}
+				disabled={loading || props.disabled}
+				ref={ref}
+				type={type}
+			>
+				<>
+					{loading && (
+						<div className="absolute inset-0 flex justify-center align-items-center">
+							<Spinner />
+						</div>
+					)}
+					{children}
+				</>
+			</button>
+		);
+	},
+);
 Button.displayName = "Button";
 
 const Submit = React.forwardRef<
@@ -93,10 +96,10 @@ const OPButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
 	({ children, ...props }, ref) => {
 		return (
 			<Button ref={ref} variant="op" size="pill" {...props}>
-				<span className="inline-flex items-center gap-2">
+				<span className="inline-flex items-center gap-2 w-full">
 					<OptimismLogo />
 					<span className="text-xs font-aspekta font-medium">
-						Earn $OP for your thoughts
+						{children ? children : "Earn $OP for your thoughts"}
 					</span>
 				</span>
 			</Button>
@@ -105,4 +108,4 @@ const OPButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
 );
 Submit.displayName = "Submit";
 
-export { Submit, Button, OPButton, buttonVariants };
+export { Button, OPButton, Submit, buttonVariants };

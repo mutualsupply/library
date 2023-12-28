@@ -3,15 +3,17 @@ import * as React from "react";
 
 import { cn } from "utils";
 
-const inputVariants = cva("", {
+const inputVariants = cva("flex w-full font-aspekta text-base text-primary", {
 	variants: {
 		variant: {
 			default:
-				"font-aspecta flex w-full text-base border border-input bg-transparent px-4 py-3 shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 rounded-sm border-dashed",
+				"border border-input bg-transparent px-4 py-3 transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 rounded-sm border-dashed",
+			solid:
+				"border border-primary bg-transparent transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 border-solid",
 		},
 		size: {
 			default: "h-9",
-			lg: "h-12",
+			lg: "h-12 px-4 py-3",
 		},
 	},
 	defaultVariants: {
@@ -32,14 +34,16 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 		ref,
 	) => {
 		return (
-			<span className={cn("flex", "items-center", "grow")}>
+			<span className={cn("relative")}>
 				{leftOfInput && (
-					<span className={cn("absolute left-8")}>{leftOfInput}</span>
+					<span className={cn("absolute left-3 top-1/2 -translate-y-1/2")}>
+						{leftOfInput}
+					</span>
 				)}
 				<input
 					type={type}
 					className={cn(inputVariants({ variant, size, className }), {
-						"pl-12": !!leftOfInput,
+						"pl-10": !!leftOfInput,
 					})}
 					ref={ref}
 					{...props}

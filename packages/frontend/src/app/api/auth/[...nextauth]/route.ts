@@ -16,6 +16,8 @@ const handler = NextAuth({
 	],
 	callbacks: {
 		async signIn({ account, profile }) {
+			// Email may be null but we need it, so we query here in case
+			// https://github.com/nextauthjs/next-auth/issues/374
 			if (account?.provider === "github") {
 				if (profile) {
 					if (!profile.email) {
@@ -34,6 +36,8 @@ const handler = NextAuth({
 			return true;
 		},
 		async jwt(jwt) {
+			// We want access to the access token and refresh token in the client
+			// so we attach here
 			if (jwt.account) {
 				jwt.token.accessToken = jwt.account.access_token;
 				jwt.token.expiresAt = jwt.account.expires_at;
@@ -43,6 +47,7 @@ const handler = NextAuth({
 			return jwt.token;
 		},
 		async session(sesh) {
+			console.log("SESSION!", sesh);
 			return sesh.session;
 		},
 	},

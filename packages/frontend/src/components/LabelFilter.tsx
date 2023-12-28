@@ -3,9 +3,9 @@ import Close from "./icons/Close";
 import { Button } from "./ui/button";
 
 interface LabelFilterProps {
-	items: { key: string; title: string }[];
+	items: { key: string; name: string }[];
 	selected?: string[];
-	onClick?: (key: any) => void;
+	onClick?: (key: string) => void;
 	onClearClick?: () => void;
 }
 
@@ -21,21 +21,27 @@ export default function LabelFilter({
 				<Button
 					key={`label-${item.key}-${index}`}
 					onClick={() => onClick?.(item.key)}
-					className={cn({
+					className={cn("min-w-min", {
 						[cn("bg-black", "text-white", "border-transparent")]:
 							selected?.includes(item.key),
 					})}
 				>
-					<span className={cn("font-spline")}>{item.title}</span>
+					<span className={cn("font-spline text-xs")}>{item.name}</span>
 				</Button>
 			))}
 			{selected && selected?.length > 0 && onClearClick && (
 				<Button
 					onClick={onClearClick}
-					className="inline-flex items-center gap-0.5 border-dashed rounded-full font-sans font-light"
+					variant="outline"
+					size="pill"
+					className="px-4 inline-flex items-center gap-1"
 				>
-					<Close width={20} />
-					<div className={cn("lowercase", "font-aspecta")}>clear</div>
+					<Close className="h-3" />
+					<span
+						className={cn("lowercase", "font-aspecta", "text-sm", "leading-5")}
+					>
+						clear
+					</span>
 				</Button>
 			)}
 		</div>

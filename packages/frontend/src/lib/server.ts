@@ -2,7 +2,8 @@ import fs from "fs";
 import { marked } from "marked";
 import { serialize } from "next-mdx-remote/serialize";
 import path from "path";
-import { Case, CaseMetadata, StudyType } from "./interfaces";
+import { Hex } from "viem";
+import { Case, CaseMetadata } from "./interfaces";
 
 const PATH_TO_MARKDOWN = "src/markdown";
 
@@ -94,23 +95,20 @@ export function parseMarkdown(source: string): CaseMetadata {
 		return text;
 	};
 
-	const { text: title } = tokens.find(
-		(token) => token.type === "heading" && token.depth === 1,
-	) as marked.Tokens.Heading;
-
-	const organization = getStrongTextStartsWith("Organization") as string;
-	const type = getStrongTextStartsWith("Type") as StudyType;
-	const author = getStrongTextStartsWith("Authored by") as string;
-	const submittedOn = getStrongTextStartsWith("Submitted on") as string;
-	const address = getStrongTextStartsWith("Address") as
-		| `0x${string}`
-		| undefined;
+	const title = getStrongTextStartsWith("Title") as string;
+	const author = getStrongTextStartsWith("Author") as string;
+	const category = getStrongTextStartsWith("Category") as string;
+	const proofOfExperience = getStrongTextStartsWith(
+		"Proof of Experience",
+	) as string;
+	const createdAt = getStrongTextStartsWith("Created") as string;
+	const address = getStrongTextStartsWith("Signed by") as Hex | undefined;
 	return {
 		title,
-		organization,
-		type,
 		author,
-		submittedOn,
+		category,
+		proofOfExperience,
+		createdAt,
 		address,
 	};
 }

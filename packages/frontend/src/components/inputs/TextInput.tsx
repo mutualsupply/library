@@ -8,10 +8,11 @@ import {
 	FormLabel,
 	FormMessage,
 } from "../ui/form";
-import { Input } from "../ui/input";
+import { Input, InputProps } from "../ui/input";
 
 interface TextInputProps
-	extends Pick<InputHTMLAttributes<HTMLInputElement>, "type"> {
+	extends Pick<InputHTMLAttributes<HTMLInputElement>, "type">,
+		Pick<InputProps, "size" | "variant"> {
 	name: string;
 	label?: string;
 	placeholder?: string;
@@ -24,6 +25,8 @@ const TextInput = ({
 	placeholder,
 	description,
 	type = "text",
+	size,
+	variant,
 }: TextInputProps) => {
 	const form = useFormContext();
 	return (
@@ -32,11 +35,21 @@ const TextInput = ({
 			name={name}
 			render={({ field }) => (
 				<FormItem>
-					{label && <FormLabel>{label}</FormLabel>}
+					{(label || description) && (
+						<div>
+							{label && <FormLabel>{label}</FormLabel>}
+							{description && <FormDescription>{description}</FormDescription>}
+						</div>
+					)}
 					<FormControl>
-						<Input type={type} placeholder={placeholder} {...field} />
+						<Input
+							type={type}
+							placeholder={placeholder}
+							size={size}
+							variant={variant}
+							{...field}
+						/>
 					</FormControl>
-					{description && <FormDescription>{description}</FormDescription>}
 					<FormMessage />
 				</FormItem>
 			)}

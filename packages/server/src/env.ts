@@ -7,12 +7,13 @@ const env = {
 	AWS_ACCESS_KEY: process.env.AWS_ACCESS_KEY as string,
 	AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY as string,
 	AWS_BUCKET_NAME: process.env.AWS_BUCKET_NAME as string,
+	GITHUB_BRANCH: process.env.GITHUB_BRANCH as string,
 };
 
-objectKeys(env).forEach((key) => {
+for (const key of objectKeys(env)) {
 	if (!env[key]) {
 		throw new Error(`Missing environment variable ${key}`);
 	}
-});
+}
 
 export default env;

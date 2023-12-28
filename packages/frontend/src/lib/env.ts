@@ -11,6 +11,7 @@ interface Env {
 	NEXT_PUBLIC_WALLETCONNECT_ID: string;
 	NEXT_PUBLIC_APP_ENV: AppEnv;
 	NEXT_PUBLIC_SERVER_BASE_URL: string;
+	NEXT_PUBLIC_PRIVY_APP_ID: string;
 	GITHUB_TOKEN: string;
 	GITHUB_ID: string;
 	GITHUB_SECRET: string;
@@ -25,6 +26,7 @@ const env: Env = {
 	NEXT_PUBLIC_APP_ENV: process.env.NEXT_PUBLIC_APP_ENV as AppEnv,
 	NEXT_PUBLIC_SERVER_BASE_URL: process.env
 		.NEXT_PUBLIC_SERVER_BASE_URL as string,
+	NEXT_PUBLIC_PRIVY_APP_ID: process.env.NEXT_PUBLIC_PRIVY_APP_ID as string,
 	GITHUB_TOKEN: process.env.GITHUB_TOKEN as string,
 	GITHUB_ID: process.env.GITHUB_ID as string,
 	GITHUB_SECRET: process.env.GITHUB_SECRET as string,
@@ -44,18 +46,19 @@ if (typeof window === "undefined") {
 
 const missingKeys: Array<string> = [];
 
-keysToValidate.forEach((key) => {
+for (const key of keysToValidate) {
 	if (!env[key]) {
 		missingKeys.push(key);
 	}
 	if (key === "NEXT_PUBLIC_APP_ENV") {
-		if (!Object.values(AppEnv).includes(env[key] as any)) {
+		if (!Object.values(AppEnv).includes(env[key])) {
 			throw new Error(
 				`${key} must be one of ${Object.values(AppEnv).join(", ")}`,
 			);
 		}
 	}
-});
+}
+
 if (missingKeys.length > 0) {
 	throw new Error(`Missing environment variables: ${missingKeys.join(", ")}`);
 }

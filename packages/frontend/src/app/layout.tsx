@@ -2,7 +2,6 @@ import { Metadata } from "next";
 import localFont from "next/font/local";
 import { cn } from "utils";
 import Footer from "../components/Footer";
-import Header from "../components/Header";
 import Providers from "../components/Providers";
 import "../styles/globals.css";
 
@@ -85,10 +84,7 @@ export default function RootLayout({
 				)}
 			>
 				<Providers>
-					<div className={cn("flex-grow p-4")}>
-						<Header />
-						{children}
-					</div>
+					<div className={cn("flex-grow flex flex-col")}>{children}</div>
 					<Footer />
 				</Providers>
 			</body>

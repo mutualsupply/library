@@ -2,7 +2,8 @@ import { Endpoints } from "@octokit/types";
 import {
 	CaseStudy,
 	CreateNewCaseStudyResponse,
-	ServerCaseStudy,
+	DBCaseStudy,
+	PostCaseStudyBody,
 } from "./interfaces";
 
 export type GithubPullResponse =
@@ -16,7 +17,7 @@ export async function getPulls(): Promise<GithubPullResponse> {
 	return res.json();
 }
 
-export async function getDrafts(): Promise<Array<ServerCaseStudy>> {
+export async function getDrafts(): Promise<Array<DBCaseStudy>> {
 	const res = await fetch("/api/draft", {
 		method: "GET",
 		credentials: "include",
@@ -30,40 +31,34 @@ export async function getDrafts(): Promise<Array<ServerCaseStudy>> {
 	return res.json();
 }
 
-export async function submitCaseStudy({
-	caseStudy,
-	signature,
-}: {
-	caseStudy: CaseStudy;
-	signature?: string;
-}): Promise<CreateNewCaseStudyResponse> {
+export async function submitCaseStudy(
+	body: PostCaseStudyBody,
+): Promise<CreateNewCaseStudyResponse> {
 	const res = await fetch("/api/create-case", {
 		method: "POST",
-		body: JSON.stringify({ caseStudy, signature }),
+		body: JSON.stringify(body),
 		credentials: "same-origin",
 	});
 	if (!res.ok) {
 		console.error("Could not create case study", await res.text());
 		throw new Error("Could not create case study");
-	} else {
-		return res.json();
 	}
+	return res.json();
 }
 
 export async function saveDraft(
-	caseStudy: Partial<CaseStudy>,
+	body: Omit<Partial<PostCaseStudyBody>, "signature">,
 ): Promise<Partial<CaseStudy>> {
 	const res = await fetch("/api/draft", {
 		method: "POST",
-		body: JSON.stringify(caseStudy),
+		body: JSON.stringify(body),
 		credentials: "same-origin",
 	});
 	if (!res.ok) {
 		console.error("Could not create save draft", await res.text());
 		throw new Error("Could not save drafe");
-	} else {
-		return res.json();
 	}
+	return res.json();
 }
 
 export const GITHUB_OWNER = "mutualsupply";

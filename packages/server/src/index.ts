@@ -1,6 +1,6 @@
 import cors from "@koa/cors";
 import multer from "@koa/multer";
-import { ENV, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import Koa, { Context } from "koa";
 import bodyParser from "koa-bodyparser";
 import json from "koa-json";
@@ -24,11 +24,11 @@ app.use(router.routes());
 app.use(router.allowedMethods());
 
 app.listen(env.PORT, () => {
-	console.log(`server is running at ${env.PORT}`);
+	console.log(`[app] running at port: ${env.PORT}`);
 });
 
 router.get("/", async (ctx, next) => {
-	ctx.body = { message: "🍎" };
+	ctx.body = { message: "👓" };
 	await next();
 });
 
@@ -47,7 +47,7 @@ router.get("/draft/:email", async (ctx, next) => {
 		update: {},
 	});
 	const drafts = await prisma.caseStudy.findMany({
-		where: { userId: user.id, isDraft: true },
+		where: { userId: user.id },
 		orderBy: { createdAt: "desc" },
 	});
 
@@ -56,8 +56,7 @@ router.get("/draft/:email", async (ctx, next) => {
 });
 
 router.post("/draft", async (ctx, next) => {
-	const { isProd, caseStudy, user } = ctx.request
-		.body as PostCaseStudyRequestBody;
+	const { caseStudy, user } = ctx.request.body as PostCaseStudyRequestBody;
 	const { email } = user;
 	const dbUser = await prisma.user.upsert({
 		where: { email },
@@ -68,8 +67,6 @@ router.post("/draft", async (ctx, next) => {
 		data: {
 			userId: dbUser.id,
 			content: caseStudy as unknown as Prisma.InputJsonValue,
-			env: isProd ? ENV.PROD : ENV.DEV,
-			isDraft: true,
 		},
 	});
 	ctx.body = drafts;
@@ -82,7 +79,7 @@ router.get("/status", async (ctx, next) => {
 });
 
 router.post("/case-study", async (ctx, next) => {
-	const { caseStudy, user, isProd, slug, address } = ctx.request
+	const { caseStudy, user, slug, signerAddress } = ctx.request
 		.body as PostCaseStudyRequestBody;
 	if (!user.email) {
 		ctx.status = 401;
@@ -93,14 +90,6 @@ router.post("/case-study", async (ctx, next) => {
 			ctx,
 		);
 	} else {
-		const { branchName } = createCaseStudy(
-			user,
-			caseStudy,
-			isProd,
-			slug,
-			address,
-		);
-
 		const dbUser = await prisma.user.upsert({
 			where: { email: user.email },
 			update: {
@@ -113,15 +102,22 @@ router.post("/case-study", async (ctx, next) => {
 			},
 		});
 
-		await prisma.caseStudy.create({
+		const dbCaseStudy = await prisma.caseStudy.create({
 			data: {
 				userId: dbUser.id,
 				content: JSON.stringify(caseStudy),
-				env: isProd ? ENV.PROD : ENV.DEV,
+				signerAddress,
 				slug,
-				address,
 			},
 		});
+
+		const { branchName } = createCaseStudy(
+			user,
+			caseStudy,
+			slug,
+			signerAddress,
+		);
+
 		ctx.body = { branchName };
 		await next();
 	}

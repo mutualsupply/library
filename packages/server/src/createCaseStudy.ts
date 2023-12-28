@@ -1,4 +1,5 @@
 import child from "child_process";
+import env from "./env";
 import { CaseStudy, GithubUser } from "./interfaces";
 
 const run = (cmd: string) => {
@@ -8,7 +9,6 @@ const run = (cmd: string) => {
 function createCaseStudy(
 	user: GithubUser,
 	caseStudy: CaseStudy,
-	isProd: boolean,
 	slug: string,
 	address?: `0x${string}`,
 ) {
@@ -22,26 +22,18 @@ function createCaseStudy(
 	run(
 		`GIT_SSH_COMMAND="ssh -i /root/.ssh/id_ed25519" git clone git@github.com:mutualsupply/${repoName}.git ${dirName}/${repoName}`,
 	);
-	if (!isProd) {
-		run(`cd ${dirName}/${repoName} && git checkout dev`);
-	}
+	run(`cd ${dirName}/${repoName} && git checkout ${env.GITHUB_BRANCH}`);
 	const markdown = `# ${caseStudy.title}
 
 ${caseStudy.markdown ? caseStudy.markdown : ""}
 
 ### Metadata\n
-Organization: **${caseStudy.organizationName}**\n
-Type: **${caseStudy.type}**\n
-${caseStudy?.industry ? `Industry: **${caseStudy.industry}**\n` : ""}
-Authored by: **${caseStudy.name}** (${caseStudy.email})\n
-Created on: **${now.toISOString()}**\n
-Is Part Of Team: **${caseStudy.partOfTeam ? "Yes" : "No"}**
-${address ? `\nAddress: **${address}**` : ""}
-${
-	caseStudy.url
-		? `\nProof of Experience: **[${caseStudy.url}](${caseStudy.url})**`
-		: ""
-}
+Title: **${caseStudy.title}**\n
+Author: **${caseStudy.name}** (${caseStudy.email})\n
+Category: **${caseStudy.category}**\n
+Proof of Experience: **[${caseStudy.experienceUrl}](${caseStudy.experienceUrl})**
+Created: **${now.toISOString()}**\n
+${address ? `\nSigned by: **${address}**` : ""}
 `;
 	run(`echo "${markdown}" > ${pathToFrontendPackage}/src/markdown/${slug}.mdx`);
 	run(`cd ${dirName}/${repoName} && git status`);

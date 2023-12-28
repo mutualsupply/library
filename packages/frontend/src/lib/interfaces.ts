@@ -2,37 +2,31 @@ import { MDXRemoteSerializeResult } from "next-mdx-remote";
 
 type DateTime = string;
 
-export enum ENV {
-	DEV = "DEV",
-	PROD = "PROD",
-}
-export interface ServerCaseStudy {
+export interface DBCaseStudy {
 	id: number;
-	content: Partial<CaseStudy>;
-	isDraft: boolean;
-	isApproved: boolean;
-	address?: string;
+	content: CaseStudy;
+	slug?: string;
+	signerAddress?: string;
+
+	submitted: boolean;
+	approved: boolean | null;
+	featured: boolean;
+
 	createdAt: DateTime;
 	updatedAt: DateTime;
 	deletedAt?: DateTime;
-	slug?: string;
-	env: ENV;
-	userId: number;
-}
+	approvedAt?: DateTime;
 
-export enum StudyType {
-	Signal = "Signal",
-	Observation = "Observation",
-	Exploration = "Exploration",
+	userId: number;
 }
 
 export interface CaseMetadata {
 	title: string;
-	organization: string;
-	type: StudyType;
 	author: string;
-	submittedOn: DateTime;
+	createdAt: DateTime;
 	address?: `0x${string}`;
+	category: string;
+	proofOfExperience: string;
 }
 
 export interface Case extends CaseMetadata {
@@ -52,15 +46,16 @@ export interface CreateNewCaseStudyResponse {
 }
 
 export interface CaseStudy {
-	type: StudyType;
+	title: string;
 	name: string;
 	email: string;
-	title: string;
-	organizationName: string;
-	industry?: string;
-	partOfTeam: boolean;
+	category: string;
+	experienceUrl: string;
 	markdown?: string;
-	url?: string;
+}
+
+export interface PostCaseStudyBody extends CaseStudy {
+	signature?: string;
 }
 
 export interface PR {

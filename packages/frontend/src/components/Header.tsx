@@ -6,11 +6,10 @@ import { usePathname } from "next/navigation";
 import { PropsWithChildren, useEffect, useState } from "react";
 import { cn } from "utils";
 import { isDev } from "../lib/env";
-import { Button, OPButton } from "./ui/button";
-import Hamburger from "./icons/Hamburger";
-import Close from "./icons/Close";
 import Footer from "./Footer";
-import { useRouter } from "next/navigation";
+import Close from "./icons/Close";
+import Hamburger from "./icons/Hamburger";
+import { Button, OPButton } from "./ui/button";
 
 export default function Header() {
 	const pathname = usePathname();
@@ -83,7 +82,7 @@ function NavLinks() {
 			<NavButton isSelected={pathname === "/"} href="/">
 				Index
 			</NavButton>
-			<NavButton isSelected={pathname === "/create-case"} href="/create-case">
+			<NavButton isSelected={pathname === "/submit"} href="/submit">
 				Submit
 			</NavButton>
 			<NavButton href="https://www.mutual.supply/library#what">
