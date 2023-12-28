@@ -1,6 +1,5 @@
 import { Endpoints } from "@octokit/types";
 import {
-	CaseStudy,
 	CreateNewCaseStudyResponse,
 	DBCaseStudy,
 	PostCaseStudyBody,
@@ -51,11 +50,27 @@ export async function submitCaseStudy(
 }
 
 export async function saveDraft(
-	body: Omit<Partial<PostCaseStudyBody>, "signature">,
-): Promise<Partial<CaseStudy>> {
+	body: Omit<PostCaseStudyBody, "signature">,
+): Promise<DBCaseStudy> {
 	const res = await fetch("/api/draft", {
 		method: "POST",
 		body: JSON.stringify(body),
+		credentials: "same-origin",
+	});
+	if (!res.ok) {
+		console.error("Could not create save draft", await res.text());
+		throw new Error("Could not save draft");
+	}
+	return res.json();
+}
+
+export async function updateDraft(
+	body: Omit<PostCaseStudyBody, "signature"> & { id: number },
+): Promise<DBCaseStudy> {
+	const { id, ...rest } = body;
+	const res = await fetch(`/api/draft/${id}`, {
+		method: "POST",
+		body: JSON.stringify(rest),
 		credentials: "same-origin",
 	});
 	if (!res.ok) {

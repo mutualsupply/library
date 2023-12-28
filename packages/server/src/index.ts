@@ -74,13 +74,50 @@ router.post("/draft", async (ctx, next) => {
 		update: {},
 		create: { email },
 	});
-	const drafts = await prisma.caseStudy.create({
+	const draft = await prisma.caseStudy.create({
 		data: {
 			userId: dbUser.id,
 			content: caseStudy as unknown as Prisma.InputJsonValue,
 		},
 	});
-	ctx.body = drafts;
+	ctx.body = draft;
+	await next();
+});
+
+router.post("/draft/update/:id", async (ctx, next) => {
+	const { id } = ctx.params;
+	const { caseStudy, user } = ctx.request.body as PostCaseStudyRequestBody;
+	const { email } = user;
+	if (!email) {
+		ctx.status = 401;
+		ctx.body = "User must have an email to publish a case study";
+		ctx.app.emit(
+			"error",
+			new Error("User must have an email to publish a case study"),
+			ctx,
+		);
+		return await next();
+	}
+
+	const draft = await prisma.caseStudy.findFirst({
+		where: { id: Number(id), user: { email } },
+	});
+
+	if (!draft) {
+		ctx.status = 404;
+		ctx.body = "Draft not found";
+		ctx.app.emit("error", new Error("Draft not found"), ctx);
+		return await next();
+	}
+
+	const updatedDraft = await prisma.caseStudy.update({
+		where: { id: Number(id) },
+		data: {
+			content: caseStudy as unknown as Prisma.InputJsonValue,
+		},
+	});
+
+	ctx.body = updatedDraft;
 	await next();
 });
 
@@ -120,14 +157,14 @@ router.post("/case-study", async (ctx, next) => {
 	const dbCaseStudy = await prisma.caseStudy.create({
 		data: {
 			userId: dbUser.id,
-			content: JSON.stringify(caseStudy),
+			content: caseStudy as unknown as Prisma.InputJsonValue,
 			githubBranchName: branchName,
 			signerAddress,
 			slug,
 		},
 	});
 
-	ctx.body = { branchName };
+	ctx.body = { dbCaseStudy };
 	await next();
 });
 

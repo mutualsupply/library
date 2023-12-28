@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { cn } from "utils";
 import useCreateCaseStudy from "../hooks/useCreateCaseStudy";
 import useSaveDraft from "../hooks/useSaveDraft";
+import useUpdateDraft from "../hooks/useUpdateDraft";
 import { isProd } from "../lib/env";
 import { CaseStudy, DBCaseStudy } from "../lib/interfaces";
 import { caseStudyFormSchema } from "../lib/schema";
@@ -38,10 +39,14 @@ export default function CreateCasePage({ draft }: CreateCaseProps) {
 		useSaveDraft();
 	const { mutateAsync: createCase, isPending: isCreateCaseStudyPending } =
 		useCreateCaseStudy();
+
+	const { mutateAsync: updateDraft, isPending: isUpdateDraftPending } =
+		useUpdateDraft();
 	const [markdown, setMarkdown] = useState<string | undefined>(
 		draft?.content?.markdown,
 	);
 	const { wallets } = useWallets();
+	const [draftId, setDraftId] = useState<number | undefined>(draft?.id);
 
 	let defaultValues = draft?.content;
 	if (!defaultValues) {
@@ -73,8 +78,14 @@ export default function CreateCasePage({ draft }: CreateCaseProps) {
 			...data,
 			markdown,
 		};
-		return createDraft(caseStudy).then(() => {
-			router.push("/submit");
+
+		if (draftId) {
+			console.log("updating draft");
+			return updateDraft({ id: draftId, ...caseStudy });
+		}
+
+		return createDraft(caseStudy).then((draft) => {
+			setDraftId(draft.id);
 		});
 	};
 
@@ -118,15 +129,23 @@ export default function CreateCasePage({ draft }: CreateCaseProps) {
 								size="pill"
 								className={cn("w-28")}
 								onClick={form.handleSubmit(onSaveDraft)}
-								loading={isCreateDraftPending}
-								disabled={isCreateCaseStudyPending || isCreateDraftPending}
+								loading={isCreateDraftPending || isUpdateDraftPending}
+								disabled={
+									isCreateCaseStudyPending ||
+									isCreateDraftPending ||
+									isUpdateDraftPending
+								}
 							>
 								{draft ? "Update Draft" : "Save Draft"}
 							</Button>
 							<Button
 								type="submit"
 								loading={isCreateCaseStudyPending}
-								disabled={isCreateCaseStudyPending || isCreateDraftPending}
+								disabled={
+									isCreateCaseStudyPending ||
+									isCreateDraftPending ||
+									isUpdateDraftPending
+								}
 								size="pill"
 								className={cn("bg-primary text-white w-28")}
 							>
