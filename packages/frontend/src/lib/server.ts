@@ -1,7 +1,11 @@
 import fs from "fs";
 import { marked } from "marked";
+import { Session, getServerSession } from "next-auth";
+import { JWT, getToken } from "next-auth/jwt";
 import { serialize } from "next-mdx-remote/serialize";
+import { NextRequest } from "next/server";
 import path from "path";
+import { isExpired } from "utils";
 import { Hex } from "viem";
 import { CaseMetadata, CaseWithMetadata } from "./interfaces";
 
@@ -120,4 +124,31 @@ export class UnauthenticatedError extends Error {
 	constructor(msg?: string) {
 		super(msg || "Must be authenticated");
 	}
+}
+
+interface SessionWithEmail extends Session {
+	user: { email: string; name?: string | null; image?: string | null };
+}
+
+export async function getAuth(req: NextRequest): Promise<{
+	session: SessionWithEmail;
+	token: JWT;
+}> {
+	// We require the email in nextauth callbacks so we assert it will always be set here
+	const session = (await getServerSession()) as SessionWithEmail;
+	const token = await getToken({
+		req,
+	});
+	// Email is required throughout the app
+	if (!session?.user || !session?.user?.email || !token?.accessToken) {
+		throw new UnauthenticatedError();
+	}
+
+	if (isExpired(token?.accessToken as number)) {
+		throw new UnauthenticatedError();
+	}
+	return {
+		session,
+		token,
+	};
 }

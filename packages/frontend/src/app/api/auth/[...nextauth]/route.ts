@@ -1,20 +1,9 @@
 import NextAuth from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
+import { isExpired } from "utils";
 import env from "../../../../lib/env";
 import GithubClient from "../../../../lib/githubClient";
 import { GithubEmailsRepsonse } from "./../../../../../../server/src/interfaces";
-
-function isExpired(epochSeconds: number) {
-	return Date.now() / 1000 > epochSeconds;
-}
-
-async function refreshAccessToken(refreshToken: string) {
-	try {
-		return GithubClient.refreshToken(refreshToken);
-	} catch (e) {
-		console.error(e);
-	}
-}
 
 const handler = NextAuth({
 	session: {
@@ -43,8 +32,15 @@ const handler = NextAuth({
 						throw new Error("Could not fetch emails");
 					}
 					const emails = (await res.json()) as GithubEmailsRepsonse;
+					// If we cannot grab an email for this user they cannot auth with us
 					if (emails?.length > 0) {
-						profile.email = emails.find((email) => email.primary)?.email;
+						const email = emails.find((email) => email.primary)?.email;
+						if (!email) {
+							throw new Error("Could not get a valid email");
+						}
+						profile.email = email;
+					} else {
+						throw new Error("Could not get a valid email");
 					}
 				}
 			}

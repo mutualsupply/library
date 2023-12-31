@@ -1,67 +1,46 @@
-import { NextApiRequest } from "next";
-import { getServerSession } from "next-auth";
-import { getToken } from "next-auth/jwt";
-import { NextResponse } from "next/server";
-import { UnauthenticatedError } from "../../../lib/server";
+import { NextRequest, NextResponse } from "next/server";
+import { recoverMessageAddress } from "viem";
+import GithubClient from "../../../lib/githubClient";
+import { postCaseStudyBodySchema } from "../../../lib/schema";
+import { UnauthenticatedError, getAuth } from "../../../lib/server";
+import ServerClient from "../../../lib/serverClient";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
 	try {
-		// @note This logic is shared in draft logic. Need to check if the token is still valid
-		const session = await getServerSession();
-		const token = await getToken({
-			req: req as unknown as NextApiRequest,
-		});
+		const { session, token } = await getAuth(req);
 
-		console.log("TOKEN", token);
-		console.log("SESSION", session);
+		const json = await req.json();
+		const { signature, id, ...rest } = json;
+		const caseStudy = postCaseStudyBodySchema.parse(rest);
 
-		if (!token || !session) {
-			throw new UnauthenticatedError(
-				"Must be authenticated to create a case study",
-			);
+		let signerAddress = undefined;
+		if (json.signature) {
+			signerAddress = await recoverMessageAddress({
+				message: JSON.stringify(json.caseStudy),
+				signature: json.signature as `0x${string}`,
+			});
 		}
 
-		if (!session.user?.email) {
-			throw new UnauthenticatedError(
-				"User must have Github public email to publish a case study",
-			);
-		}
+		console.log(
+			`Creating case study: ${JSON.stringify(caseStudy)} ${
+				signerAddress ? `from address: ${signerAddress}` : ""
+			}`,
+		);
 
-		// const json = await req.json();
-		// const { signature, id, ...rest } = json;
-		// const caseStudy = postCaseStudyBodySchema.parse(rest);
+		// Create case study
+		const { githubBranchName: head } = await ServerClient.createCase(
+			caseStudy,
+			session.user,
+			signerAddress,
+			id,
+		);
 
-		// let signerAddress = undefined;
-		// if (json.signature) {
-		// 	signerAddress = await recoverMessageAddress({
-		// 		message: JSON.stringify(json.caseStudy),
-		// 		signature: json.signature as `0x${string}`,
-		// 	});
-		// }
-
-		// console.log(
-		// 	`Creating case study: ${JSON.stringify(caseStudy)} ${
-		// 		signerAddress ? `from address: ${signerAddress}` : ""
-		// 	}`,
-		// );
-
-		// // Create case study
-		// const { githubBranchName: head } = await ServerClient.createCase(
-		// 	caseStudy,
-		// 	session.user,
-		// 	signerAddress,
-		// 	id,
-		// );
-
-		// // Create PR
-		// const pr = GithubClient.createPr(
-		// 	token.accessToken as string,
-		// 	caseStudy,
-		// 	head,
-		// );
-		const head = "";
-		const caseStudy = "";
-		const pr = "";
+		// Create PR
+		const pr = GithubClient.createPr(
+			token.accessToken as string,
+			caseStudy,
+			head,
+		);
 
 		return NextResponse.json({
 			head,

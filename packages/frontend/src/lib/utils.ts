@@ -55,3 +55,6 @@ export default function sleep(sec: number) {
 		setTimeout(resolve, sec * 1000);
 	});
 }
+export function isExpired(epochSeconds: number) {
+	return Date.now() / 1000 > epochSeconds;
+}

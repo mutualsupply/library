@@ -1,29 +1,11 @@
-import { NextApiRequest } from "next";
-import { getServerSession } from "next-auth";
-import { getToken } from "next-auth/jwt";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import env from "../../../lib/env";
 import { postCaseStudyBodySchema } from "../../../lib/schema";
-import { UnauthenticatedError } from "../../../lib/server";
+import { UnauthenticatedError, getAuth } from "../../../lib/server";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
 	try {
-		// @note This logic is shared in create case logic. Need to check if the token is still valid
-		const session = await getServerSession();
-		const token = await getToken({
-			req: req as unknown as NextApiRequest,
-		});
-
-		if (!token || !session) {
-			throw new UnauthenticatedError("Must be authenticated to create a draft");
-		}
-
-		if (!session.user?.email) {
-			throw new UnauthenticatedError(
-				"User must have Github public email to create a draft",
-			);
-		}
-
+		const { session } = await getAuth(req);
 		const caseStudy = postCaseStudyBodySchema.parse(await req.json());
 		const res = await fetch(`${env.NEXT_PUBLIC_SERVER_BASE_URL}/draft`, {
 			method: "POST",
@@ -53,23 +35,9 @@ export async function POST(req: Request) {
 	}
 }
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
 	try {
-		const session = await getServerSession();
-		const token = await getToken({
-			req: req as unknown as NextApiRequest,
-		});
-
-		if (!token || !session) {
-			throw new UnauthenticatedError("Must be authenticated to get a drafts");
-		}
-
-		if (!session.user?.email) {
-			throw new UnauthenticatedError(
-				"User must have Github public email to get drafts",
-			);
-		}
-
+		const { session } = await getAuth(req);
 		const res = await fetch(
 			`${env.NEXT_PUBLIC_SERVER_BASE_URL}/draft/${encodeURIComponent(
 				session.user.email,
