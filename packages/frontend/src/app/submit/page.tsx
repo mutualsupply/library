@@ -19,6 +19,11 @@ import {
 	AccordionTrigger,
 } from "../../components/ui/accordion";
 import useDrafts from "../../hooks/useDrafts";
+import {
+	GITHUB_OWNER,
+	GITHUB_REPO,
+	NEW_CASE_PAGE_NAME,
+} from "../../lib/constants";
 import { DBCaseStudy } from "../../lib/interfaces";
 
 const Submit = () => {
@@ -178,7 +183,7 @@ const Submit = () => {
 							size="pill"
 							onClick={() => {
 								if (isLoggedIn) {
-									router.push("/create");
+									router.push(NEW_CASE_PAGE_NAME);
 								} else {
 									openLogin();
 								}
@@ -227,7 +232,7 @@ const StatusMap = {
 	},
 	[Status.Submitted]: {
 		color: "#F79009",
-		text: "In Review",
+		text: "In review",
 	},
 	[Status.Approved]: {
 		color: "#00A181",
@@ -261,7 +266,7 @@ function StatusIndicator({ draft }: StatusIndicatorProps) {
 	const renderButton = useCallback((status: Status, draft: DBCaseStudy) => {
 		if (status === Status.Draft) {
 			return (
-				<Link href={`/create/${draft.id}`}>
+				<Link href={`/${NEW_CASE_PAGE_NAME}/${draft.id}`}>
 					<Button
 						size="pill"
 						className={cn(
@@ -279,7 +284,14 @@ function StatusIndicator({ draft }: StatusIndicatorProps) {
 				<Link
 					href={`https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/pull/${draft.githubBranchName}`}
 				>
-					Edit
+					<Button
+						size="pill"
+						className={cn(
+							"bg-background text-black border-black border-dashed font-aspekta text-xs w-16 py-1",
+						)}
+					>
+						View
+					</Button>
 				</Link>
 			);
 		}

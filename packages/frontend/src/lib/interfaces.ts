@@ -2,6 +2,16 @@ import { MDXRemoteSerializeResult } from "next-mdx-remote";
 
 type DateTime = string;
 
+export interface CaseStudy {
+	title: string;
+	name: string;
+	email: string;
+	category: string;
+	experienceUrl: string;
+	organization?: string;
+	markdown?: string;
+}
+
 export interface DBCaseStudy {
 	id: number;
 	content: CaseStudy;
@@ -21,22 +31,19 @@ export interface DBCaseStudy {
 	userId: number;
 }
 
-export interface CaseMetadata {
-	title: string;
-	author: string;
+export interface CaseMetadata
+	extends Pick<CaseStudy, "title" | "name" | "category" | "experienceUrl"> {
 	createdAt: DateTime;
 	address?: `0x${string}`;
-	category: string;
-	proofOfExperience: string;
 }
 
-export interface Case extends CaseMetadata {
+export interface CaseWithMetadata extends CaseMetadata {
 	filename: string;
 	slug: string;
 	source: string;
 }
 
-export interface CaseSource extends Case {
+export interface CaseSource extends CaseWithMetadata {
 	serialized: MDXRemoteSerializeResult;
 }
 
@@ -45,18 +52,9 @@ export interface CreateNewCaseStudyResponse {
 	caseStudy: CaseStudy;
 	pr: PR;
 }
-
-export interface CaseStudy {
-	title: string;
-	name: string;
-	email: string;
-	category: string;
-	experienceUrl: string;
-	markdown?: string;
-}
-
 export interface PostCaseStudyBody extends CaseStudy {
 	signature?: string;
+	id?: number;
 }
 
 export interface PR {
@@ -79,10 +77,10 @@ export interface PR {
 	merged_at: null;
 	merge_commit_sha: null;
 	assignee: null;
-	assignees: any[];
-	requested_reviewers: any[];
-	requested_teams: any[];
-	labels: any[];
+	assignees: unknown[];
+	requested_reviewers: unknown[];
+	requested_teams: unknown[];
+	labels: unknown[];
 	milestone: null;
 	draft: boolean;
 	commits_url: string;
@@ -207,7 +205,7 @@ export interface Repo {
 	allow_forking: boolean;
 	is_template: boolean;
 	web_commit_signoff_required: boolean;
-	topics: any[];
+	topics: unknown[];
 	visibility: string;
 	forks: number;
 	open_issues: number;
@@ -234,4 +232,13 @@ export interface User {
 	received_events_url: string;
 	type: string;
 	site_admin: boolean;
+}
+
+export interface GithubRefreshResponse {
+	access_token: string;
+	expires_in: number;
+	refresh_token: string;
+	refresh_token_expires_in: number;
+	scope: string;
+	token_type: string;
 }

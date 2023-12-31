@@ -127,7 +127,7 @@ router.get("/status", async (ctx, next) => {
 });
 
 router.post("/case-study", async (ctx, next) => {
-	const { caseStudy, user, slug, signerAddress } = ctx.request
+	const { caseStudy, user, slug, signerAddress, id } = ctx.request
 		.body as PostCaseStudyRequestBody;
 	if (!user.email) {
 		ctx.status = 401;
@@ -138,6 +138,18 @@ router.post("/case-study", async (ctx, next) => {
 			ctx,
 		);
 		return await next();
+	}
+
+	if (id) {
+		const draft = await prisma.caseStudy.findFirst({
+			where: { id: Number(id), user: { email: user.email } },
+		});
+		if (!draft) {
+			ctx.status = 404;
+			ctx.body = "Draft not found";
+			ctx.app.emit("error", new Error("Draft not found"), ctx);
+			return await next();
+		}
 	}
 
 	const dbUser = await prisma.user.upsert({
@@ -154,15 +166,30 @@ router.post("/case-study", async (ctx, next) => {
 
 	const { branchName } = createCaseStudy(user, caseStudy, slug, signerAddress);
 
-	const dbCaseStudy = await prisma.caseStudy.create({
-		data: {
-			userId: dbUser.id,
-			content: caseStudy as unknown as Prisma.InputJsonValue,
-			githubBranchName: branchName,
-			signerAddress,
-			slug,
-		},
-	});
+	let dbCaseStudy;
+	if (id) {
+		dbCaseStudy = await prisma.caseStudy.update({
+			where: { id: Number(id) },
+			data: {
+				content: caseStudy as unknown as Prisma.InputJsonValue,
+				githubBranchName: branchName,
+				submitted: true,
+				signerAddress,
+				slug,
+			},
+		});
+	} else {
+		dbCaseStudy = await prisma.caseStudy.create({
+			data: {
+				userId: dbUser.id,
+				content: caseStudy as unknown as Prisma.InputJsonValue,
+				githubBranchName: branchName,
+				submitted: true,
+				signerAddress,
+				slug,
+			},
+		});
+	}
 
 	ctx.body = { dbCaseStudy };
 	await next();

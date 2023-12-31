@@ -1,12 +1,12 @@
 "use client";
 
 import { cn } from "utils";
-import { Case, CaseSource } from "../lib/interfaces";
+import { CaseSource, CaseWithMetadata } from "../lib/interfaces";
 import { BackLink } from "./Links";
 import RemoteMDX from "./RemoteMDX";
 
 interface CaseProps {
-	cases: Array<Case>;
+	cases: Array<CaseWithMetadata>;
 	caseStudy: CaseSource;
 }
 

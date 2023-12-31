@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useWallets } from "@privy-io/react-auth";
+import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -46,7 +46,8 @@ export default function CreateCasePage({ draft }: CreateCaseProps) {
 		draft?.content?.markdown,
 	);
 	const { wallets } = useWallets();
-	const [draftId, setDraftId] = useState<number | undefined>(draft?.id);
+	const { authenticated } = usePrivy();
+	const [id, setId] = useState<number | undefined>(draft?.id);
 
 	let defaultValues = draft?.content;
 	if (!defaultValues) {
@@ -57,6 +58,7 @@ export default function CreateCasePage({ draft }: CreateCaseProps) {
 				email: session?.user?.email || "",
 				category: "",
 				experienceUrl: "",
+				organization: "",
 			};
 		} else {
 			defaultValues = {
@@ -65,6 +67,7 @@ export default function CreateCasePage({ draft }: CreateCaseProps) {
 				email: session?.user?.email || "",
 				category: "social",
 				experienceUrl: "https://dev.mutual.supply",
+				organization: "MUTUAL",
 			};
 		}
 	}
@@ -79,13 +82,12 @@ export default function CreateCasePage({ draft }: CreateCaseProps) {
 			markdown,
 		};
 
-		if (draftId) {
-			console.log("updating draft");
-			return updateDraft({ id: draftId, ...caseStudy });
+		if (id) {
+			return updateDraft({ id: id, ...caseStudy });
 		}
 
 		return createDraft(caseStudy).then((draft) => {
-			setDraftId(draft.id);
+			setId(draft.id);
 		});
 	};
 
@@ -96,14 +98,20 @@ export default function CreateCasePage({ draft }: CreateCaseProps) {
 		};
 
 		const wallet = wallets?.[0];
-		if (wallet) {
-			const signature = await wallet.sign(JSON.stringify(caseStudy));
-			return createCase({
-				...caseStudy,
-				signature,
-			});
+		if (authenticated && wallet) {
+			try {
+				const signature = await wallet.sign(JSON.stringify(caseStudy));
+				return createCase({
+					...caseStudy,
+					signature,
+					id,
+				});
+			} catch (e) {
+				console.error(e);
+				return;
+			}
 		}
-		return createCase(caseStudy);
+		return createCase({ ...caseStudy, id });
 	};
 
 	return (
@@ -153,10 +161,10 @@ export default function CreateCasePage({ draft }: CreateCaseProps) {
 							</Button>
 						</div>
 					</div>
-					<div className={cn("md:grid grid-cols-12 grow")}>
+					<div className={cn("md:grid grid-cols-6 grow")}>
 						<div
 							className={cn(
-								"col-span-4 p-4 border border-primary border-r-0 border-b-0 md:border-b",
+								"col-span-2 p-4 border border-primary border-r-0 border-b-0 md:border-b",
 							)}
 						>
 							<div className={cn("font-otBrut text-3xl text-primary")}>
@@ -184,14 +192,6 @@ export default function CreateCasePage({ draft }: CreateCaseProps) {
 									size="lg"
 									variant="solid"
 								/>
-								<TextInput
-									type="email"
-									name="email"
-									label="Email"
-									placeholder="research@mutual.supply"
-									size="lg"
-									variant="solid"
-								/>
 								<SelectInput
 									name="category"
 									label="Choose a category"
@@ -200,16 +200,31 @@ export default function CreateCasePage({ draft }: CreateCaseProps) {
 									items={categorySelectItems}
 								/>
 								<TextInput
+									type="email"
+									name="email"
+									label="Email"
+									placeholder="research@mutual.supply"
+									size="lg"
+									variant="solid"
+								/>
+								<TextInput
 									name="experienceUrl"
 									label="Proof of Experience"
-									description="Required! Provide a link to a website / app / prototype / screen recording"
+									description="Share a link to where this lives online. A website / app / prototype / screen recording, etc."
 									placeholder="www.mutual.supply"
 									size="lg"
 									variant="solid"
 								/>
+								<TextInput
+									name="organization"
+									label="Name of organization (if applicable)"
+									placeholder="MUTUAL"
+									variant="solid"
+									size="lg"
+								/>
 							</div>
 						</div>
-						<div className={cn("col-span-8 flex flex-col")}>
+						<div className={cn("col-span-4 flex flex-col")}>
 							<MilkdownEditor
 								defaultValue={draft?.content?.markdown}
 								placeholder="Testing"

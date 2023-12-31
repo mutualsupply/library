@@ -4,6 +4,7 @@ export interface CaseStudy {
 	email: string;
 	category: string;
 	experienceUrl: string;
+	organization?: string;
 	markdown?: string;
 }
 
@@ -12,6 +13,8 @@ export interface PostCaseStudyRequestBody {
 	user: GithubUser;
 	slug: string;
 	signerAddress?: `0x${string}`;
+	// optional ID to connect to a draft
+	id?: number;
 }
 
 export interface GithubUser {

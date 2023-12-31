@@ -79,6 +79,3 @@ export async function updateDraft(
 	}
 	return res.json();
 }
-
-export const GITHUB_OWNER = "mutualsupply";
-export const GITHUB_REPO = "library";

@@ -2,12 +2,7 @@ import { NextApiRequest } from "next";
 import { getServerSession } from "next-auth";
 import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
-import { recoverMessageAddress } from "viem";
-import GithubClient from "../../../lib/githubClient";
-import { CaseStudy } from "../../../lib/interfaces";
-import { postCaseStudyBodySchema } from "../../../lib/schema";
 import { UnauthenticatedError } from "../../../lib/server";
-import ServerClient from "../../../lib/serverClient";
 
 export async function POST(req: Request) {
 	try {
@@ -16,6 +11,9 @@ export async function POST(req: Request) {
 		const token = await getToken({
 			req: req as unknown as NextApiRequest,
 		});
+
+		console.log("TOKEN", token);
+		console.log("SESSION", session);
 
 		if (!token || !session) {
 			throw new UnauthenticatedError(
@@ -29,39 +27,41 @@ export async function POST(req: Request) {
 			);
 		}
 
-		const json = (await req.json()) as {
-			caseStudy: CaseStudy;
-			signature?: string;
-		};
-		const caseStudy = postCaseStudyBodySchema.parse(json.caseStudy);
+		// const json = await req.json();
+		// const { signature, id, ...rest } = json;
+		// const caseStudy = postCaseStudyBodySchema.parse(rest);
 
-		let signerAddress = undefined;
-		if (json.signature) {
-			signerAddress = await recoverMessageAddress({
-				message: JSON.stringify(json.caseStudy),
-				signature: json.signature as `0x${string}`,
-			});
-		}
+		// let signerAddress = undefined;
+		// if (json.signature) {
+		// 	signerAddress = await recoverMessageAddress({
+		// 		message: JSON.stringify(json.caseStudy),
+		// 		signature: json.signature as `0x${string}`,
+		// 	});
+		// }
 
-		console.log(
-			`Creating case study: ${JSON.stringify(caseStudy)} ${
-				signerAddress ? `from address: ${signerAddress}` : ""
-			}`,
-		);
+		// console.log(
+		// 	`Creating case study: ${JSON.stringify(caseStudy)} ${
+		// 		signerAddress ? `from address: ${signerAddress}` : ""
+		// 	}`,
+		// );
 
-		// Create case study
-		const { branchName: head } = await ServerClient.createCase(
-			caseStudy,
-			session.user,
-			signerAddress,
-		);
+		// // Create case study
+		// const { githubBranchName: head } = await ServerClient.createCase(
+		// 	caseStudy,
+		// 	session.user,
+		// 	signerAddress,
+		// 	id,
+		// );
 
-		// Create PR
-		const pr = GithubClient.createPr(
-			token.accessToken as string,
-			caseStudy,
-			head,
-		);
+		// // Create PR
+		// const pr = GithubClient.createPr(
+		// 	token.accessToken as string,
+		// 	caseStudy,
+		// 	head,
+		// );
+		const head = "";
+		const caseStudy = "";
+		const pr = "";
 
 		return NextResponse.json({
 			head,

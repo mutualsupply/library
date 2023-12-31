@@ -17,6 +17,7 @@ export const caseStudyFormSchema = z.object({
 	experienceUrl: z.string().url({
 		message: "Must be a valid URL",
 	}),
+	organization: z.string().optional(),
 });
 
 export const postCaseStudyBodySchema = caseStudyFormSchema.extend({

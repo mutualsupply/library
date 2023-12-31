@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { GITHUB_OWNER, GITHUB_REPO } from "../../../lib/api";
+import { GITHUB_OWNER, GITHUB_REPO } from "../../../lib/constants";
 import env from "../../../lib/env";
 
 export async function GET() {

@@ -3,7 +3,7 @@ import { marked } from "marked";
 import { serialize } from "next-mdx-remote/serialize";
 import path from "path";
 import { Hex } from "viem";
-import { Case, CaseMetadata } from "./interfaces";
+import { CaseMetadata, CaseWithMetadata } from "./interfaces";
 
 const PATH_TO_MARKDOWN = "src/markdown";
 
@@ -36,7 +36,10 @@ export async function getCaseFromSlug(slug: string) {
 	return { ...caseFile, serialized };
 }
 
-export function getCase(pathToMarkdownDir: string, filename: string): Case {
+export function getCase(
+	pathToMarkdownDir: string,
+	filename: string,
+): CaseWithMetadata {
 	let source = fs
 		.readFileSync(path.join(pathToMarkdownDir, filename))
 		.toString("utf-8");
@@ -96,18 +99,18 @@ export function parseMarkdown(source: string): CaseMetadata {
 	};
 
 	const title = getStrongTextStartsWith("Title") as string;
-	const author = getStrongTextStartsWith("Author") as string;
+	const name = getStrongTextStartsWith("Author") as string;
 	const category = getStrongTextStartsWith("Category") as string;
-	const proofOfExperience = getStrongTextStartsWith(
+	const experienceUrl = getStrongTextStartsWith(
 		"Proof of Experience",
 	) as string;
 	const createdAt = getStrongTextStartsWith("Created") as string;
 	const address = getStrongTextStartsWith("Signed by") as Hex | undefined;
 	return {
 		title,
-		author,
+		name,
 		category,
-		proofOfExperience,
+		experienceUrl,
 		createdAt,
 		address,
 	};

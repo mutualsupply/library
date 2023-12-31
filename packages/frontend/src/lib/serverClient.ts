@@ -11,6 +11,7 @@ class ServerClientClass {
 		caseStudy: CaseStudy,
 		user: DefaultSession["user"],
 		signerAddress?: string | Hex,
+		id?: number,
 	) {
 		const res = await fetch(`${env.NEXT_PUBLIC_SERVER_BASE_URL}/case-study`, {
 			method: "POST",
@@ -22,6 +23,7 @@ class ServerClientClass {
 				caseStudy,
 				signerAddress,
 				user,
+				id,
 			}),
 		});
 		if (!res.ok) {

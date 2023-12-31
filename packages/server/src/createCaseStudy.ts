@@ -31,7 +31,8 @@ ${caseStudy.markdown ? caseStudy.markdown : ""}
 Title: **${caseStudy.title}**\n
 Author: **${caseStudy.name}** (${caseStudy.email})\n
 Category: **${caseStudy.category}**\n
-Proof of Experience: **[${caseStudy.experienceUrl}](${caseStudy.experienceUrl})**
+Proof of Experience: **[${caseStudy.experienceUrl}](${caseStudy.experienceUrl})**\n
+${caseStudy.organization ? `Organization: **${caseStudy.organization}**\n` : ""}
 Created: **${now.toISOString()}**\n
 ${address ? `\nSigned by: **${address}**` : ""}
 `;

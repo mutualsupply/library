@@ -2,14 +2,14 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { cn, startsWithFilter } from "utils";
-import { Case } from "../lib/interfaces";
+import { CaseWithMetadata } from "../lib/interfaces";
 import { categorySelectItems } from "./CreateCase";
 import LabelFilter from "./LabelFilter";
 import Search from "./icons/Search";
 import { Input } from "./ui/input";
 
 interface HomeProps {
-	cases: Array<Case>;
+	cases: Array<CaseWithMetadata>;
 }
 
 export function HomePage({ cases }: HomeProps) {
@@ -103,7 +103,7 @@ export function HomePage({ cases }: HomeProps) {
 						{(index + 1) % 2 === 0 && (
 							<div className={cn("absolute", "inset-0", "bg-tertiary/25")} />
 						)}
-						<div className={cn("text-primary")}>{caseFile.author}</div>
+						<div className={cn("text-primary")}>{caseFile.name}</div>
 					</Link>
 				))}
 			</div>

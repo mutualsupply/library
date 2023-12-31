@@ -1,6 +1,6 @@
-import { GITHUB_OWNER, GITHUB_REPO } from "./api";
-import { isProd } from "./env";
-import { CaseStudy } from "./interfaces";
+import { GITHUB_OWNER, GITHUB_REPO } from "./constants";
+import env, { isProd } from "./env";
+import { CaseStudy, GithubRefreshResponse } from "./interfaces";
 
 class GithubClass {
 	private readonly baseUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}`;
@@ -25,6 +25,36 @@ class GithubClass {
 			throw new Error("Could not create pull request");
 		}
 		return res.json();
+	}
+
+	async refreshToken(refresh_token: string): Promise<GithubRefreshResponse> {
+		console.log("Attempting to refresh token");
+		const params = new URLSearchParams({
+			client_id: env.GITHUB_ID,
+			client_secret: env.GITHUB_SECRET,
+			grant_type: "refresh_token",
+			refresh_token,
+		});
+		const res = await fetch(
+			`https://github.com/login/oauth/access_token?${params}`,
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Accept: "application/vnd.github+json",
+				},
+			},
+		);
+		if (!res.ok) {
+			throw new Error("Could not refresh token");
+		}
+		const json = await res.json();
+		if (json.error) {
+			console.error("Got an error attempting to refresh token", json.error);
+			throw new Error(json.error);
+		}
+		console.log("Successfully refreshed token");
+		return json;
 	}
 }
 
