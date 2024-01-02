@@ -32,10 +32,10 @@ ${caseStudy.markdown ? caseStudy.markdown : ""}
 Title: **${caseStudy.title}**\n
 Author: **${caseStudy.name}** (${caseStudy.email})\n
 Category: **${caseStudy.category}**\n
-Proof of Experience: **[${caseStudy.experienceUrl}](${caseStudy.experienceUrl})**\n
-${caseStudy.organization ? `Organization: **${caseStudy.organization}**\n` : ""}
-Created: **${now.toISOString()}**\n
-${address ? `Signed by: **${address}**` : ""}
+Proof of Experience: **[${caseStudy.experienceUrl}](${caseStudy.experienceUrl})**
+${caseStudy.organization ? `\nOrganization: **${caseStudy.organization}**` : ""}
+${address ? `\nSigned by: **${address}**` : ""}
+Created: **${now.toISOString()}**
 `;
 	run(`echo "${markdown}" > ${pathToFrontendPackage}/src/markdown/${slug}.mdx`);
 	run(`cd ${dirName}/${repoName} && git status`);

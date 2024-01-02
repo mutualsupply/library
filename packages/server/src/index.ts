@@ -233,7 +233,8 @@ router.post(
 
 // @next: find the case study by slug & update its accepted @ time && status
 router.post("/github/webhook", async (ctx, next) => {
-	const body = ctx.request.body;
+	const body = ctx.request.body as Record<string, unknown>;
+	console.log(body?.pull_request);
 	console.log("github hook", body);
 
 	// get slug from posted body on merged PR
