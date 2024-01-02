@@ -244,3 +244,12 @@ export interface GithubRefreshResponse {
 	scope: string;
 	token_type: string;
 }
+
+export interface GithubEmail {
+	email: string;
+	verified: boolean;
+	primary: boolean;
+	visibility: string;
+}
+
+export type GithubEmailsRepsonse = Array<GithubEmail>;

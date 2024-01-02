@@ -3,7 +3,7 @@ import GitHubProvider from "next-auth/providers/github";
 import { isExpired } from "utils";
 import env from "../../../../lib/env";
 import GithubClient from "../../../../lib/githubClient";
-import { GithubEmailsRepsonse } from "./../../../../../../server/src/interfaces";
+import { GithubEmailsRepsonse } from "../../../../lib/interfaces";
 
 const handler = NextAuth({
 	session: {
