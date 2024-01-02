@@ -8,7 +8,6 @@ import {
 	NEW_CASE_PAGE_NAME,
 } from "../lib/constants";
 import { DBCaseStudy } from "../lib/interfaces";
-import { Status, StatusIndicatorProps, StatusMap } from "./StatusIndicator";
 import { Button } from "./ui/button";
 
 export function StatusIndicator({
