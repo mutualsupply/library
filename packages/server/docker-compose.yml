@@ -14,8 +14,8 @@ services:
     volumes:
       - ./data/db:/var/lib/postgresql/data
 
-  apidev:
-    container_name: mutual-api-development
+  api:
+    container_name: mutual-api
     build:
       context: .
       target: development

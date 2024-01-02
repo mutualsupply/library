@@ -4,8 +4,8 @@ import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import * as React from "react";
 
 import { cn } from "utils";
-import Add from "../icons/Add";
 import Minus from "../icons/Minus";
+import Plus from "../icons/Plus";
 
 const Accordion = AccordionPrimitive.Root;
 
@@ -44,7 +44,7 @@ const AccordionTrigger = React.forwardRef<
 		<AccordionPrimitive.Trigger
 			ref={ref}
 			className={cn(
-				"flex flex-1 items-center justify-between text-lg group p-6 gap-2 text-left font-aspekta",
+				"flex flex-1 items-center justify-between text-lg group px-6 py-4 gap-2 text-left font-aspekta",
 				className,
 			)}
 			{...props}
@@ -52,8 +52,12 @@ const AccordionTrigger = React.forwardRef<
 			<div className="group-hover:underline">{children}</div>
 			<div className="flex items-center gap-1">
 				{leftOfIcon && leftOfIcon}
-				<Add className={cn("group-data-[state=open]:hidden")} />
-				<Minus className={cn("group-data-[state=closed]:hidden")} />
+				<Plus
+					className={cn("group-data-[state=open]:hidden w-6 text-primary")}
+				/>
+				<Minus
+					className={cn("group-data-[state=closed]:hidden w-6 text-primary")}
+				/>
 			</div>
 		</AccordionPrimitive.Trigger>
 	</AccordionPrimitive.Header>

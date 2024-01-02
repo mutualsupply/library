@@ -1,4 +1,3 @@
-import { Select } from "@radix-ui/react-select";
 import { useFormContext } from "react-hook-form";
 import {
 	FormControl,
@@ -9,6 +8,7 @@ import {
 	FormMessage,
 } from "../ui/form";
 import {
+	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
@@ -43,7 +43,12 @@ const SelectInput = ({
 			name={name}
 			render={({ field }) => (
 				<FormItem>
-					{label && <FormLabel>{label}</FormLabel>}
+					{(label || description) && (
+						<div>
+							{label && <FormLabel>{label}</FormLabel>}
+							{description && <FormDescription>{description}</FormDescription>}
+						</div>
+					)}
 					<FormControl>
 						<Select
 							onValueChange={(value) => field.onChange(value)}
@@ -61,7 +66,6 @@ const SelectInput = ({
 							</SelectContent>
 						</Select>
 					</FormControl>
-					{description && <FormDescription>{description}</FormDescription>}
 					<FormMessage />
 				</FormItem>
 			)}

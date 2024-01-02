@@ -1,30 +1,30 @@
 "use client";
 
-import Link from "next/link";
 import { useMemo, useState } from "react";
 import { cn, objectKeys } from "utils";
-import { caseTypeFilterItems } from "../lib/client";
-import { Case, CaseSource, StudyType } from "../lib/interfaces";
+import { CaseSource, CaseWithMetadata } from "../lib/interfaces";
+import { categorySelectItems } from "./CreateCase";
 import LabelFilter from "./LabelFilter";
-import { BackLink } from "./Links";
+import { BackLink, Link } from "./Links";
 import RemoteMDX from "./RemoteMDX";
+import Website from "./icons/Website";
 
 interface CaseProps {
-	cases: Array<Case>;
+	cases: Array<CaseWithMetadata>;
 	caseStudy: CaseSource;
 }
 
 export default function CasePage({ cases, caseStudy }: CaseProps) {
-	const [selectedType, setSelectedType] = useState<Array<StudyType>>([
-		caseStudy.type,
+	const [selectedCategory, setSelectedCategory] = useState<Array<string>>([
+		caseStudy.category,
 	]);
 
 	const filteredCasesByType = useMemo(() => {
-		if (selectedType.length === 0) {
+		if (selectedCategory.length === 0) {
 			return cases;
 		}
-		return cases.filter((c) => selectedType.includes(c.type));
-	}, [cases, selectedType]);
+		return cases.filter((c) => selectedCategory.includes(c.category));
+	}, [cases, selectedCategory]);
 
 	const casesByFirstLetter = filteredCasesByType.reduce(
 		(acc, currCase) => {
@@ -35,28 +35,28 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
 			acc[firstLetter].push(currCase);
 			return acc;
 		},
-		{} as Record<string, Case[]>,
+		{} as Record<string, CaseWithMetadata[]>,
 	);
 
-	const onLabelFilterClick = (label: StudyType) => {
-		if (selectedType?.includes(label)) {
-			setSelectedType(selectedType.filter((l) => l !== label));
+	const onLabelFilterClick = (label: string) => {
+		if (selectedCategory?.includes(label)) {
+			setSelectedCategory(selectedCategory.filter((l) => l !== label));
 		} else {
-			setSelectedType((selectedType || []).concat(label));
+			setSelectedCategory((selectedCategory || []).concat(label));
 		}
 	};
 	return (
 		<>
-			<div className={cn("my-5", "flex", "items-center", "gap-8")}>
-				<BackLink href={"/"}>Index</BackLink>
+			<div className={cn("mb-5", "flex", "items-center", "gap-8")}>
+				<BackLink href={"/"}>Back to Index</BackLink>
 				<LabelFilter
-					items={caseTypeFilterItems}
-					selected={selectedType}
+					items={categorySelectItems}
+					selected={selectedCategory}
 					onClick={onLabelFilterClick}
-					onClearClick={() => setSelectedType([])}
+					onClearClick={() => setSelectedCategory([])}
 				/>
 			</div>
-			<div className={cn("grid", "grid-cols-12", "grow")}>
+			<div className={cn("grid", "grid-cols-12", "grow", "gap-10")}>
 				<div className={cn("col-span-2", "flex", "flex-col", "gap-2")}>
 					{objectKeys(casesByFirstLetter).map((firstLetter, index) => (
 						<div key={`letter-${firstLetter}-${index}`}>
@@ -83,7 +83,7 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
 									>
 										<Link
 											href={`/case/${c.slug}`}
-											className={cn({
+											className={cn("text-black no-underline", {
 												"hover:text-primary": c.slug !== caseStudy.slug,
 											})}
 										>
@@ -106,39 +106,33 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
 						"grid-cols-12",
 					)}
 				>
-					<div className={cn("z-10", "relative", "p-8", "col-span-9")}>
+					<div
+						className={cn("z-10", "relative", "p-8", "col-span-9")}
+						id="remote-markdown"
+					>
 						<RemoteMDX serialized={caseStudy.serialized} />
-					</div>
-					<div className={cn("col-span-3", "relative")}>
 						<div
 							className={cn(
-								"border",
-								"border-black",
-								"border-dashed",
-								"p-8",
-								"relative",
-								"left-[34px]",
-								"flex",
-								"flex-col",
-								"gap-6",
+								"absolute top-[110px] border border-dashed border-black w-full rounded-xl p-2 inline-flex items-center justify-between",
 							)}
 						>
-							<Label title="Author" underline>
-								{caseStudy.author}
-							</Label>
-							<Label title="Organization" underline>
-								{caseStudy.organization}
-							</Label>
-							{caseStudy.address && (
-								<Label title="Address">{caseStudy.address}</Label>
-							)}
-							<Label title="Submitted">
-								{new Date(caseStudy.submittedOn).toLocaleString("en-US", {
-									month: "short",
-									day: "numeric",
+							<span>
+								Written by {caseStudy.name}{" "}
+								{caseStudy.organization
+									? `about ${caseStudy.organization} `
+									: ""}
+								on{" "}
+								{new Date(caseStudy.createdAt).toLocaleDateString("en-US", {
 									year: "numeric",
+									month: "long",
+									day: "numeric",
 								})}
-							</Label>
+							</span>
+							<span>
+								<Link href={caseStudy.experienceUrl}>
+									<Website className={cn("text-primary w-6")} />
+								</Link>
+							</span>
 						</div>
 					</div>
 					<div
@@ -157,16 +151,3 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
 		</>
 	);
 }
-
-const Label = ({
-	title,
-	children,
-	underline = false,
-}: { title?: string; children: string; underline?: boolean }) => {
-	return (
-		<div className={cn("flex", "items-center", "gap-1")}>
-			<div>{title}:</div>
-			<div className={cn({ underline: underline })}>{children}</div>
-		</div>
-	);
-};

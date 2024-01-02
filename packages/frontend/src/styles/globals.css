@@ -109,3 +109,23 @@
 div[data-milkdown-root], .milkdown {
   height: 100%;
 }
+
+.milkdown.fullscreen {
+  position: fixed;
+  inset: 0;
+  overflow-y: scroll;
+}
+
+.ProseMirror[data-placeholder]::before {
+  color: #a9a9a9;
+  position: absolute;
+  content: attr(data-placeholder);
+  pointer-events: none;
+  font-size: 16px;
+  /* Using default height value of p element in chrome */
+  line-height: 28px;
+}
+
+#remote-markdown > h1 {
+  margin-bottom: 100px;
+}

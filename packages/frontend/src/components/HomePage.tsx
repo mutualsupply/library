@@ -2,21 +2,20 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { cn, startsWithFilter } from "utils";
-import { caseTypeFilterItems } from "../lib/client";
-import { Case, StudyType } from "../lib/interfaces";
-import AlphaToggle from "./AlphaToggle";
+import { CaseWithMetadata } from "../lib/interfaces";
+import { categorySelectItems } from "./CreateCase";
 import LabelFilter from "./LabelFilter";
-import { Input } from "./ui/input";
 import Search from "./icons/Search";
+import { Input } from "./ui/input";
 
 interface HomeProps {
-	cases: Array<Case>;
+	cases: Array<CaseWithMetadata>;
 }
 
 export function HomePage({ cases }: HomeProps) {
-	const [selectedChar, setSelectedChar] = useState<undefined | Array<string>>();
-	const [selectedLabel, setSelectedLabel] = useState<Array<StudyType>>([]);
-	const onLabelFilterClick = (label: StudyType) => {
+	const [search, setSearch] = useState<undefined | Array<string>>();
+	const [selectedLabel, setSelectedLabel] = useState<Array<string>>([]);
+	const onLabelFilterClick = (label: string) => {
 		if (selectedLabel?.includes(label)) {
 			setSelectedLabel(selectedLabel.filter((l) => l !== label));
 		} else {
@@ -27,33 +26,45 @@ export function HomePage({ cases }: HomeProps) {
 	const filteredData = useMemo(() => {
 		const labelFilteredData = cases.filter((d) => {
 			if (selectedLabel.length > 0) {
-				return selectedLabel.some((label) => d.type.includes(label));
+				return selectedLabel.some((label) => d.category.includes(label));
 			}
 			return true;
 		});
 		return startsWithFilter(
 			labelFilteredData,
-			selectedChar ? selectedChar.join("") : "",
+			search ? search.join("") : "",
 			"title",
 		);
-	}, [selectedLabel, selectedChar, cases]);
+	}, [selectedLabel, search, cases]);
 
 	return (
 		<>
-			<div className={cn("mb-12", "mt-8", "flex", "items-center", "gap-8")}>
-				<Input
-					placeholder="Search"
-					leftOfInput={<Search className="h-6 w-6" />}
-					className="w-full md:w-96"
-				/>
+			<div
+				className={cn(
+					"mb-12",
+					"mt-8",
+					"md:flex",
+					"items-center",
+					"md:justify-end",
+					"lg:justify-between",
+					"gap-8",
+				)}
+			>
 				<div className="hidden lg:block">
 					<LabelFilter
-						items={caseTypeFilterItems}
+						items={categorySelectItems}
 						selected={selectedLabel}
 						onClick={onLabelFilterClick}
 						onClearClick={() => setSelectedLabel([])}
 					/>
 				</div>
+				<Input
+					value={search}
+					onChange={(e) => setSearch(e.target.value.split(" "))}
+					placeholder="Search"
+					leftOfInput={<Search className="h-5 w-5" />}
+					className="w-full md:w-96 text-sm"
+				/>
 			</div>
 			<div className={cn("flex", "flex-col")}>
 				{filteredData.map((caseFile, index) => (
@@ -81,17 +92,18 @@ export function HomePage({ cases }: HomeProps) {
 								"group-hover:text-primary",
 							)}
 						>
-							<span className={cn("text-sm")}>{index + 1}</span>
-							<span className={cn("text-4xl", "font-otBrut")}>
+							<span className={cn("text-sm font-spline")}>
+								<span>{index < 10 && "0"}</span>
+								{index + 1}
+							</span>
+							<span className={cn("text-2xl", "font-otBrut")}>
 								{caseFile.title}
 							</span>
 						</div>
 						{(index + 1) % 2 === 0 && (
 							<div className={cn("absolute", "inset-0", "bg-tertiary/25")} />
 						)}
-						<div className={cn("hidden", "group-hover:block")}>
-							{caseFile.organization}
-						</div>
+						<div className={cn("text-primary")}>{caseFile.name}</div>
 					</Link>
 				))}
 			</div>

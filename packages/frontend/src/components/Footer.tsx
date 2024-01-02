@@ -12,8 +12,8 @@ export default function Footer() {
 					height={24}
 					src="/images/apple.gif"
 				/>
-				<div>
-					Manifested by <Badge>MUTUAL</Badge>
+				<div className="font-aspekta text-sm">
+					manifested by <Badge>MUTUAL</Badge>
 				</div>
 			</div>
 		</div>

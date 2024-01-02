@@ -1,8 +1,13 @@
 import fs from "fs";
 import { marked } from "marked";
+import { Session, getServerSession } from "next-auth";
+import { JWT, getToken } from "next-auth/jwt";
 import { serialize } from "next-mdx-remote/serialize";
+import { NextRequest } from "next/server";
 import path from "path";
-import { Case, CaseMetadata, StudyType } from "./interfaces";
+import { isExpired } from "utils";
+import { Hex } from "viem";
+import { CaseMetadata, CaseWithMetadata } from "./interfaces";
 
 const PATH_TO_MARKDOWN = "src/markdown";
 
@@ -35,7 +40,10 @@ export async function getCaseFromSlug(slug: string) {
 	return { ...caseFile, serialized };
 }
 
-export function getCase(pathToMarkdownDir: string, filename: string): Case {
+export function getCase(
+	pathToMarkdownDir: string,
+	filename: string,
+): CaseWithMetadata {
 	let source = fs
 		.readFileSync(path.join(pathToMarkdownDir, filename))
 		.toString("utf-8");
@@ -53,27 +61,6 @@ export function getCase(pathToMarkdownDir: string, filename: string): Case {
 		source,
 		...parsed,
 	};
-}
-
-function getAllSlugs() {
-	const filenames = getAllCaseFileNames();
-	return filenames.map((file) => file.split(".mdx")[0]);
-}
-
-export function createSlug(title: string) {
-	const allSlugs = getAllSlugs();
-	let slug = title
-		.toLowerCase()
-		.replace(/[^a-z0-9]+/g, "-")
-		.replace(/^-|-$/g, "");
-	const originalSlug = slug;
-
-	let count = 1;
-	while (allSlugs.includes(slug)) {
-		slug = `${originalSlug}-${count}`;
-		count++;
-	}
-	return slug;
 }
 
 export function parseMarkdown(source: string): CaseMetadata {
@@ -94,24 +81,28 @@ export function parseMarkdown(source: string): CaseMetadata {
 		return text;
 	};
 
-	const { text: title } = tokens.find(
-		(token) => token.type === "heading" && token.depth === 1,
-	) as marked.Tokens.Heading;
+	const title = getStrongTextStartsWith("Title") as string;
+	const name = getStrongTextStartsWith("Author") as string;
+	const category = getStrongTextStartsWith("Category") as string;
+	const url = getStrongTextStartsWith("Proof of Experience") as string;
 
-	const organization = getStrongTextStartsWith("Organization") as string;
-	const type = getStrongTextStartsWith("Type") as StudyType;
-	const author = getStrongTextStartsWith("Authored by") as string;
-	const submittedOn = getStrongTextStartsWith("Submitted on") as string;
-	const address = getStrongTextStartsWith("Address") as
-		| `0x${string}`
+	const start = url.lastIndexOf("(") + 1; // Find the position of the last '(' and add 1 to start after it
+	const end = url.lastIndexOf(")");
+	const experienceUrl = url.substring(start, end); // Extract the substring between the start and end positions
+
+	const createdAt = getStrongTextStartsWith("Created") as string;
+	const address = getStrongTextStartsWith("Signed by") as Hex | undefined;
+	const organization = getStrongTextStartsWith("Organization") as
+		| string
 		| undefined;
 	return {
 		title,
-		organization,
-		type,
-		author,
-		submittedOn,
+		name,
+		category,
+		experienceUrl,
+		createdAt,
 		address,
+		organization,
 	};
 }
 
@@ -119,4 +110,31 @@ export class UnauthenticatedError extends Error {
 	constructor(msg?: string) {
 		super(msg || "Must be authenticated");
 	}
+}
+
+interface SessionWithEmail extends Session {
+	user: { email: string; name?: string | null; image?: string | null };
+}
+
+export async function getAuth(req: NextRequest): Promise<{
+	session: SessionWithEmail;
+	token: JWT;
+}> {
+	// We require the email in nextauth callbacks so we assert it will always be set here
+	const session = (await getServerSession()) as SessionWithEmail;
+	const token = await getToken({
+		req,
+	});
+	// Email is required throughout the app
+	if (!session?.user || !session?.user?.email || !token?.accessToken) {
+		throw new UnauthenticatedError();
+	}
+
+	if (isExpired(token?.accessToken as number)) {
+		throw new UnauthenticatedError();
+	}
+	return {
+		session,
+		token,
+	};
 }

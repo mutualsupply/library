@@ -1,34 +1,83 @@
 import cors from "@koa/cors";
 import multer from "@koa/multer";
-import { ENV, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import Koa, { Context } from "koa";
 import bodyParser from "koa-bodyparser";
 import json from "koa-json";
 import logger from "koa-logger";
 import Router from "koa-router";
-import createCaseStudy from "./createCaseStudy";
-import env from "./env";
-import { PostCaseStudyRequestBody } from "./interfaces";
-import Media from "./media";
-import prisma from "./prismaClient";
+import { createSlug, upsertUser } from "./lib/caseStudy";
+import createCaseStudy from "./lib/createCaseStudy";
+import env from "./lib/env";
+import { PostCaseStudyRequestBody } from "./lib/interfaces";
+import Media from "./lib/media";
+import prisma from "./lib/prismaClient";
 
 const app = new Koa();
 const router = new Router();
 const upload = multer({ dest: "uploads/" });
 
+const allowedOrigins = [
+	"http://localhost:3000",
+	"https://dev.research.mutual.supply",
+	"https://research.mutual.supply",
+];
+
 app.use(json());
 app.use(bodyParser());
 app.use(logger());
-app.use(cors());
+app.use(
+	cors({
+		origin: (ctx) => {
+			if (
+				ctx.request.header.origin &&
+				allowedOrigins.includes(ctx.request.header.origin)
+			) {
+				return ctx.request.header.origin;
+			}
+			return "";
+		},
+	}),
+);
 app.use(router.routes());
 app.use(router.allowedMethods());
 
 app.listen(env.PORT, () => {
-	console.log(`server is running at ${env.PORT}`);
+	console.log(`[app] running at port: ${env.PORT}`);
 });
 
 router.get("/", async (ctx, next) => {
-	ctx.body = { message: "🍎" };
+	ctx.body = { message: "👓" };
+	await next();
+});
+
+router.get("/status", async (ctx, next) => {
+	ctx.body = { status: "ok", time: new Date() };
+	await next();
+});
+
+router.post("/draft", async (ctx, next) => {
+	const { caseStudy, user } = ctx.request.body as PostCaseStudyRequestBody;
+	const { email } = user;
+	if (!email) {
+		ctx.status = 401;
+		ctx.body = "User must have an email to publish a case study";
+		ctx.app.emit(
+			"error",
+			new Error("User must have an email to publish a case study"),
+			ctx,
+		);
+		return await next();
+	}
+
+	const dbUser = await upsertUser(user);
+	const draft = await prisma.caseStudy.create({
+		data: {
+			userId: dbUser.id,
+			content: caseStudy as unknown as Prisma.InputJsonValue,
+		},
+	});
+	ctx.body = draft;
 	await next();
 });
 
@@ -47,7 +96,7 @@ router.get("/draft/:email", async (ctx, next) => {
 		update: {},
 	});
 	const drafts = await prisma.caseStudy.findMany({
-		where: { userId: user.id, isDraft: true },
+		where: { userId: user.id },
 		orderBy: { createdAt: "desc" },
 	});
 
@@ -55,34 +104,45 @@ router.get("/draft/:email", async (ctx, next) => {
 	await next();
 });
 
-router.post("/draft", async (ctx, next) => {
-	const { isProd, caseStudy, user } = ctx.request
-		.body as PostCaseStudyRequestBody;
+router.post("/draft/update/:id", async (ctx, next) => {
+	const { id } = ctx.params;
+	const { caseStudy, user } = ctx.request.body as PostCaseStudyRequestBody;
 	const { email } = user;
-	const dbUser = await prisma.user.upsert({
-		where: { email },
-		update: {},
-		create: { email },
+	if (!email) {
+		ctx.status = 401;
+		ctx.body = "User must have an email to publish a case study";
+		ctx.app.emit(
+			"error",
+			new Error("User must have an email to publish a case study"),
+			ctx,
+		);
+		return await next();
+	}
+
+	const draft = await prisma.caseStudy.findFirst({
+		where: { id: Number(id), user: { email } },
 	});
-	const drafts = await prisma.caseStudy.create({
+
+	if (!draft) {
+		ctx.status = 404;
+		ctx.body = "Draft not found";
+		ctx.app.emit("error", new Error("Draft not found"), ctx);
+		return await next();
+	}
+
+	const updatedDraft = await prisma.caseStudy.update({
+		where: { id: Number(id) },
 		data: {
-			userId: dbUser.id,
 			content: caseStudy as unknown as Prisma.InputJsonValue,
-			env: isProd ? ENV.PROD : ENV.DEV,
-			isDraft: true,
 		},
 	});
-	ctx.body = drafts;
-	await next();
-});
 
-router.get("/status", async (ctx, next) => {
-	ctx.body = { status: "ok", time: new Date() };
+	ctx.body = updatedDraft;
 	await next();
 });
 
 router.post("/case-study", async (ctx, next) => {
-	const { caseStudy, user, isProd, slug, address } = ctx.request
+	const { caseStudy, user, signerAddress, id } = ctx.request
 		.body as PostCaseStudyRequestBody;
 	if (!user.email) {
 		ctx.status = 401;
@@ -92,62 +152,80 @@ router.post("/case-study", async (ctx, next) => {
 			new Error("User must have an email to publish a case study"),
 			ctx,
 		);
-	} else {
+		return await next();
+	}
+
+	const dbUser = await upsertUser(user);
+
+	if (id) {
+		const draft = await prisma.caseStudy.findFirst({
+			where: { id: Number(id), user: { id: dbUser.id } },
+		});
+		if (!draft) {
+			ctx.status = 404;
+			ctx.body = "Draft not found";
+			ctx.app.emit("error", new Error("Draft not found"), ctx);
+			return await next();
+		}
+	}
+
+	const slug = await createSlug(caseStudy);
+	let githubBranchName: string;
+	try {
 		const { branchName } = createCaseStudy(
 			user,
 			caseStudy,
-			isProd,
 			slug,
-			address,
+			signerAddress,
 		);
+		githubBranchName = branchName;
+	} catch (e) {
+		ctx.status = 500;
+		ctx.body = "Could not create case study";
+		ctx.app.emit("error", new Error("Could not create case study"), ctx);
+		return await next();
+	}
 
-		const dbUser = await prisma.user.upsert({
-			where: { email: user.email },
-			update: {
-				name: user.name,
-				email: user.email,
-			},
-			create: {
-				name: user.name,
-				email: user.email,
+	let dbCaseStudy;
+	if (id) {
+		dbCaseStudy = await prisma.caseStudy.update({
+			where: { id: Number(id) },
+			data: {
+				content: caseStudy as unknown as Prisma.InputJsonValue,
+				submitted: true,
+				githubBranchName,
+				signerAddress,
+				slug,
 			},
 		});
-
-		await prisma.caseStudy.create({
+	} else {
+		dbCaseStudy = await prisma.caseStudy.create({
 			data: {
 				userId: dbUser.id,
-				content: JSON.stringify(caseStudy),
-				env: isProd ? ENV.PROD : ENV.DEV,
+				content: caseStudy as unknown as Prisma.InputJsonValue,
+				submitted: true,
+				githubBranchName,
+				signerAddress,
 				slug,
-				address,
 			},
 		});
-		ctx.body = { branchName };
-		await next();
 	}
+
+	ctx.body = dbCaseStudy;
+	await next();
 });
 
 router.post(
 	"/media",
 	upload.fields([{ name: "files", maxCount: 10 }]),
 	async (ctx: Context, next) => {
-		const validOrigins = [
-			"http://localhost:3000",
-			"https://dev.research.mutual.supply",
-			"https://research.mutual.supply",
-		];
-		const origin = ctx.request.get("origin");
-		if (!validOrigins.includes(origin)) {
-			throw new Error("Invalid origin");
-		}
-		//@ts-ignore
+		// @ts-expect-error
 		const files = ctx.request.files?.files;
 		if (!files || !Array.isArray(files)) {
 			throw new Error("No files");
 		}
 		const promises = files.map((file) => Media.upload(file));
 		const res = await Promise.all(promises);
-		console.log("res", res);
 		ctx.body = res;
 		await next();
 	},

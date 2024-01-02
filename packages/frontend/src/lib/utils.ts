@@ -10,7 +10,7 @@ export const objectKeys = <Obj>(obj: Obj): (keyof Obj)[] => {
 	return Object.keys(obj as object) as (keyof Obj)[];
 };
 
-export function shortenAddress(address?: Hex, chars = 4): string {
+export function shortenAddress(address?: Hex | string, chars = 4): string {
 	if (!address) {
 		return "";
 	}
@@ -33,7 +33,7 @@ export function startsWithFilter<T, K extends keyof T>(
 	query: string,
 	key: K,
 ) {
-	return items.filter(function (item) {
+	return items.filter((item) => {
 		if (typeof item[key] === "string") {
 			const itemLower = (item[key] as string).toLowerCase();
 			return itemLower.startsWith(query.toLowerCase());
@@ -48,4 +48,13 @@ export function jsonify(anything: any) {
 
 export function randomInclusive(max: number) {
 	return Math.floor(Math.random() * (max + 1));
+}
+
+export default function sleep(sec: number) {
+	return new Promise((resolve) => {
+		setTimeout(resolve, sec * 1000);
+	});
+}
+export function isExpired(epochSeconds: number) {
+	return Date.now() / 1000 > epochSeconds;
 }
