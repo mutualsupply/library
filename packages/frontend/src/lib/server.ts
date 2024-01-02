@@ -84,11 +84,17 @@ export function parseMarkdown(source: string): CaseMetadata {
 	const title = getStrongTextStartsWith("Title") as string;
 	const name = getStrongTextStartsWith("Author") as string;
 	const category = getStrongTextStartsWith("Category") as string;
-	const experienceUrl = getStrongTextStartsWith(
-		"Proof of Experience",
-	) as string;
+	const url = getStrongTextStartsWith("Proof of Experience") as string;
+
+	const start = url.lastIndexOf("(") + 1; // Find the position of the last '(' and add 1 to start after it
+	const end = url.lastIndexOf(")");
+	const experienceUrl = url.substring(start, end); // Extract the substring between the start and end positions
+
 	const createdAt = getStrongTextStartsWith("Created") as string;
 	const address = getStrongTextStartsWith("Signed by") as Hex | undefined;
+	const organization = getStrongTextStartsWith("Organization") as
+		| string
+		| undefined;
 	return {
 		title,
 		name,
@@ -96,6 +102,7 @@ export function parseMarkdown(source: string): CaseMetadata {
 		experienceUrl,
 		createdAt,
 		address,
+		organization,
 	};
 }
 

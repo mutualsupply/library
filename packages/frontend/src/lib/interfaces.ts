@@ -32,7 +32,10 @@ export interface DBCaseStudy {
 }
 
 export interface CaseMetadata
-	extends Pick<CaseStudy, "title" | "name" | "category" | "experienceUrl"> {
+	extends Pick<
+		CaseStudy,
+		"title" | "name" | "category" | "experienceUrl" | "organization"
+	> {
 	createdAt: DateTime;
 	address?: `0x${string}`;
 }

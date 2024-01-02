@@ -10,7 +10,14 @@ export default function RemoteMDX({
 		<MDXRemote
 			components={{
 				h1: ({ children }) => (
-					<h1 className={cn("text-primary", "font-otBrut", "text-6xl")}>
+					<h1
+						className={cn(
+							"text-primary",
+							"font-otBrut",
+							"text-5xl",
+							"font-normal",
+						)}
+					>
 						{children}
 					</h1>
 				),

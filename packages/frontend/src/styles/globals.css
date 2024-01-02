@@ -125,3 +125,7 @@ div[data-milkdown-root], .milkdown {
   /* Using default height value of p element in chrome */
   line-height: 28px;
 }
+
+#remote-markdown > h1 {
+  margin-bottom: 100px;
+}
