@@ -35,7 +35,7 @@ Category: **${caseStudy.category}**\n
 Proof of Experience: **[${caseStudy.experienceUrl}](${caseStudy.experienceUrl})**
 ${caseStudy.organization ? `\nOrganization: **${caseStudy.organization}**` : ""}
 ${address ? `\nSigned by: **${address}**` : ""}
-Created: **${now.toISOString()}**
+\nCreated: **${now.toISOString()}**
 `;
 	run(`echo "${markdown}" > ${pathToFrontendPackage}/src/markdown/${slug}.mdx`);
 	run(`cd ${dirName}/${repoName} && git status`);
