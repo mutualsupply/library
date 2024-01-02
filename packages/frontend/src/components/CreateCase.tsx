@@ -16,7 +16,6 @@ import {
 	GITHUB_REPO,
 	NEW_CASE_PAGE_NAME,
 } from "../lib/constants";
-import { isProd } from "../lib/env";
 import { CaseStudy, DBCaseStudy } from "../lib/interfaces";
 import { caseStudyFormSchema } from "../lib/schema";
 import MilkdownEditor from "./MilkdownEditor/MilkdownEditor";
@@ -64,25 +63,14 @@ export default function CreateCasePage({ draft }: CreateCaseProps) {
 
 	let defaultValues = draft?.content;
 	if (!defaultValues) {
-		if (isProd()) {
-			defaultValues = {
-				title: "",
-				name: session?.user?.name || "",
-				email: session?.user?.email || "",
-				category: "",
-				experienceUrl: "",
-				organization: "",
-			};
-		} else {
-			defaultValues = {
-				title: "How to make a Case Study",
-				name: session?.user?.name || "",
-				email: session?.user?.email || "",
-				category: "social",
-				experienceUrl: "https://dev.mutual.supply",
-				organization: "MUTUAL",
-			};
-		}
+		defaultValues = {
+			title: "",
+			name: session?.user?.name || "",
+			email: session?.user?.email || "",
+			category: "",
+			experienceUrl: "",
+			organization: "",
+		};
 	}
 
 	const form = useForm({
