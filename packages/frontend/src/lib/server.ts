@@ -63,27 +63,6 @@ export function getCase(
 	};
 }
 
-function getAllSlugs() {
-	const filenames = getAllCaseFileNames();
-	return filenames.map((file) => file.split(".mdx")[0]);
-}
-
-export function createSlug(title: string) {
-	const allSlugs = getAllSlugs();
-	let slug = title
-		.toLowerCase()
-		.replace(/[^a-z0-9]+/g, "-")
-		.replace(/^-|-$/g, "");
-	const originalSlug = slug;
-
-	let count = 1;
-	while (allSlugs.includes(slug)) {
-		slug = `${originalSlug}-${count}`;
-		count++;
-	}
-	return slug;
-}
-
 export function parseMarkdown(source: string): CaseMetadata {
 	const lexer = new marked.Lexer();
 	const tokens = lexer.lex(source);

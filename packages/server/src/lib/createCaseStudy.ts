@@ -23,6 +23,7 @@ function createCaseStudy(
 		`GIT_SSH_COMMAND="ssh -i /root/.ssh/id_ed25519" git clone git@github.com:mutualsupply/${repoName}.git ${dirName}/${repoName}`,
 	);
 	run(`cd ${dirName}/${repoName} && git checkout ${env.GITHUB_BRANCH}`);
+
 	const markdown = `# ${caseStudy.title}
 
 ${caseStudy.markdown ? caseStudy.markdown : ""}
@@ -34,7 +35,7 @@ Category: **${caseStudy.category}**\n
 Proof of Experience: **[${caseStudy.experienceUrl}](${caseStudy.experienceUrl})**\n
 ${caseStudy.organization ? `Organization: **${caseStudy.organization}**\n` : ""}
 Created: **${now.toISOString()}**\n
-${address ? `\nSigned by: **${address}**` : ""}
+${address ? `Signed by: **${address}**` : ""}
 `;
 	run(`echo "${markdown}" > ${pathToFrontendPackage}/src/markdown/${slug}.mdx`);
 	run(`cd ${dirName}/${repoName} && git status`);

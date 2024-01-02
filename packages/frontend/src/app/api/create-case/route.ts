@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { recoverMessageAddress } from "viem";
+import { isExpired } from "utils";
+import { Hex, recoverMessageAddress } from "viem";
 import GithubClient from "../../../lib/githubClient";
 import { postCaseStudyBodySchema } from "../../../lib/schema";
 import { UnauthenticatedError, getAuth } from "../../../lib/server";
@@ -12,12 +13,11 @@ export async function POST(req: NextRequest) {
 		const json = await req.json();
 		const { signature, id, ...rest } = json;
 		const caseStudy = postCaseStudyBodySchema.parse(rest);
-
 		let signerAddress = undefined;
 		if (json.signature) {
 			signerAddress = await recoverMessageAddress({
-				message: JSON.stringify(json.caseStudy),
-				signature: json.signature as `0x${string}`,
+				message: JSON.stringify(caseStudy),
+				signature: json.signature as Hex,
 			});
 		}
 
@@ -27,24 +27,30 @@ export async function POST(req: NextRequest) {
 			}`,
 		);
 
-		// Create case study
-		const { githubBranchName: head } = await ServerClient.createCase(
+		const dbCaseStudy = await ServerClient.createCase(
 			caseStudy,
 			session.user,
 			signerAddress,
 			id,
 		);
 
-		// Create PR
-		const pr = GithubClient.createPr(
+		if (token.expiresAt && isExpired(token.expiresAt as number)) {
+			return NextResponse.json(
+				{
+					error: "Token expired",
+				},
+				{ status: 401 },
+			);
+		}
+
+		const pr = await GithubClient.createPr(
 			token.accessToken as string,
 			caseStudy,
-			head,
+			dbCaseStudy.githubBranchName as string,
 		);
 
 		return NextResponse.json({
-			head,
-			caseStudy,
+			caseStudy: dbCaseStudy,
 			pr,
 		});
 	} catch (e) {

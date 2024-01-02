@@ -2,7 +2,6 @@ import { DefaultSession } from "next-auth";
 import { Hex } from "viem";
 import env from "./env";
 import { CaseStudy, DBCaseStudy } from "./interfaces";
-import { createSlug } from "./server";
 
 class ServerClientClass {
 	private readonly baseUrl = env.NEXT_PUBLIC_SERVER_BASE_URL;
@@ -12,14 +11,13 @@ class ServerClientClass {
 		user: DefaultSession["user"],
 		signerAddress?: string | Hex,
 		id?: number,
-	) {
-		const res = await fetch(`${env.NEXT_PUBLIC_SERVER_BASE_URL}/case-study`, {
+	): Promise<DBCaseStudy> {
+		const res = await fetch(`${this.baseUrl}/case-study`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({
-				slug: createSlug(caseStudy.title),
 				caseStudy,
 				signerAddress,
 				user,
@@ -35,7 +33,7 @@ class ServerClientClass {
 
 	async getDrafts(email: string): Promise<Array<DBCaseStudy>> {
 		const res = await fetch(
-			`${env.NEXT_PUBLIC_SERVER_BASE_URL}/draft/${encodeURIComponent(email)}`,
+			`${this.baseUrl}/draft/${encodeURIComponent(email)}`,
 			{
 				method: "GET",
 				headers: {

@@ -1,8 +1,7 @@
 import * as AWS from "@aws-sdk/client-s3";
-import env from "./env";
 import multer from "@koa/multer";
-import { join } from "path";
-import { createReadStream, readFileSync } from "fs";
+import { createReadStream } from "fs";
+import env from "./env";
 
 class MediaClass {
 	cdnBaseUrl = "https://media.mutual.supply";

@@ -197,7 +197,7 @@ const Submit = () => {
 					</div>
 
 					{drafts && drafts.length > 0 && (
-						<div className={cn("mt-6")}>
+						<div className={cn("mt-6 max-h-72 overflow-y-scroll")}>
 							{drafts.map((draft, index) => (
 								<div
 									key={`draft-${draft.id}`}
@@ -207,7 +207,7 @@ const Submit = () => {
 									)}
 								>
 									<div className={cn("text-sm")}>{draft.content?.title}</div>
-									<StatusIndicator draft={draft} />
+									<StatusIndicator caseStudy={draft} />
 								</div>
 							))}
 						</div>
@@ -245,11 +245,15 @@ const StatusMap = {
 };
 
 interface StatusIndicatorProps {
-	draft: DBCaseStudy;
+	caseStudy: DBCaseStudy;
+	showButton?: boolean;
 }
 
-function StatusIndicator({ draft }: StatusIndicatorProps) {
-	const { submitted, approved } = draft;
+export function StatusIndicator({
+	caseStudy,
+	showButton = true,
+}: StatusIndicatorProps) {
+	const { submitted, approved } = caseStudy;
 	let status = Status.Approved;
 
 	if (!submitted) {
@@ -316,9 +320,11 @@ function StatusIndicator({ draft }: StatusIndicatorProps) {
 					<span className={cn("text-xs font-aspekta")}>{text}</span>
 				</div>
 			</span>
-			<span className={cn("flex items-center")}>
-				{renderButton(status, draft)}
-			</span>
+			{showButton && (
+				<span className={cn("flex items-center")}>
+					{renderButton(status, caseStudy)}
+				</span>
+			)}
 		</div>
 	);
 }

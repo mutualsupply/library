@@ -6,6 +6,10 @@ class GithubClass {
 	private readonly baseUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}`;
 
 	async createPr(accessToken: string, caseStudy: CaseStudy, head: string) {
+		let body = `${caseStudy.title} by ${caseStudy.email}`;
+		if (caseStudy.experienceUrl) {
+			body += `\n\n[Experience](${caseStudy.experienceUrl})`;
+		}
 		const res = await fetch(`${this.baseUrl}/pulls`, {
 			method: "POST",
 			headers: {
@@ -16,12 +20,14 @@ class GithubClass {
 			},
 			body: JSON.stringify({
 				title: `Submission: ${caseStudy.title}`,
-				body: `${caseStudy.title} by ${caseStudy.email}\n\n[Link](${caseStudy.experienceUrl})`,
 				base: isProd() ? "main" : "dev",
+				body,
 				head,
 			}),
 		});
 		if (!res.ok) {
+			const text = await res.text();
+			console.error("Could not create pull request", text);
 			throw new Error("Could not create pull request");
 		}
 		return res.json();

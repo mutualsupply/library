@@ -48,16 +48,15 @@ export interface CaseSource extends CaseWithMetadata {
 }
 
 export interface CreateNewCaseStudyResponse {
-	head: string;
-	caseStudy: CaseStudy;
-	pr: PR;
+	caseStudy: DBCaseStudy;
+	pr: GithubPR;
 }
 export interface PostCaseStudyBody extends CaseStudy {
 	signature?: string;
 	id?: number;
 }
 
-export interface PR {
+export interface GithubPR {
 	url: string;
 	id: number;
 	node_id: string;

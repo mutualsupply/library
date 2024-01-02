@@ -242,6 +242,9 @@ importers:
       multer:
         specifier: 1.4.5-lts.1
         version: 1.4.5-lts.1
+      slugify:
+        specifier: ^1.6.6
+        version: 1.6.6
     devDependencies:
       '@types/koa':
         specifier: ^2.13.6
@@ -11201,6 +11204,11 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       unicode-emoji-modifier-base: 1.0.0
+    dev: false
+
+  /slugify@1.6.6:
+    resolution: {integrity: sha512-h+z7HKHYXj6wJU+AnS/+IH8Uh9fdcX1Lrhg1/VMdf9PwoBQXFcXiAdsy2tSK0P6gKwJLXp02r90ahUCqHk9rrw==}
+    engines: {node: '>=8.0.0'}
     dev: false
 
   /sonic-boom@2.8.0:
