@@ -232,7 +232,6 @@ export default function CreateCasePage({ draft }: CreateCaseProps) {
 							<div className={cn("col-span-4 flex flex-col")}>
 								<MilkdownEditor
 									defaultValue={draft?.content?.markdown}
-									placeholder="Testing"
 									onChange={setMarkdown}
 								/>
 							</div>

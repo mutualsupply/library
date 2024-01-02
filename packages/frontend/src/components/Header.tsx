@@ -29,8 +29,8 @@ export default function Header() {
 					<Image
 						src={"/images/glasses.png"}
 						alt={"s/o blackboard"}
-						width={91}
-						height={48}
+						width={76}
+						height={40}
 					/>
 				</Link>
 			</div>

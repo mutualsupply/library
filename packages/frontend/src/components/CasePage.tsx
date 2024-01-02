@@ -113,7 +113,7 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
 						<RemoteMDX serialized={caseStudy.serialized} />
 						<div
 							className={cn(
-								"absolute top-[110px] border border-dashed border-black w-full rounded-xl p-2 inline-flex items-center justify-between",
+								"absolute top-[110px] border border-dashed border-black w-full rounded-xl p-2 inline-flex items-center justify-between bg-background",
 							)}
 						>
 							<span>

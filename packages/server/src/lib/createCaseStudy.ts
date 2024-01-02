@@ -43,7 +43,7 @@ ${address ? `\nSigned by: **${address}**` : ""}
 	run(`cd ${dirName}/${repoName} && git checkout ${branchName}`);
 	run(`cd ${dirName}/${repoName} && git add .`);
 	run(
-		`cd ${dirName}/${repoName} && git commit -m 'testing' --author "${user.name} <${user.email}>" `,
+		`cd ${dirName}/${repoName} && git commit -m 'New case study: ${caseStudy.title}' --author "${user.name} <${user.email}>" `,
 	);
 	run(`cd ${dirName}/${repoName} && git push origin -u ${branchName} -f`);
 	run(`rm -rf ${dirName}`);

@@ -75,7 +75,8 @@ export function HomePage({ cases }: HomeProps) {
 							"p-6",
 							"relative",
 							"group",
-							"hover:text-primary",
+							"hover:text-white",
+							"hover:bg-primary",
 							"flex",
 							"items-center",
 							"justify-between",
@@ -89,7 +90,6 @@ export function HomePage({ cases }: HomeProps) {
 								"gap-4",
 								"items-center",
 								"relative",
-								"group-hover:text-primary",
 							)}
 						>
 							<span className={cn("text-sm font-spline")}>
@@ -103,7 +103,9 @@ export function HomePage({ cases }: HomeProps) {
 						{(index + 1) % 2 === 0 && (
 							<div className={cn("absolute", "inset-0", "bg-tertiary/25")} />
 						)}
-						<div className={cn("text-primary")}>{caseFile.name}</div>
+						<div className={cn("text-primary group-hover:text-white")}>
+							{caseFile.name}
+						</div>
 					</Link>
 				))}
 			</div>
