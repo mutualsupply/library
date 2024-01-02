@@ -14,11 +14,13 @@ services:
     volumes:
       - ./data/db:/var/lib/postgresql/data
 
-  apidev:
-    container_name: mutual-api-development
+  api:
+    container_name: mutual-api
     build:
       context: .
       target: development
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
     volumes:
       - ./:/usr/src/app
       - /usr/src/app/node_modules

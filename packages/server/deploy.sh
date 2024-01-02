@@ -1,3 +1,0 @@
-set -eu
-
-fly deploy

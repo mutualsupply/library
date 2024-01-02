@@ -6,15 +6,23 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "pnpm --stream -r run dev",
-    "format": "pnpm -r run format",
+    "format": "pnpm dlx @biomejs/biome format . --write",
     "pre-commit": "pnpm format",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "server:deploy": "cd packages/server && ./deploy.sh"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "husky": "^8.0.3",
-    "rome": "12.0.0"
+    "@biomejs/biome": "1.4.1",
+    "husky": "^8.0.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "axios@>=0.8.1 <1.6.0": ">=1.6.0",
+      "@koa/cors@<5.0.0": ">=5.0.0",
+      "octokit@<3.1.2": ">=3.1.2"
+    }
   }
 }

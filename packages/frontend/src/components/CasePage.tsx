@@ -1,177 +1,153 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { useMemo, useState } from "react"
-import { cn } from "utils"
-import { getCaseLabelItems } from "../lib/client"
-import { Case, CaseSource } from "../lib/interfaces"
-import LabelFilter from "./LabelFilter"
-import RemoteMDX from "./RemoteMDX"
-import { BackLink } from "./Links"
+import { useMemo, useState } from "react";
+import { cn, objectKeys } from "utils";
+import { CaseSource, CaseWithMetadata } from "../lib/interfaces";
+import { categorySelectItems } from "./CreateCase";
+import LabelFilter from "./LabelFilter";
+import { BackLink, Link } from "./Links";
+import RemoteMDX from "./RemoteMDX";
+import Website from "./icons/Website";
 
 interface CaseProps {
-  cases: Array<Case>
-  caseStudy: CaseSource
+	cases: Array<CaseWithMetadata>;
+	caseStudy: CaseSource;
 }
 
 export default function CasePage({ cases, caseStudy }: CaseProps) {
-  const [selectedLabel, setSelectedLabel] = useState<undefined | Array<string>>(
-    caseStudy.labels,
-  )
-  const firstLetterOfTitles = useMemo(() => {
-    const selectedCases = cases.filter((caseStudy) => {
-      if (!selectedLabel || selectedLabel.length === 0) {
-        return true
-      }
-      return caseStudy.labels.some((label) => selectedLabel.includes(label))
-    })
-    const firstLetters = selectedCases.map((c) => c.title[0].toUpperCase())
-    const uniqueLetters = Array.from(new Set(firstLetters))
-    return uniqueLetters.sort()
-  }, [cases, selectedLabel])
-  const labelFilterItems = getCaseLabelItems(cases)
-  const onLabelFilterClick = (label: string) => {
-    if (selectedLabel?.includes(label)) {
-      setSelectedLabel(selectedLabel.filter((l) => l !== label))
-    } else {
-      setSelectedLabel((selectedLabel || []).concat(label))
-    }
-  }
-  return (
-    <>
-      <div className={cn("my-5", "flex", "items-center", "gap-8")}>
-        <BackLink href={"/"}>Index</BackLink>
-        <LabelFilter
-          items={labelFilterItems}
-          selected={selectedLabel}
-          onClick={onLabelFilterClick}
-          onClearClick={() => setSelectedLabel(undefined)}
-        />
-      </div>
-      <div className={cn("grid", "grid-cols-12", "grow")}>
-        <div className={cn("col-span-2", "flex", "flex-col", "gap-2")}>
-          {firstLetterOfTitles.map((letter) => (
-            <div key={`letter-${letter}`}>
-              <span
-                className={cn(
-                  "bg-tertiary",
-                  "uppercase",
-                  "px-3",
-                  "py-2",
-                  "text-xl",
-                  "inline-block",
-                  "font-otBrut",
-                )}
-              >
-                {letter}
-              </span>
-              <div className={cn("flex", "flex-col", "gap-4", "mt-2")}>
-                {cases
-                  .filter((c) => c.title[0].toUpperCase() === letter)
-                  .map((c) => (
-                    <div
-                      key={`case-${c.slug}`}
-                      className={cn({
-                        [cn("bg-tertiary")]: c.slug === caseStudy.slug,
-                      })}
-                    >
-                      <Link
-                        href={`/case/${c.slug}`}
-                        className={cn({
-                          "hover:text-primary": c.slug !== caseStudy.slug,
-                        })}
-                      >
-                        {c.title}
-                      </Link>
-                    </div>
-                  ))}
-              </div>
-            </div>
-          ))}
-        </div>
-        <div
-          className={cn(
-            "max-w-full",
-            "prose",
-            "col-span-10",
-            "relative",
-            "grow",
-            "grid",
-            "grid-cols-12",
-          )}
-        >
-          <div className={cn("z-10", "relative", "p-8", "col-span-9")}>
-            <RemoteMDX serialized={caseStudy.serialized} />
-          </div>
-          <div className={cn("col-span-3", "relative")}>
-            <div
-              className={cn(
-                "border",
-                "border-tertiary",
-                "p-3",
-                "relative",
-                "left-[34px]",
-                "flex",
-                "flex-col",
-                "gap-6",
-              )}
-            >
-              <div className={cn("grid", "md:grid-cols-6", "grid-cols-1")}>
-                <div className={cn("col-span-2")}>AUTHOR:</div>
-                <div
-                  className={cn(
-                    "underline",
-                    "col-span-4",
-                    "font-aspekta",
-                    "font-light",
-                  )}
-                >
-                  NAME
-                </div>
-              </div>
-              <div className={cn("grid", "grid-cols-6")}>
-                <div className={cn("col-span-2")}>CREATED:</div>
-                <div className={cn("col-span-4", "font-aspekta", "font-light")}>
-                  {new Date().toDateString()}
-                </div>
-              </div>
-              <div className={cn("flex", "items-center", "flex-wrap", "gap-4")}>
-                {caseStudy.labels.map((label) => (
-                  <div key={label} className={cn("relative")}>
-                    <div
-                      className={cn("relative", "z-10", "px-2", "rounded-sm")}
-                    >
-                      {label}
-                    </div>
-                    <div
-                      className={cn(
-                        "bg-g",
-                        "absolute",
-                        "inset-0",
-                        "w-full",
-                        "h-full",
-                        "opacity-60",
-                        "rounded-sm",
-                      )}
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-          <div
-            className={cn(
-              "absolute",
-              "inset-0",
-              "w-[calc(100%+32px)]",
-              "h-[calc(100%+32px)]",
-              "bg-gradient-to-t",
-              "from-tertiary/50",
-              "to-transparent",
-            )}
-          />
-        </div>
-      </div>
-    </>
-  )
+	const [selectedCategory, setSelectedCategory] = useState<Array<string>>([
+		caseStudy.category,
+	]);
+
+	const filteredCasesByType = useMemo(() => {
+		if (selectedCategory.length === 0) {
+			return cases;
+		}
+		return cases.filter((c) => selectedCategory.includes(c.category));
+	}, [cases, selectedCategory]);
+
+	const casesByFirstLetter = filteredCasesByType.reduce(
+		(acc, currCase) => {
+			const firstLetter = currCase.title[0].toUpperCase();
+			if (!acc[firstLetter]) {
+				acc[firstLetter] = [];
+			}
+			acc[firstLetter].push(currCase);
+			return acc;
+		},
+		{} as Record<string, CaseWithMetadata[]>,
+	);
+
+	const onLabelFilterClick = (label: string) => {
+		if (selectedCategory?.includes(label)) {
+			setSelectedCategory(selectedCategory.filter((l) => l !== label));
+		} else {
+			setSelectedCategory((selectedCategory || []).concat(label));
+		}
+	};
+	return (
+		<>
+			<div className={cn("mb-5", "flex", "items-center", "gap-8")}>
+				<BackLink href={"/"}>Back to Index</BackLink>
+				<LabelFilter
+					items={categorySelectItems}
+					selected={selectedCategory}
+					onClick={onLabelFilterClick}
+					onClearClick={() => setSelectedCategory([])}
+				/>
+			</div>
+			<div className={cn("grid", "grid-cols-12", "grow", "gap-10")}>
+				<div className={cn("col-span-2", "flex", "flex-col", "gap-2")}>
+					{objectKeys(casesByFirstLetter).map((firstLetter, index) => (
+						<div key={`letter-${firstLetter}-${index}`}>
+							<span
+								className={cn(
+									"bg-tertiary",
+									"uppercase",
+									"px-3",
+									"py-2",
+									"text-xl",
+									"inline-block",
+									"font-otBrut",
+								)}
+							>
+								{firstLetter.toUpperCase()}
+							</span>
+							<div className={cn("flex", "flex-col", "gap-4", "mt-2")}>
+								{casesByFirstLetter[firstLetter].map((c, index) => (
+									<div
+										key={`case-${c.slug}-${index}`}
+										className={cn({
+											[cn("bg-tertiary")]: c.slug === caseStudy.slug,
+										})}
+									>
+										<Link
+											href={`/case/${c.slug}`}
+											className={cn("text-black no-underline", {
+												"hover:text-primary": c.slug !== caseStudy.slug,
+											})}
+										>
+											{c.title}
+										</Link>
+									</div>
+								))}
+							</div>
+						</div>
+					))}
+				</div>
+				<div
+					className={cn(
+						"max-w-full",
+						"prose",
+						"col-span-10",
+						"relative",
+						"grow",
+						"grid",
+						"grid-cols-12",
+					)}
+				>
+					<div
+						className={cn("z-10", "relative", "p-8", "col-span-9")}
+						id="remote-markdown"
+					>
+						<RemoteMDX serialized={caseStudy.serialized} />
+						<div
+							className={cn(
+								"absolute top-[110px] border border-dashed border-black w-full rounded-xl p-2 inline-flex items-center justify-between",
+							)}
+						>
+							<span>
+								Written by {caseStudy.name}{" "}
+								{caseStudy.organization
+									? `about ${caseStudy.organization} `
+									: ""}
+								on{" "}
+								{new Date(caseStudy.createdAt).toLocaleDateString("en-US", {
+									year: "numeric",
+									month: "long",
+									day: "numeric",
+								})}
+							</span>
+							<span>
+								<Link href={caseStudy.experienceUrl}>
+									<Website className={cn("text-primary w-6")} />
+								</Link>
+							</span>
+						</div>
+					</div>
+					<div
+						className={cn(
+							"absolute",
+							"inset-0",
+							"w-[calc(100%+32px)]",
+							"h-[calc(100%+32px)]",
+							"bg-gradient-to-t",
+							"from-tertiary/50",
+							"to-transparent",
+						)}
+					/>
+				</div>
+			</div>
+		</>
+	);
 }

@@ -11,29 +11,31 @@ datasource db {
 }
 
 model User {
-  id          Int          @id @default(autoincrement())
-  email       String       @unique
+  id          Int         @id @default(autoincrement())
+  email       String      @unique
   name        String?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
   deletedAt   DateTime?
-  submissions Submission[]
+  caseStudies CaseStudy[]
 }
 
-enum SubmissionType {
-  CASE_STUDY
-  RESEARCH_REPORT
-}
+model CaseStudy {
+  id            Int     @id @default(autoincrement())
+  content       Json
+  slug          String? @unique
+  signerAddress String?
+  githubBranchName   String?
 
-model Submission {
-  id                Int            @id @default(autoincrement())
-  content           Json
-  type              SubmissionType
-  userId            Int
-  user              User           @relation(fields: [userId], references: [id])
-  submitted         Boolean        @default(false)
-  signedWithAddress String?
-  createdAt         DateTime       @default(now())
-  updatedAt         DateTime       @updatedAt
-  deletedAt         DateTime?
+  submitted Boolean @default(false)
+  approved  Boolean?
+  featured  Boolean @default(false)
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+  approvedAt DateTime?
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
 }

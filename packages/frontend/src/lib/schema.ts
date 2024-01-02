@@ -1,40 +1,25 @@
-import { z } from "zod"
+import { z } from "zod";
 
-const MAX_TITLE_LENGTH = 200
-
-export enum BooleanStrings {
-  True = "true",
-  False = "false",
-}
-const BooleanEnum = z.nativeEnum(BooleanStrings)
+const MAX_TITLE_LENGTH = 200;
 
 export const caseStudyFormSchema = z.object({
-  email: z.string().email({
-    message: "Email please!",
-  }),
-  name: z.string().min(1, { message: "Don't forget your name" }),
-  title: z
-    .string()
-    .min(1, { message: "Must be named something!" })
-    .max(MAX_TITLE_LENGTH, {
-      message: `Keep it short, max characters: ${MAX_TITLE_LENGTH}`,
-    }),
-  organizationName: z
-    .string()
-    .min(1, { message: "Please include the name of the organization" }),
-  productDescription: z
-    .string()
-    .min(1, { message: "Please include a description of the product" }),
-  industry: z.string().min(1, {
-    message: "Please include which industry this product is a part of",
-  }),
-  doesUseChain: BooleanEnum.or(z.string()),
-  partOfTeam: BooleanEnum.or(z.string()),
-  url: z.union([z.string().url().optional(), z.literal("")]),
-})
+	title: z
+		.string()
+		.min(1, { message: "Must be named something!" })
+		.max(MAX_TITLE_LENGTH, {
+			message: `Keep it short, max characters: ${MAX_TITLE_LENGTH}`,
+		}),
+	name: z.string().min(1, { message: "Don't forget your name" }),
+	email: z.string().email({
+		message: "Email please!",
+	}),
+	category: z.string().min(1, { message: "Don't forget a category" }),
+	experienceUrl: z.string().url({
+		message: "Must be a valid URL",
+	}),
+	organization: z.string().optional(),
+});
 
-export const caseStudyBodySchema = caseStudyFormSchema.extend({
-  partOfTeam: z.boolean(),
-  doesUseChain: z.boolean(),
-  markdown: z.string().optional(),
-})
+export const postCaseStudyBodySchema = caseStudyFormSchema.extend({
+	markdown: z.string().optional(),
+});
