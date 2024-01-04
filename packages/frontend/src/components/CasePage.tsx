@@ -49,15 +49,19 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
 		<>
 			<div className={cn("mb-5", "flex", "items-center", "gap-8")}>
 				<BackLink href={"/"}>Back to Index</BackLink>
-				<LabelFilter
-					items={categorySelectItems}
-					selected={selectedCategory}
-					onClick={onLabelFilterClick}
-					onClearClick={() => setSelectedCategory([])}
-				/>
+				<div className={cn("hidden")}>
+					<LabelFilter
+						items={categorySelectItems}
+						selected={selectedCategory}
+						onClick={onLabelFilterClick}
+						onClearClick={() => setSelectedCategory([])}
+					/>
+				</div>
 			</div>
 			<div className={cn("grid", "grid-cols-12", "grow", "gap-10")}>
-				<div className={cn("col-span-2", "flex", "flex-col", "gap-2")}>
+				<div
+					className={cn("col-span-2", "flex-col", "gap-2", "hidden lg:flex")}
+				>
 					{objectKeys(casesByFirstLetter).map((firstLetter, index) => (
 						<div key={`letter-${firstLetter}-${index}`}>
 							<span
@@ -99,21 +103,44 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
 					className={cn(
 						"max-w-full",
 						"prose",
-						"col-span-10",
+						"lg:col-span-10",
+						"col-span-12",
 						"relative",
 						"grow",
-						"grid",
-						"grid-cols-12",
+						"flex",
+						"flex-col",
+						"min-h-0",
 					)}
 				>
 					<div
-						className={cn("z-10", "relative", "p-8", "col-span-9")}
+						className={cn(
+							"absolute",
+							"-right-[14px]",
+							// Note: these values correspond to layout padding
+							"w-[calc(100%+32px)]",
+							"h-[calc(100%+16px)]",
+							"bg-gradient-to-t",
+							"from-tertiary/50",
+							"to-transparent",
+							"hidden",
+							"lg:block",
+						)}
+					/>
+					<div
+						className={cn(
+							"z-10",
+							"relative",
+							"overflow-y-scroll",
+							"h-0",
+							"grow",
+							"pr-4",
+						)}
 						id="remote-markdown"
 					>
 						<RemoteMDX serialized={caseStudy.serialized} />
 						<div
 							className={cn(
-								"absolute top-[110px] border border-dashed border-black w-full rounded-xl p-2 inline-flex items-center justify-between bg-background",
+								"absolute pr-6 top-[75px] w-full left-0 border border-dashed border-black rounded-xl p-2 inline-flex items-center justify-between bg-background",
 							)}
 						>
 							<span>
@@ -135,17 +162,6 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
 							</span>
 						</div>
 					</div>
-					<div
-						className={cn(
-							"absolute",
-							"inset-0",
-							"w-[calc(100%+32px)]",
-							"h-[calc(100%+32px)]",
-							"bg-gradient-to-t",
-							"from-tertiary/50",
-							"to-transparent",
-						)}
-					/>
 				</div>
 			</div>
 		</>
