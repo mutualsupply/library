@@ -82,7 +82,7 @@ const Submit = () => {
 										<div>
 											<Button
 												variant={"purple"}
-												className={cn("flex items-center gap-2 w-full")}
+												className={cn("flex items-center gap-2 w-full mt-2")}
 											>
 												<div
 													className={cn("inline-flex", "gap-1", "items-center")}

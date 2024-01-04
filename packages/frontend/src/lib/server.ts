@@ -34,7 +34,10 @@ export async function getCaseFromSlug(slug: string) {
 		path.join(process.cwd(), PATH_TO_MARKDOWN),
 		filename,
 	);
-	const serialized = await serialize(caseFile.source, {
+	const sourceWithBanner = caseFile.source.replace(/^# .*/, (match) => {
+		return `${match}\n\n<Banner />`;
+	});
+	const serialized = await serialize(sourceWithBanner, {
 		parseFrontmatter: true,
 	});
 	return { ...caseFile, serialized };

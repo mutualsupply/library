@@ -43,7 +43,7 @@ export default function Header() {
 					variant="outline"
 					size="lg"
 					onClick={() => setShowMenu(!showMenu)}
-					className={cn("w-20 p-0")}
+					className={cn("w-20 h-10 p-0 bg-background")}
 				>
 					<Hamburger className="w-6" />
 				</Button>
@@ -111,7 +111,7 @@ function MobileMenu({ show, onHide }: MobileMenuProps) {
 						variant="blueOutline"
 						size="lg"
 						onClick={onHide}
-						className={cn("w-20 p-0")}
+						className={cn("w-20 h-10 p-0 bg-background")}
 					>
 						<Close className={cn("h-4")} />
 					</Button>

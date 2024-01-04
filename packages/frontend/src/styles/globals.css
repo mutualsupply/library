@@ -128,10 +128,7 @@ div[data-milkdown-root], .milkdown {
   line-height: 28px;
 }
 
-#remote-markdown > h1 {
-  margin-bottom: 100px;
-}
-
+/* Select placeholder color */
 #SelectTrigger[data-placeholder] {
   color: #737373
 }

@@ -6,8 +6,7 @@ import { CaseSource, CaseWithMetadata } from "../lib/interfaces";
 import { categorySelectItems } from "./CreateCase";
 import LabelFilter from "./LabelFilter";
 import { BackLink, Link } from "./Links";
-import RemoteMDX from "./RemoteMDX";
-import Website from "./icons/Website";
+import RemoteMDX, { Banner } from "./RemoteMDX";
 
 interface CaseProps {
 	cases: Array<CaseWithMetadata>;
@@ -49,7 +48,7 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
 		<>
 			<div className={cn("mb-5", "flex", "items-center", "gap-8")}>
 				<BackLink href={"/"}>Back to Index</BackLink>
-				<div className={cn("hidden")}>
+				<div className={cn("hidden", "lg:block")}>
 					<LabelFilter
 						items={categorySelectItems}
 						selected={selectedCategory}
@@ -58,9 +57,16 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
 					/>
 				</div>
 			</div>
-			<div className={cn("grid", "grid-cols-12", "grow", "gap-10")}>
+			<div className={cn("flex", "grow", "gap-10", "mt-12")}>
 				<div
-					className={cn("col-span-2", "flex-col", "gap-2", "hidden lg:flex")}
+					className={cn(
+						"max-w-[320px]",
+						"flex-col",
+						"gap-2",
+						"hidden lg:flex",
+						"pr-6",
+						"pl-4",
+					)}
 				>
 					{objectKeys(casesByFirstLetter).map((firstLetter, index) => (
 						<div key={`letter-${firstLetter}-${index}`}>
@@ -134,33 +140,13 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
 							"h-0",
 							"grow",
 							"pr-4",
+							"max-w-[780px]",
 						)}
-						id="remote-markdown"
 					>
-						<RemoteMDX serialized={caseStudy.serialized} />
-						<div
-							className={cn(
-								"absolute pr-6 top-[75px] w-full left-0 border border-dashed border-black rounded-xl p-2 inline-flex items-center justify-between bg-background",
-							)}
-						>
-							<span>
-								Written by {caseStudy.name}{" "}
-								{caseStudy.organization
-									? `about ${caseStudy.organization} `
-									: ""}
-								on{" "}
-								{new Date(caseStudy.createdAt).toLocaleDateString("en-US", {
-									year: "numeric",
-									month: "long",
-									day: "numeric",
-								})}
-							</span>
-							<span>
-								<Link href={caseStudy.experienceUrl}>
-									<Website className={cn("text-primary w-6")} />
-								</Link>
-							</span>
-						</div>
+						<RemoteMDX
+							serialized={caseStudy.serialized}
+							banner={<Banner caseStudy={caseStudy} />}
+						/>
 					</div>
 				</div>
 			</div>
