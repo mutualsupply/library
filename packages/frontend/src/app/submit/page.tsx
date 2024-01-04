@@ -164,7 +164,11 @@ const Submit = () => {
 
 			<div className={cn("grow flex justify-center items-start mt-6 md:mt-56")}>
 				<div className={cn("max-w-[800px] w-full border border-dashed p-4")}>
-					<div className={cn("flex justify-between items-center")}>
+					<div
+						className={cn(
+							"flex flex-col xs:flex-row xs:justify-between xs:items-center gap-4",
+						)}
+					>
 						<span className={cn("font-otBrut text-primary flex gap-2")}>
 							<span className={cn("text-2xl")}>Thoughts</span>
 							{drafts && drafts.length > 0 && (
@@ -197,7 +201,7 @@ const Submit = () => {
 								<div
 									key={`draft-${draft.id}`}
 									className={cn(
-										"font-aspekta flex items-center justify-between px-3 py-2",
+										"font-aspekta flex flex-col xs:flex-row xs:items-center xs:justify-between px-3 py-2 gap-y-2",
 										{ "bg-tertiary/30": index % 2 === 0 },
 									)}
 								>

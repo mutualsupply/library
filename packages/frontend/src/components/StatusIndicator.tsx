@@ -10,6 +10,36 @@ import {
 import { DBCaseStudy } from "../lib/interfaces";
 import { Button } from "./ui/button";
 
+export enum Status {
+	Draft = "draft",
+	Submitted = "submitted",
+	Approved = "approved",
+	Rejected = "rejected",
+}
+export const StatusMap = {
+	[Status.Draft]: {
+		color: "#171712",
+		text: "Draft",
+	},
+	[Status.Submitted]: {
+		color: "#F79009",
+		text: "In review",
+	},
+	[Status.Approved]: {
+		color: "#00A181",
+		text: "Accepted",
+	},
+	[Status.Rejected]: {
+		color: "#EF4444",
+		text: "Rejected",
+	},
+};
+
+export interface StatusIndicatorProps {
+	caseStudy: DBCaseStudy;
+	showButton?: boolean;
+}
+
 export function StatusIndicator({
 	caseStudy,
 	showButton = true,
@@ -71,7 +101,11 @@ export function StatusIndicator({
 	}, []);
 
 	return (
-		<div className={cn("grid grid-cols-2 space-x-1")}>
+		<div
+			className={cn(
+				"grid grid-cols-1 space-y-2 xs:grid-cols-2 xs:space-x-1 xs:space-y-0",
+			)}
+		>
 			<span className={cn("text-xs flex items-center")}>
 				<div className={cn("inline-flex items-center gap-1")}>
 					<span
@@ -88,33 +122,4 @@ export function StatusIndicator({
 			)}
 		</div>
 	);
-}
-export enum Status {
-	Draft = "draft",
-	Submitted = "submitted",
-	Approved = "approved",
-	Rejected = "rejected",
-}
-export const StatusMap = {
-	[Status.Draft]: {
-		color: "#171712",
-		text: "Draft",
-	},
-	[Status.Submitted]: {
-		color: "#F79009",
-		text: "In review",
-	},
-	[Status.Approved]: {
-		color: "#00A181",
-		text: "Accepted",
-	},
-	[Status.Rejected]: {
-		color: "#EF4444",
-		text: "Rejected",
-	},
-};
-
-export interface StatusIndicatorProps {
-	caseStudy: DBCaseStudy;
-	showButton?: boolean;
 }

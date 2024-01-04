@@ -1,4 +1,5 @@
 import { useFormContext } from "react-hook-form";
+import { cn } from "utils";
 import {
 	FormControl,
 	FormDescription,
@@ -37,6 +38,7 @@ const SelectInput = ({
 	items,
 }: SelectInputProps) => {
 	const form = useFormContext();
+	const error = form.formState.errors[name];
 	return (
 		<FormField
 			control={form.control}
@@ -54,7 +56,7 @@ const SelectInput = ({
 							onValueChange={(value) => field.onChange(value)}
 							value={field.value === "" ? undefined : field.value}
 						>
-							<SelectTrigger>
+							<SelectTrigger className={cn(error && "border-red")}>
 								<SelectValue placeholder={placeholder} />
 							</SelectTrigger>
 							<SelectContent>

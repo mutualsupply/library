@@ -85,6 +85,8 @@
     --red: 353, 100%, 51%;
 
     --purple: 265, 83%, 63%;
+
+    --black: 60, 12%, 8%;
   }
 }
  
@@ -128,4 +130,8 @@ div[data-milkdown-root], .milkdown {
 
 #remote-markdown > h1 {
   margin-bottom: 100px;
+}
+
+#SelectTrigger[data-placeholder] {
+  color: #737373
 }
