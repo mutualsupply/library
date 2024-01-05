@@ -61,6 +61,7 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
 				<div
 					className={cn(
 						"max-w-[320px]",
+						"w-full",
 						"flex-col",
 						"gap-2",
 						"hidden lg:flex",
