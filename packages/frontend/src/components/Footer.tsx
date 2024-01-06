@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { cn } from "utils";
 import { Badge } from "./ui/badge";
 
@@ -16,7 +17,14 @@ export default function Footer() {
 					src="/images/apple.gif"
 				/>
 				<div className="font-aspekta text-sm text-center">
-					manifested by <Badge>MUTUAL</Badge>
+					manifested by{" "}
+					<Link
+						href="https://mutual.supply"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						<Badge>MUTUAL</Badge>
+					</Link>
 				</div>
 			</div>
 		</div>
