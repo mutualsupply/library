@@ -12,6 +12,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: superfly/flyctl-actions/setup-flyctl@master
+        with: 
+          version: '0.1.135'
       - name: Deploy
         working-directory: packages/server
         run: ./deploy-staging.sh
