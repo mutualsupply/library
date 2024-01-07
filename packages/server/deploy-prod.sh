@@ -1,3 +1,3 @@
 set -eu
 
-fly deploy --config fly.production.toml
+flyctl deploy --config fly.production.toml --remote-only
