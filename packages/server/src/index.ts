@@ -52,7 +52,7 @@ router.get("/", async (ctx, next) => {
 });
 
 router.get("/status", async (ctx, next) => {
-	ctx.body = { status: "ok", time: new Date() };
+	ctx.body = { status: "better than ok", time: new Date() };
 	await next();
 });
 
