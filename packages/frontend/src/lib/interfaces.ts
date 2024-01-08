@@ -12,6 +12,11 @@ export interface CaseStudy {
 	markdown?: string;
 }
 
+export interface UserResponse {
+	user: User;
+	cases: Array<DBCaseStudy>;
+}
+
 export interface DBCaseStudy {
 	id: number;
 	content: CaseStudy;
@@ -44,6 +49,7 @@ export interface CaseWithMetadata extends CaseMetadata {
 	filename: string;
 	slug: string;
 	source: string;
+	featured?: boolean;
 }
 
 export interface CaseSource extends CaseWithMetadata {

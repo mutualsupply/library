@@ -18,7 +18,7 @@ import {
 	AccordionItem,
 	AccordionTrigger,
 } from "../../components/ui/accordion";
-import useDrafts from "../../hooks/useDrafts";
+import useUser from "../../hooks/useUser";
 import { NEW_CASE_PAGE_NAME } from "../../lib/constants";
 
 const Submit = () => {
@@ -29,7 +29,7 @@ const Submit = () => {
 	const [accordionValue, setAccordionValue] = useState<string>("");
 	const openLogin = () => setAccordionValue("login");
 	const closeLogin = () => setAccordionValue("");
-	const { data: drafts } = useDrafts();
+	const { data } = useUser();
 	return (
 		<div className={cn("flex flex-col md:flex-row md:gap-6")}>
 			<div className={cn("md:max-w-[320px] w-full")}>
@@ -171,8 +171,8 @@ const Submit = () => {
 					>
 						<span className={cn("font-otBrut text-primary flex gap-2")}>
 							<span className={cn("text-2xl")}>Thoughts</span>
-							{drafts && drafts.length > 0 && (
-								<span className={cn("text-base")}>{drafts.length}</span>
+							{data?.cases && data?.cases.length > 0 && (
+								<span className={cn("text-base")}>{data?.cases.length}</span>
 							)}
 						</span>
 						<Button
@@ -195,9 +195,9 @@ const Submit = () => {
 						</Button>
 					</div>
 
-					{drafts && drafts.length > 0 && (
+					{data?.cases && data?.cases.length > 0 && (
 						<div className={cn("mt-6 max-h-72 overflow-y-scroll")}>
-							{drafts.map((draft, index) => (
+							{data?.cases.map((draft, index) => (
 								<div
 									key={`draft-${draft.id}`}
 									className={cn(

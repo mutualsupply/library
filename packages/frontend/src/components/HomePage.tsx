@@ -92,10 +92,14 @@ export function HomePage({ cases }: HomeProps) {
 								"relative",
 							)}
 						>
-							<span className={cn("text-sm font-spline")}>
-								<span>{index < 10 && "0"}</span>
-								{index + 1}
-							</span>
+							{caseFile.featured ? (
+								<span className={cn("w-3 h-3 rounded-full bg-[#77F5B9]")} />
+							) : (
+								<span className={cn("text-sm font-spline")}>
+									<span>{index < 10 && "0"}</span>
+									{index + 1}
+								</span>
+							)}
 							<span className={cn("text-2xl", "font-otBrut")}>
 								{caseFile.title}
 							</span>

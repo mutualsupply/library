@@ -2,7 +2,7 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveDraft } from "../lib/api";
-import { DRAFTS_QUERY_KEY } from "./useDrafts";
+import { USER_QUERY_KEY } from "./useUser";
 
 interface UseSaveDraftProps {
 	onSuccess?: () => void;
@@ -14,7 +14,7 @@ export default function useSaveDraft({ onSuccess }: UseSaveDraftProps = {}) {
 		mutationFn: saveDraft,
 		onSuccess(): void {
 			onSuccess?.();
-			queryClient.invalidateQueries({ queryKey: [DRAFTS_QUERY_KEY] });
+			queryClient.invalidateQueries({ queryKey: [USER_QUERY_KEY] });
 		},
 	});
 }

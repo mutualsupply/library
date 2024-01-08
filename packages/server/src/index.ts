@@ -65,6 +65,7 @@ app.listen(env.PORT, () => {
 	console.log(`[app] running at port: ${env.PORT}`);
 });
 
+// PUBLIC ENDPOINTS
 router.get("/", async (ctx, next) => {
 	ctx.body = { message: "👓" };
 	await next();
@@ -75,6 +76,55 @@ router.get("/status", async (ctx, next) => {
 	await next();
 });
 
+router.get("/cases", async (ctx, next) => {
+	const cases = await prisma.caseStudy.findMany({
+		where: { submitted: true, approved: true },
+		orderBy: { createdAt: "desc" },
+	});
+
+	ctx.body = cases;
+	await next();
+});
+
+router.post(
+	"/media",
+	upload.fields([{ name: "files", maxCount: 10 }]),
+	async (ctx: Context, next) => {
+		if (!isAuthed(ctx)) {
+			ctx.status = 401;
+			ctx.body = "Unauthorized";
+			ctx.app.emit("error", new Error("Unauthorized"), ctx);
+			return;
+		}
+
+		// @ts-expect-error
+		const files = ctx.request.files?.files;
+		if (!files || !Array.isArray(files)) {
+			throw new Error("No files");
+		}
+		const promises = files.map((file) => Media.upload(file));
+		const res = await Promise.all(promises);
+		ctx.body = res;
+		await next();
+	},
+);
+
+// @next: find the case study by slug & update its accepted @ time && status
+router.post("/github/webhook", async (ctx, next) => {
+	const body = ctx.request.body as Record<string, unknown>;
+	console.log(body?.pull_request);
+	console.log("github hook", body);
+
+	// get slug from posted body on merged PR
+	// update the accepted at datetime && status
+	// mint an NFT of the case study to the submitter if
+	// there is an address associated
+
+	ctx.body = { status: "ok" };
+	await next();
+});
+
+// PRIVATE ENDPOINTS
 router.post("/draft", authMiddleware, async (ctx, next) => {
 	const { caseStudy, user } = ctx.request.body as PostCaseStudyRequestBody;
 	const { email } = user;
@@ -94,6 +144,7 @@ router.post("/draft", authMiddleware, async (ctx, next) => {
 		data: {
 			userId: dbUser.id,
 			content: caseStudy as unknown as Prisma.InputJsonValue,
+			submitted: false,
 		},
 	});
 	ctx.body = draft;
@@ -103,11 +154,24 @@ router.post("/draft", authMiddleware, async (ctx, next) => {
 router.get("/user/:email", authMiddleware, async (ctx, next) => {
 	const { email } = ctx.params;
 	const user = await prisma.user.findUnique({ where: { email } });
-	ctx.body = user;
+	if (!user) {
+		ctx.status = 404;
+		ctx.body = "User not found";
+		ctx.app.emit("error", new Error("User not found"), ctx);
+		return await next();
+	}
+	const cases = await prisma.caseStudy.findMany({
+		where: { userId: user.id },
+		orderBy: { createdAt: "desc" },
+	});
+	ctx.body = {
+		user,
+		cases,
+	};
 	await next();
 });
 
-router.get("/draft/:email", authMiddleware, async (ctx, next) => {
+router.get("/cases/:email", authMiddleware, async (ctx, next) => {
 	const { email } = ctx.params;
 	const user = await prisma.user.upsert({
 		where: { email },
@@ -231,43 +295,5 @@ router.post("/case-study", authMiddleware, async (ctx, next) => {
 	}
 
 	ctx.body = dbCaseStudy;
-	await next();
-});
-
-router.post(
-	"/media",
-	upload.fields([{ name: "files", maxCount: 10 }]),
-	async (ctx: Context, next) => {
-		if (!isAuthed(ctx)) {
-			ctx.status = 401;
-			ctx.body = "Unauthorized";
-			ctx.app.emit("error", new Error("Unauthorized"), ctx);
-			return;
-		}
-
-		// @ts-expect-error
-		const files = ctx.request.files?.files;
-		if (!files || !Array.isArray(files)) {
-			throw new Error("No files");
-		}
-		const promises = files.map((file) => Media.upload(file));
-		const res = await Promise.all(promises);
-		ctx.body = res;
-		await next();
-	},
-);
-
-// @next: find the case study by slug & update its accepted @ time && status
-router.post("/github/webhook", async (ctx, next) => {
-	const body = ctx.request.body as Record<string, unknown>;
-	console.log(body?.pull_request);
-	console.log("github hook", body);
-
-	// get slug from posted body on merged PR
-	// update the accepted at datetime && status
-	// mint an NFT of the case study to the submitter if
-	// there is an address associated
-
-	ctx.body = { status: "ok" };
 	await next();
 });

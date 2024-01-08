@@ -2,7 +2,7 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateDraft } from "../lib/api";
-import { DRAFTS_QUERY_KEY } from "./useDrafts";
+import { USER_QUERY_KEY } from "./useUser";
 
 interface UseUpdateDraftProps {
 	onSuccess?: () => void;
@@ -16,7 +16,7 @@ export default function useUpdateDraft({
 		mutationFn: updateDraft,
 		onSuccess(): void {
 			onSuccess?.();
-			queryClient.invalidateQueries({ queryKey: [DRAFTS_QUERY_KEY] });
+			queryClient.invalidateQueries({ queryKey: [USER_QUERY_KEY] });
 		},
 	});
 }

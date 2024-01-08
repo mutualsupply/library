@@ -75,6 +75,36 @@ class ServerClientClass {
 		}
 		return res.json();
 	}
+
+	async getCases(): Promise<Array<DBCaseStudy>> {
+		const res = await fetch(`${this.baseUrl}/cases`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${env.API_KEY}`,
+			},
+		});
+
+		if (!res.ok) {
+			throw new Error("Could not get case studies");
+		}
+		return res.json();
+	}
+
+	async getUser(email: string) {
+		const res = await fetch(`${this.baseUrl}/user/${email}`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${env.API_KEY}`,
+			},
+		});
+
+		if (!res.ok) {
+			throw new Error("Could not get user");
+		}
+		return res.json();
+	}
 }
 
 const ServerClient = new ServerClientClass();

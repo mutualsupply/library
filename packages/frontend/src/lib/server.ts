@@ -21,7 +21,7 @@ function getAbsolutePathToMarkdown() {
 	return path.join(process.cwd(), PATH_TO_MARKDOWN);
 }
 
-export function getCases() {
+export function getLocalCases() {
 	const filenames = getAllCaseFileNames();
 	return filenames.map((filename) =>
 		getCase(getAbsolutePathToMarkdown(), filename),

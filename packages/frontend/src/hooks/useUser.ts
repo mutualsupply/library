@@ -2,15 +2,15 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import { getDrafts } from "../lib/api";
+import { getUser } from "../lib/api";
 
-export const DRAFTS_QUERY_KEY = "drafts";
+export const USER_QUERY_KEY = "user";
 
-export default function useDrafts() {
+export default function useUser() {
 	const { data } = useSession();
 	return useQuery({
-		queryKey: [DRAFTS_QUERY_KEY],
-		queryFn: getDrafts,
+		queryKey: [USER_QUERY_KEY],
+		queryFn: getUser,
 		refetchOnWindowFocus: true,
 		enabled: !!data,
 	});
