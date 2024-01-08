@@ -90,13 +90,6 @@ router.post(
 	"/media",
 	upload.fields([{ name: "files", maxCount: 10 }]),
 	async (ctx: Context, next) => {
-		if (!isAuthed(ctx)) {
-			ctx.status = 401;
-			ctx.body = "Unauthorized";
-			ctx.app.emit("error", new Error("Unauthorized"), ctx);
-			return;
-		}
-
 		// @ts-expect-error
 		const files = ctx.request.files?.files;
 		if (!files || !Array.isArray(files)) {
