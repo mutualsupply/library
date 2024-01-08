@@ -70,29 +70,33 @@ export function parseMarkdown(source: string): CaseMetadata {
 	const lexer = new marked.Lexer();
 	const tokens = lexer.lex(source);
 
-	const getStrongTextStartsWith = (search: string) => {
-		const token = tokens.find(
-			(token) => token.type === "paragraph" && token.text?.startsWith(search),
-		) as marked.Tokens.Paragraph;
+	// If metadata positioning in markdown changes, this will need to be updated
+	const metadata = tokens[tokens.length - 1];
 
-		if (!token) {
-			return undefined;
+	const getStrongTextStartsWith = (search: string) => {
+		if ("tokens" in metadata && metadata.tokens) {
+			const tokens = metadata.tokens as marked.Tokens.Text[];
+			const index = tokens.findIndex(
+				(token) => token.type === "text" && token.raw.includes(search),
+			);
+			if (index === -1) {
+				return undefined;
+			}
+
+			const value = tokens[index + 1].text;
+			return value;
 		}
-		const { text } = token.tokens.find(
-			(token) => token.type === "strong",
-		) as marked.Tokens.Strong;
-		return text;
+
+		throw new Error("Metadata not found");
 	};
 
 	const title = getStrongTextStartsWith("Title") as string;
 	const name = getStrongTextStartsWith("Author") as string;
 	const category = getStrongTextStartsWith("Category") as string;
 	const url = getStrongTextStartsWith("Proof of Experience") as string;
-
 	const start = url.lastIndexOf("(") + 1; // Find the position of the last '(' and add 1 to start after it
 	const end = url.lastIndexOf(")");
 	const experienceUrl = url.substring(start, end); // Extract the substring between the start and end positions
-
 	const createdAt = getStrongTextStartsWith("Created") as string;
 	const address = getStrongTextStartsWith("Signed by") as Hex | undefined;
 	const organization = getStrongTextStartsWith("Organization") as
