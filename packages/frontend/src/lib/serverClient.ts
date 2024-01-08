@@ -1,7 +1,7 @@
 import { DefaultSession } from "next-auth";
 import { Hex } from "viem";
 import env from "./env";
-import { CaseStudy, DBCaseStudy } from "./interfaces";
+import { CaseStudy, DBCaseStudy, UserResponse } from "./interfaces";
 
 class ServerClientClass {
 	private readonly baseUrl = env.NEXT_PUBLIC_SERVER_BASE_URL;
@@ -33,21 +33,8 @@ class ServerClientClass {
 	}
 
 	async getDrafts(email: string): Promise<Array<DBCaseStudy>> {
-		const res = await fetch(
-			`${this.baseUrl}/draft/${encodeURIComponent(email)}`,
-			{
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${env.API_KEY}`,
-				},
-			},
-		);
-
-		if (!res.ok) {
-			throw new Error("Could not create case study");
-		}
-		return res.json();
+		const user = await this.getUser(email);
+		return user.cases.filter((c) => !c.submitted);
 	}
 
 	async getDraft(email: string, id: number) {
@@ -112,7 +99,7 @@ class ServerClientClass {
 		return res.json();
 	}
 
-	async getUser(email: string) {
+	async getUser(email: string): Promise<UserResponse> {
 		const res = await fetch(`${this.baseUrl}/user/${email}`, {
 			method: "GET",
 			headers: {
