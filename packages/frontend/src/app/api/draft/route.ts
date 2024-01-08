@@ -1,28 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import env from "../../../lib/env";
 import { postCaseStudyBodySchema } from "../../../lib/schema";
 import { UnauthenticatedError, getAuth } from "../../../lib/server";
+import ServerClient from "../../../lib/serverClient";
 
 export async function POST(req: NextRequest) {
 	try {
-		const { session } = await getAuth(req);
+		const {
+			session: { user },
+		} = await getAuth(req);
 		const caseStudy = postCaseStudyBodySchema.parse(await req.json());
-		const res = await fetch(`${env.NEXT_PUBLIC_SERVER_BASE_URL}/draft`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				caseStudy,
-				user: session.user,
-			}),
-		});
-		if (!res.ok) {
-			throw new Error("Could not create case study");
-		}
-
-		const json = await res.json();
-		return NextResponse.json(json);
+		const draft = await ServerClient.saveDraft(caseStudy, user);
+		return NextResponse.json(draft);
 	} catch (e) {
 		if (e instanceof UnauthenticatedError) {
 			return NextResponse.json({ error: e.message }, { status: 401 });
@@ -37,22 +25,10 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
 	try {
-		const { session } = await getAuth(req);
-		const res = await fetch(
-			`${env.NEXT_PUBLIC_SERVER_BASE_URL}/draft/${encodeURIComponent(
-				session.user.email,
-			)}`,
-			{
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-				},
-			},
-		);
-		if (!res.ok) {
-			throw new Error("Could not create case study");
-		}
-		const drafts = await res.json();
+		const {
+			session: { user: { email } },
+		} = await getAuth(req);
+		const drafts = await ServerClient.getDrafts(email);
 		return NextResponse.json(drafts);
 	} catch (e) {
 		if (e instanceof UnauthenticatedError) {

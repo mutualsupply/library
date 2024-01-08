@@ -16,6 +16,7 @@ class ServerClientClass {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
+				Authorization: `Bearer ${env.API_KEY}`,
 			},
 			body: JSON.stringify({
 				caseStudy,
@@ -38,6 +39,7 @@ class ServerClientClass {
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
+					Authorization: `Bearer ${env.API_KEY}`,
 				},
 			},
 		);
@@ -51,6 +53,27 @@ class ServerClientClass {
 	async getDraft(email: string, id: number) {
 		const drafts = await this.getDrafts(email);
 		return drafts.find((d) => d.id === id);
+	}
+
+	async saveDraft(
+		caseStudy: CaseStudy,
+		user: DefaultSession["user"],
+	): Promise<DBCaseStudy> {
+		const res = await fetch(`${this.baseUrl}/draft`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${env.API_KEY}`,
+			},
+			body: JSON.stringify({
+				caseStudy,
+				user,
+			}),
+		});
+		if (!res.ok) {
+			throw new Error("Could not save draft");
+		}
+		return res.json();
 	}
 }
 

@@ -62,6 +62,23 @@ class GithubClass {
 		console.log("Successfully refreshed token");
 		return json;
 	}
+
+	async getPulls() {
+		const res = await fetch(`${this.baseUrl}/pulls`, {
+			method: "GET",
+			headers: {
+				Accept: "application/vnd.github+json",
+				Authorization: `Bearer ${env.GITHUB_TOKEN}`,
+				"X-GitHub-Api-Version": "2022-11-28",
+			},
+		});
+		if (!res.ok) {
+			console.error(await res.text());
+			throw new Error("Could not get pull requests");
+		}
+		const data = await res.json();
+		return data;
+	}
 }
 
 const GithubClient = new GithubClass();

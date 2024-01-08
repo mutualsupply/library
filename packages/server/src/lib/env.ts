@@ -9,6 +9,7 @@ const env = {
 	AWS_BUCKET_NAME: process.env.AWS_BUCKET_NAME as string,
 	GITHUB_BRANCH: process.env.GITHUB_BRANCH as string,
 	ED25519_PRIV: process.env.ED25519_PRIV as string,
+	API_KEY: process.env.API_KEY as string,
 };
 
 for (const key of objectKeys(env)) {

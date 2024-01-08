@@ -17,6 +17,7 @@ interface Env {
 	GITHUB_SECRET: string;
 	NEXTAUTH_URL: string;
 	NEXTAUTH_SECRET: string;
+	API_KEY: string;
 }
 
 const env: Env = {
@@ -32,6 +33,7 @@ const env: Env = {
 	GITHUB_SECRET: process.env.GITHUB_SECRET as string,
 	NEXTAUTH_URL: process.env.NEXTAUTH_URL as string,
 	NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET as string,
+	API_KEY: process.env.API_KEY as string,
 };
 
 const frontendKeys = objectKeys(env).filter((key) =>

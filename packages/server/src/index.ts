@@ -23,6 +23,25 @@ const allowedOrigins = [
 	"https://research.mutual.supply",
 ];
 
+function isAuthed(ctx: Context) {
+	const { authorization } = ctx.request.header;
+	if (authorization && !Array.isArray(authorization)) {
+		const bearer = authorization.split(" ")[1];
+		return bearer === env.API_KEY;
+	}
+	return false;
+}
+
+function authMiddleware(ctx: Context, next: () => Promise<unknown>) {
+	if (!isAuthed(ctx)) {
+		ctx.status = 401;
+		ctx.body = "Unauthorized";
+		ctx.app.emit("error", new Error("Unauthorized"), ctx);
+		return;
+	}
+	return next();
+}
+
 app.use(json());
 app.use(bodyParser());
 app.use(logger());
@@ -56,7 +75,7 @@ router.get("/status", async (ctx, next) => {
 	await next();
 });
 
-router.post("/draft", async (ctx, next) => {
+router.post("/draft", authMiddleware, async (ctx, next) => {
 	const { caseStudy, user } = ctx.request.body as PostCaseStudyRequestBody;
 	const { email } = user;
 	if (!email) {
@@ -81,14 +100,14 @@ router.post("/draft", async (ctx, next) => {
 	await next();
 });
 
-router.get("/user/:email", async (ctx, next) => {
+router.get("/user/:email", authMiddleware, async (ctx, next) => {
 	const { email } = ctx.params;
 	const user = await prisma.user.findUnique({ where: { email } });
 	ctx.body = user;
 	await next();
 });
 
-router.get("/draft/:email", async (ctx, next) => {
+router.get("/draft/:email", authMiddleware, async (ctx, next) => {
 	const { email } = ctx.params;
 	const user = await prisma.user.upsert({
 		where: { email },
@@ -104,7 +123,7 @@ router.get("/draft/:email", async (ctx, next) => {
 	await next();
 });
 
-router.post("/draft/update/:id", async (ctx, next) => {
+router.post("/draft/update/:id", authMiddleware, async (ctx, next) => {
 	const { id } = ctx.params;
 	const { caseStudy, user } = ctx.request.body as PostCaseStudyRequestBody;
 	const { email } = user;
@@ -141,7 +160,7 @@ router.post("/draft/update/:id", async (ctx, next) => {
 	await next();
 });
 
-router.post("/case-study", async (ctx, next) => {
+router.post("/case-study", authMiddleware, async (ctx, next) => {
 	const { caseStudy, user, signerAddress, id } = ctx.request
 		.body as PostCaseStudyRequestBody;
 	if (!user.email) {
@@ -219,6 +238,13 @@ router.post(
 	"/media",
 	upload.fields([{ name: "files", maxCount: 10 }]),
 	async (ctx: Context, next) => {
+		if (!isAuthed(ctx)) {
+			ctx.status = 401;
+			ctx.body = "Unauthorized";
+			ctx.app.emit("error", new Error("Unauthorized"), ctx);
+			return;
+		}
+
 		// @ts-expect-error
 		const files = ctx.request.files?.files;
 		if (!files || !Array.isArray(files)) {
