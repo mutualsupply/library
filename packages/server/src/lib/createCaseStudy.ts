@@ -30,23 +30,28 @@ function createCaseStudy(
 	);
 	run(`cd ${dirName}/${repoName} && git checkout ${env.GITHUB_BRANCH}`);
 
-	const markdown = `# ${caseStudy.title}
+	let markdown = `# ${caseStudy.title}
 
 ${caseStudy.markdown ? caseStudy.markdown : ""}
 
-### Metadata\n
-Title: **${caseStudy.title}**\n
-Author: **${caseStudy.name}** (${caseStudy.email})\n
-Category: **${caseStudy.category}**\n
-Proof of Experience: **[${caseStudy.experienceUrl}](${caseStudy.experienceUrl})**
-${
-	caseStudy.organization
-		? `\nOrganization: **${caseStudy.organization}**`
-		: null
-}
-${address ? `\nSigned by: **${address}**` : null}
-\nCreated: **${now.toISOString()}**
-`;
+### Metadata
+Title: **${caseStudy.title}**
+Author: **${caseStudy.name}** (${caseStudy.email})
+Category: **${caseStudy.category}**
+Proof of Experience: **[${caseStudy.experienceUrl}](${
+		caseStudy.experienceUrl
+	})**`;
+
+	if (caseStudy.organization) {
+		markdown += `\nOrganization: **${caseStudy.organization}**`;
+	}
+
+	if (address) {
+		markdown += `\nSigned by: **${address}**`;
+	}
+
+	markdown += `\nCreated: **${now.toISOString()}**`;
+
 	// Write markdown file
 	run(`echo "${markdown}" > ${pathToFrontendPackage}/src/markdown/${slug}.mdx`);
 	// Create new branch
