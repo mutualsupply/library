@@ -12,10 +12,13 @@ function createCaseStudy(
 	slug: string,
 	address?: `0x${string}`,
 ) {
+	console.log("writing priv key", env.ED25519_PRIV);
 	// Write ssh key
 	const sshKey = env.ED25519_PRIV;
 	run(`echo "${sshKey}" > /root/.ssh/id_ed25519`);
-	run("chmod 600 /root/.ssh/id_ed25519");
+	run("chmod 400 /root/.ssh/id_ed25519");
+	console.log("logging");
+	run("cd /root/.ssh/ && ls -la");
 
 	// Write case study
 	console.log("writing case study submitted by", user.email);
