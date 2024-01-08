@@ -182,66 +182,68 @@ export default function CreateCasePage({ draft }: CreateCaseProps) {
 						onSubmit={form.handleSubmit(onSubmit)}
 						className={cn("grow flex flex-col")}
 					>
-						<div className={cn("flex justify-between items-center p-4")}>
-							<Button
-								type="button"
-								size="pill"
-								className="w-10 h-10"
-								onClick={async () => {
-									await form.trigger();
-									const hasErrors =
-										Object.values(form.formState.errors).length > 0;
-									if (hasErrors) {
-										router.back();
-									} else {
-										setShowModal(true);
-									}
-								}}
-							>
-								<ArrowLeft className={cn("w-6 text-primary")} />
-							</Button>
-							<div className={cn("flex items-center gap-2")}>
-								{hasRequiredError && (
-									<div
-										className={cn(
-											"hidden md:block text-sm text-red font-aspekta mr-4",
-										)}
-									>
-										Please fill out all required fields
-									</div>
-								)}
+						{!caseStudyReceipt && (
+							<div className={cn("flex justify-between items-center p-4")}>
 								<Button
 									type="button"
-									variant="outline"
 									size="pill"
-									className={cn("w-28")}
-									onClick={form.handleSubmit(onSaveDraft)}
-									loading={isCreateDraftPending || isUpdateDraftPending}
-									disabled={
-										isCreateCaseStudyPending ||
-										isCreateDraftPending ||
-										isUpdateDraftPending ||
-										!!caseStudyReceipt
-									}
+									className="w-10 h-10"
+									onClick={async () => {
+										await form.trigger();
+										const hasErrors =
+											Object.values(form.formState.errors).length > 0;
+										if (hasErrors) {
+											router.back();
+										} else {
+											setShowModal(true);
+										}
+									}}
 								>
-									{id ? "Update Draft" : "Save Draft"}
+									<ArrowLeft className={cn("w-6 text-primary")} />
 								</Button>
-								<Button
-									type="submit"
-									loading={isCreateCaseStudyPending}
-									disabled={
-										isCreateCaseStudyPending ||
-										isCreateDraftPending ||
-										isUpdateDraftPending ||
-										!!caseStudyReceipt
-									}
-									size="pill"
-									className={cn("bg-primary text-white w-28")}
-								>
-									Submit
-								</Button>
+								<div className={cn("flex items-center gap-2")}>
+									{hasRequiredError && (
+										<div
+											className={cn(
+												"hidden md:block text-sm text-red font-aspekta mr-4",
+											)}
+										>
+											Please fill out all required fields
+										</div>
+									)}
+									<Button
+										type="button"
+										variant="outline"
+										size="pill"
+										className={cn("w-28")}
+										onClick={form.handleSubmit(onSaveDraft)}
+										loading={isCreateDraftPending || isUpdateDraftPending}
+										disabled={
+											isCreateCaseStudyPending ||
+											isCreateDraftPending ||
+											isUpdateDraftPending ||
+											!!caseStudyReceipt
+										}
+									>
+										{id ? "Update Draft" : "Save Draft"}
+									</Button>
+									<Button
+										type="submit"
+										loading={isCreateCaseStudyPending}
+										disabled={
+											isCreateCaseStudyPending ||
+											isCreateDraftPending ||
+											isUpdateDraftPending ||
+											!!caseStudyReceipt
+										}
+										size="pill"
+										className={cn("bg-primary text-white w-28")}
+									>
+										Submit
+									</Button>
+								</div>
 							</div>
-						</div>
+						)}
 						{hasRequiredError && (
 							<div
 								className={cn(
