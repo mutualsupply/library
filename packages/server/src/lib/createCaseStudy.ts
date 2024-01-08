@@ -12,6 +12,12 @@ function createCaseStudy(
 	slug: string,
 	address?: `0x${string}`,
 ) {
+	// Write ssh key
+	const sshKey = env.ED25519_PRIV;
+	run(`echo "${sshKey}" > /root/.ssh/id_ed25519`);
+	run("chmod 600 /root/.ssh/id_ed25519");
+
+	// Write case study
 	console.log("writing case study submitted by", user.email);
 	const branchName = `${caseStudy.email}/${slug}`;
 	const now = new Date();
@@ -33,20 +39,30 @@ Title: **${caseStudy.title}**\n
 Author: **${caseStudy.name}** (${caseStudy.email})\n
 Category: **${caseStudy.category}**\n
 Proof of Experience: **[${caseStudy.experienceUrl}](${caseStudy.experienceUrl})**
-${caseStudy.organization ? `\nOrganization: **${caseStudy.organization}**` : ""}
-${address ? `\nSigned by: **${address}**` : ""}
+${
+	caseStudy.organization
+		? `\nOrganization: **${caseStudy.organization}**`
+		: null
+}
+${address ? `\nSigned by: **${address}**` : null}
 \nCreated: **${now.toISOString()}**
 `;
+	// Write markdown file
 	run(`echo "${markdown}" > ${pathToFrontendPackage}/src/markdown/${slug}.mdx`);
-	run(`cd ${dirName}/${repoName} && git status`);
-	run(`cd ${dirName}/${repoName} && git branch ${branchName}`);
-	run(`cd ${dirName}/${repoName} && git checkout ${branchName}`);
-	run(`cd ${dirName}/${repoName} && git add .`);
+	// Create new branch
+	run(`cd ${dirName}/${repoName} && git checkout -b ${branchName}`);
+	// Commit markdown
 	run(
-		`cd ${dirName}/${repoName} && git commit -m 'New case study: ${caseStudy.title}' --author "${user.name} <${user.email}>" `,
+		`cd ${dirName}/${repoName} && git add ${pathToFrontendPackage}/src/markdown/${slug}.mdx`,
+	);
+	run(
+		`cd ${dirName}/${repoName} && git commit -m 'New Case Study: ${caseStudy.title}' --author="${user.name} <${user.email}>" `,
 	);
 	run(`cd ${dirName}/${repoName} && git push origin -u ${branchName} -f`);
 	run(`rm -rf ${dirName}`);
+
+	// Remove ssh key
+	run("rm -rf /root/.ssh/id_ed25519");
 	return {
 		branchName,
 	};

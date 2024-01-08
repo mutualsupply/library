@@ -18,4 +18,4 @@ jobs:
         working-directory: packages/server
         run: ./deploy-prod.sh
         env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN_PRODUCTION }}
