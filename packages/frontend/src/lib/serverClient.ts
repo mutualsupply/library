@@ -76,6 +76,27 @@ class ServerClientClass {
 		return res.json();
 	}
 
+	async updateDraft(
+		user: DefaultSession["user"],
+		caseStudy: CaseStudy,
+		id: number,
+	) {
+		const res = await fetch(`${this.baseUrl}/draft/update/${id}`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${env.API_KEY}`,
+			},
+			body: JSON.stringify({
+				user,
+				caseStudy,
+			}),
+		});
+		if (!res.ok) {
+			throw new Error("Could not update draft");
+		}
+	}
+
 	async getCases(): Promise<Array<DBCaseStudy>> {
 		const res = await fetch(`${this.baseUrl}/cases`, {
 			method: "GET",

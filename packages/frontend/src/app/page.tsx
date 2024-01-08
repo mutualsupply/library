@@ -29,3 +29,5 @@ export default async function Page() {
 		</HeaderLayout>
 	);
 }
+
+export const dynamic = "force-dynamic";

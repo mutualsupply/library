@@ -67,9 +67,6 @@ export async function getUser(): Promise<UserResponse> {
 	const res = await fetch("/api/user", {
 		method: "GET",
 		credentials: "include",
-		headers: {
-			"Content-Type": "application/json",
-		},
 	});
 	if (!res.ok) {
 		throw new Error("Failed to fetch drafts");
