@@ -63,6 +63,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@octokit/types": "^12.4.0",
     "@tailwindcss/typography": "^0.5.9",
     "@types/koa-multer": "^1.0.1",
     "@types/marked": "^5.0.0",

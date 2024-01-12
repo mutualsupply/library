@@ -11,7 +11,7 @@ ADD known_hosts /root/.ssh/known_hosts
 ADD known_hosts ~/.ssh/known_hosts
 
 RUN git config --global user.name "Mutual Supply"
-RUN git config --global user.email "calebcarithers@me.com"
+RUN git config --global user.email "computer@mutual.supply"
 
 RUN pnpm install
 RUN pnpx prisma generate
