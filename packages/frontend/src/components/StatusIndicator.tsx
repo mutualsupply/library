@@ -51,6 +51,8 @@ export function StatusIndicator({
 		status = Status.Draft;
 	} else if (approved === null) {
 		status = Status.Submitted;
+	} else if (approved === true) {
+		status = Status.Approved;
 	} else {
 		status = Status.Rejected;
 	}
@@ -76,34 +78,25 @@ export function StatusIndicator({
 
 		if (status === Status.Submitted) {
 			return (
-				<Link
+				<ViewLink
 					href={`https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/pull/${draft.githubBranchName}`}
-				>
-					<Button
-						size="pill"
-						className={cn(
-							"bg-background text-black border-black border-dashed font-aspekta text-xs w-16 py-1",
-						)}
-					>
-						View
-					</Button>
-				</Link>
+				/>
 			);
 		}
 
 		if (status === Status.Approved) {
-			return <Link href={`/case/${draft.slug}`}>Edit</Link>;
+			return <ViewLink href={`/case/${draft.slug}`} />;
 		}
 
 		if (status === Status.Rejected) {
-			return <span>😓</span>;
+			return <ViewLink href={`/${NEW_CASE_PAGE_NAME}/${draft.id}`} />;
 		}
 	}, []);
 
 	return (
 		<div
 			className={cn(
-				"grid grid-cols-1 space-y-2 xs:grid-cols-2 xs:space-x-1 xs:space-y-0",
+				"xs:max-w-[150px] w-full flex justify-between items-center",
 			)}
 		>
 			<span className={cn("text-xs flex items-center")}>
@@ -121,5 +114,24 @@ export function StatusIndicator({
 				</span>
 			)}
 		</div>
+	);
+}
+
+interface ViewLinkProps {
+	href: string;
+}
+
+function ViewLink({ href }: ViewLinkProps) {
+	return (
+		<Link href={href}>
+			<Button
+				size="pill"
+				className={cn(
+					"bg-background text-black border-black border-dashed font-aspekta text-xs w-16 py-1",
+				)}
+			>
+				View
+			</Button>
+		</Link>
 	);
 }
