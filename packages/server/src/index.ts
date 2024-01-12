@@ -114,9 +114,6 @@ router.post("/github/webhook", async (ctx, next) => {
 		| PullRequestClosedEvent
 		| PushEvent;
 
-	console.log("github hook");
-	console.log(body);
-
 	// Update the status of the case study
 	if ("action" in body) {
 		if (body.action === "closed") {
@@ -124,19 +121,27 @@ router.post("/github/webhook", async (ctx, next) => {
 			const branchName = body.pull_request.head.ref;
 			const slug = branchName.split("/")[1];
 
-			const caseStudy = await prisma.caseStudy.update({
+			const caseStudyExists = !!(await prisma.caseStudy.findUnique({
 				where: { slug },
-				data: {
-					approved,
-					approvedAt: approved ? new Date() : null,
-				},
-			});
+			}));
 
-			if (approved && caseStudy.signerAddress) {
-				// Mint an NFT if there is address associated with the case study
-				console.log(
-					`TODO: mint NFT to ${caseStudy.signerAddress} for case study id: ${caseStudy.id}`,
-				);
+			if (caseStudyExists) {
+				const caseStudy = await prisma.caseStudy.update({
+					where: { slug },
+					data: {
+						approved,
+						approvedAt: approved ? new Date() : null,
+					},
+				});
+
+				if (approved && caseStudy.signerAddress) {
+					// Mint an NFT if there is address associated with the case study
+					console.log(
+						`TODO: mint NFT to ${caseStudy.signerAddress} for case study id: ${caseStudy.id}`,
+					);
+				}
+			} else {
+				console.log(`Case study with slug ${slug} not found`);
 			}
 		}
 	}
