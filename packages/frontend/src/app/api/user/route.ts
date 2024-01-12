@@ -5,7 +5,9 @@ import ServerClient from "../../../lib/serverClient";
 export async function GET(req: NextRequest) {
 	try {
 		const {
-			session: { user: { email } },
+			session: {
+				user: { email },
+			},
 		} = await getAuth(req);
 		const drafts = await ServerClient.getUser(email);
 		return NextResponse.json(drafts);
