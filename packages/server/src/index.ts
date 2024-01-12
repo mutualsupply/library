@@ -114,6 +114,9 @@ router.post("/github/webhook", async (ctx, next) => {
 		| PullRequestClosedEvent
 		| PushEvent;
 
+	console.log("github hook");
+	console.log(body);
+
 	// Update the status of the case study
 	if ("action" in body) {
 		if (body.action === "closed") {
