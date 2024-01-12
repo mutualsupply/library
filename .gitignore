@@ -63,3 +63,6 @@ packages/chain/lib
 packages/chain/docs/
 
 packages/chain/src/examples
+
+packages/server/mutual--computer
+packages/server/mutual--computer.pub

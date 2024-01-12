@@ -1,5 +1,10 @@
 import cors from "@koa/cors";
 import multer from "@koa/multer";
+import {
+	PullRequestClosedEvent,
+	PullRequestOpenedEvent,
+	PushEvent,
+} from "@octokit/webhooks-types";
 import { Prisma } from "@prisma/client";
 import Koa, { Context } from "koa";
 import bodyParser from "koa-bodyparser";
@@ -104,14 +109,34 @@ router.post(
 
 // @next: find the case study by slug & update its accepted @ time && status
 router.post("/github/webhook", async (ctx, next) => {
-	const body = ctx.request.body as Record<string, unknown>;
-	console.log(body?.pull_request);
-	console.log("github hook", body);
+	const body = ctx.request.body as
+		| PullRequestOpenedEvent
+		| PullRequestClosedEvent
+		| PushEvent;
 
-	// get slug from posted body on merged PR
-	// update the accepted at datetime && status
-	// mint an NFT of the case study to the submitter if
-	// there is an address associated
+	// Update the status of the case study
+	if ("action" in body) {
+		if (body.action === "closed") {
+			const approved = body.pull_request.merged;
+			const branchName = body.pull_request.head.ref;
+			const slug = branchName.split("/")[1];
+
+			const caseStudy = await prisma.caseStudy.update({
+				where: { slug },
+				data: {
+					approved,
+					approvedAt: approved ? new Date() : null,
+				},
+			});
+
+			if (approved && caseStudy.signerAddress) {
+				// Mint an NFT if there is address associated with the case study
+				console.log(
+					`TODO: mint NFT to ${caseStudy.signerAddress} for case study id: ${caseStudy.id}`,
+				);
+			}
+		}
+	}
 
 	ctx.body = { status: "ok" };
 	await next();
