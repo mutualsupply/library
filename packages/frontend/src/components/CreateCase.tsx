@@ -263,7 +263,7 @@ export default function CreateCasePage({ draft }: CreateCaseProps) {
 									<div className={cn("font-otBrut text-3xl text-primary")}>
 										Lorem ipsum dolor set
 									</div>
-									<div className={cn("font-aspekta text-sm")}>
+									<div className={cn("font-aspekta text-sm mt-4")}>
 										This is truly an almighty mountain. In your world you have
 										total and absolute power. Every highlight needs it's own
 										personal shadow. This is your world, whatever makes you

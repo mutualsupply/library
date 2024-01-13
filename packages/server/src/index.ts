@@ -136,6 +136,7 @@ router.post("/github/webhook", async (ctx, next) => {
 
 				if (approved && caseStudy.signerAddress) {
 					// Mint an NFT if there is address associated with the case study
+					// await mintToUser(caseStudy.signerAddress);
 					console.log(
 						`TODO: mint NFT to ${caseStudy.signerAddress} for case study id: ${caseStudy.id}`,
 					);
