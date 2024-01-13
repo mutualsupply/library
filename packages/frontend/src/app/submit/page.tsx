@@ -18,6 +18,7 @@ import {
 	AccordionItem,
 	AccordionTrigger,
 } from "../../components/ui/accordion";
+import { Separator } from "../../components/ui/separator";
 import useUser from "../../hooks/useUser";
 import { NEW_CASE_PAGE_NAME } from "../../lib/constants";
 
@@ -54,10 +55,19 @@ const Submit = () => {
 						</AccordionTrigger>
 						<AccordionContent>
 							<div className={cn("font-aspekta")}>
-								<div className={cn("text-sm", "font-medium", "font-aspekta")}>
+								<div
+									className={cn(
+										"text-base",
+										"font-medium",
+										"font-aspekta",
+										"text-purple",
+									)}
+								>
 									Github (required)
 								</div>
-								<div>Submit + save drafts</div>
+								<div className={cn("text-[#505049] mt-1")}>
+									Submit + save drafts
+								</div>
 								<div>
 									{!isLoggedIn && (
 										<Button
@@ -73,7 +83,7 @@ const Submit = () => {
 													}
 												});
 											}}
-											className={cn("flex items-center gap-2 mt-2 w-full")}
+											className={cn("flex items-center gap-2 mt-4 w-full")}
 										>
 											<Github /> <span className={cn("text-sm")}>Sign in</span>
 										</Button>
@@ -118,18 +128,22 @@ const Submit = () => {
 									)}
 								</div>
 
-								<div className={cn("mt-4")}>
-									<div className={cn("text-sm", "font-medium")}>
+								<Separator className={cn("my-6 border-dashed")} />
+
+								<div>
+									<div className={cn("text-base", "font-medium", "text-red")}>
 										Optimism (optional)
 									</div>
-									<div>Receive on-chain credit for your work</div>
+									<div className={cn("text-[#505049] mt-1")}>
+										Receive on-chain credit for your work
+									</div>
 								</div>
 							</div>
 							{!authenticated && (
 								<div>
 									<Button
 										className={cn(
-											"text-red flex items-center gap-2 mt-2 w-full",
+											"text-red flex items-center gap-2 mt-4 w-full border-solid",
 										)}
 										variant="op"
 										onClick={() => login()}
