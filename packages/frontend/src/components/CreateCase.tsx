@@ -270,7 +270,7 @@ export default function CreateCasePage({ draft }: CreateCaseProps) {
 										happy you can put in it. Go crazy. Let's give him a friend
 										too. Everybody needs a friend. You can get away with a lot.
 									</div>
-									<div className={cn("flex flex-col space-y-2")}>
+									<div className={cn("flex flex-col space-y-2 mt-10")}>
 										<TextInput
 											name="title"
 											label="Title"
