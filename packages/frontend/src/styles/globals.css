@@ -132,3 +132,7 @@ div[data-milkdown-root], .milkdown {
 #SelectTrigger[data-placeholder] {
   color: #737373
 }
+
+.prose :where(ol > li):not(:where([class~="not-prose"],[class~="not-prose"] *))::marker {
+  color: #0C89E9;
+}
