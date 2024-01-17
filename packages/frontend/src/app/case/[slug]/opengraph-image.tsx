@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/server";
+import { getCaseFromSlug } from "../../../lib/server";
 
 // Route segment config
 export const runtime = "edge";
@@ -21,6 +22,8 @@ export default async function Image({
 		new URL("/public/fonts/OTBrut-Regular.otf", import.meta.url),
 	).then((res) => res.arrayBuffer());
 
+	const caseStudy = await getCaseFromSlug(slug);
+
 	return new ImageResponse(
 		// ImageResponse JSX element
 		<div
@@ -36,7 +39,7 @@ export default async function Image({
 				fontFamily: "otBrut",
 			}}
 		>
-			{slug}
+			{caseStudy.title}
 		</div>,
 		// ImageResponse options
 		{
