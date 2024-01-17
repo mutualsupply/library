@@ -1,7 +1,13 @@
+import { Metadata } from "next";
 import { HomePage } from "../components/HomePage";
 import HeaderLayout from "../components/layout/HeaderLayout";
 import { getLocalCases } from "../lib/server";
 import ServerClient from "../lib/serverClient";
+
+export const metadata: Metadata = {
+	title: "Mutual Supply",
+	description: "Mutual Supply",
+};
 
 export default async function Page() {
 	const localCases = getLocalCases();
