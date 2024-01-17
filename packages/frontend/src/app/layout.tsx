@@ -54,7 +54,7 @@ const aspekta = localFont({
 });
 
 const otBrut = localFont({
-	src: "../../public/fonts/OTBrut-Regular.woff2",
+	src: "../../public/fonts/OTBrut-Regular.otf",
 	variable: "--font-ot-brut",
 	style: "normal",
 });

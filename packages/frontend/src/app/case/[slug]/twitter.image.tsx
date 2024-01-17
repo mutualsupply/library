@@ -18,7 +18,7 @@ export default async function Image({
 }: { params: { slug: string } }) {
 	// Font
 	const otBrut = fetch(
-		new URL("https://dev.research.mutual.supply/fonts/OTBrut-Regular.woff2"),
+		new URL("/public/fonts/OTBrut-Regular.otf", import.meta.url),
 	).then((res) => res.arrayBuffer());
 
 	return new ImageResponse(
