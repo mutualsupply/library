@@ -37,6 +37,7 @@ export default async function Image({
 				justifyContent: "center",
 				color: "#0C89E9",
 				fontFamily: "otBrut",
+				textAlign: "center",
 			}}
 		>
 			{caseStudy.content.title}
