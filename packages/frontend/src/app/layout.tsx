@@ -3,12 +3,19 @@ import localFont from "next/font/local";
 import { cn } from "utils";
 import Footer from "../components/Footer";
 import Providers from "../components/Providers";
+import { isProd } from "../lib/env";
 import "../styles/globals.css";
 
 export const metadata: Metadata = {
 	title: "Mutual Supply",
 	description: "Mutual Supply",
+	metadataBase: new URL(
+		isProd()
+			? "https://research.mutual.supply"
+			: "https://dev.research.mutual.supply",
+	),
 };
+
 const aeonikFono = localFont({
 	src: [
 		{

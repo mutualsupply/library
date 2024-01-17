@@ -21,10 +21,9 @@ export default async function Page({ params }: Params) {
 // or Dynamic metadata
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
 	const slug = params.slug;
-	const cases = getLocalCases();
 	const caseStudy = await getCaseFromSlug(slug);
 	return {
-		title: `Case Study: ${caseStudy.title}`,
+		title: caseStudy.title,
 		description: `by: ${caseStudy.name}`,
 	};
 }
