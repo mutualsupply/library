@@ -113,6 +113,20 @@ class ServerClientClass {
 		}
 		return res.json();
 	}
+
+	async getCaseBySlug(slug: string): Promise<DBCaseStudy> {
+		const res = await fetch(`${this.baseUrl}/case-study/${slug}`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+
+		if (!res.ok) {
+			throw new Error("Could not get case study");
+		}
+		return res.json();
+	}
 }
 
 const ServerClient = new ServerClientClass();
