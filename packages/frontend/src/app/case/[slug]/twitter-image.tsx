@@ -33,6 +33,7 @@ export default async function Image({
 				alignItems: "center",
 				justifyContent: "center",
 				color: "#0C89E9",
+				fontFamily: "otBrut",
 			}}
 		>
 			{slug}
@@ -44,7 +45,7 @@ export default async function Image({
 			...size,
 			fonts: [
 				{
-					name: "OT Brut",
+					name: "otBrut",
 					data: await otBrut,
 					style: "normal",
 					weight: 400,
@@ -53,3 +54,5 @@ export default async function Image({
 		},
 	);
 }
+
+export const revalidate = 0;
