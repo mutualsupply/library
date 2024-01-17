@@ -37,6 +37,13 @@ export function HomePage({ cases }: HomeProps) {
 		);
 	}, [selectedLabel, search, cases]);
 
+	const featuredCases = useMemo(() => {
+		return cases.filter((c) => c.featured);
+	}, [cases]);
+	const nonFeaturedCases = useMemo(() => {
+		return cases.filter((c) => !c.featured);
+	}, [cases]);
+
 	return (
 		<>
 			<div
@@ -67,52 +74,70 @@ export function HomePage({ cases }: HomeProps) {
 				/>
 			</div>
 			<div className={cn("flex", "flex-col")}>
-				{filteredData.map((caseFile, index) => (
-					<Link
-						key={caseFile.slug}
-						href={`/case/${caseFile.slug}`}
-						className={cn(
-							"p-6",
-							"relative",
-							"group",
-							"hover:text-white",
-							"hover:bg-primary",
-							"flex",
-							"items-center",
-							"justify-between",
-							"group",
-						)}
-					>
-						<div
-							className={cn(
-								"z-20",
-								"inline-flex",
-								"gap-4",
-								"items-center",
-								"relative",
-							)}
-						>
-							{caseFile.featured ? (
-								<span className={cn("w-3 h-3 rounded-full bg-[#77F5B9]")} />
-							) : (
-								<span className={cn("text-sm font-spline")}>
-									<span>{index < 10 && "0"}</span>
-									{index + 1}
-								</span>
-							)}
-							<span className={cn("text-2xl", "font-otBrut")}>
-								{caseFile.title}
-							</span>
-						</div>
-						{(index + 1) % 2 === 0 && (
-							<div className={cn("absolute", "inset-0", "bg-tertiary/25")} />
-						)}
-						<div className={cn("text-primary group-hover:text-white")}>
-							{caseFile.name}
-						</div>
-					</Link>
+				{featuredCases.map((caseStudy, index) => (
+					<CaseStudyItem
+						key={`featured-case-study-${index}`}
+						index={index}
+						caseStudy={caseStudy}
+					/>
+				))}
+				{nonFeaturedCases.map((caseStudy, index) => (
+					<CaseStudyItem
+						key={`featured-case-study-${index}`}
+						index={index}
+						caseStudy={caseStudy}
+					/>
 				))}
 			</div>
 		</>
+	);
+}
+
+function CaseStudyItem({
+	caseStudy,
+	index,
+}: { caseStudy: CaseWithMetadata; index: number }) {
+	return (
+		<Link
+			key={caseStudy.slug}
+			href={`/case/${caseStudy.slug}`}
+			className={cn(
+				"p-6",
+				"relative",
+				"group",
+				"hover:text-white",
+				"hover:bg-primary",
+				"flex",
+				"items-center",
+				"justify-between",
+				"group",
+			)}
+		>
+			<div
+				className={cn(
+					"z-20",
+					"inline-flex",
+					"gap-4",
+					"items-center",
+					"relative",
+				)}
+			>
+				{caseStudy.featured ? (
+					<span className={cn("w-3 h-3 rounded-full bg-[#77F5B9]")} />
+				) : (
+					<span className={cn("text-sm font-spline")}>
+						<span>{index < 10 && "0"}</span>
+						{index + 1}
+					</span>
+				)}
+				<span className={cn("text-2xl", "font-otBrut")}>{caseStudy.title}</span>
+			</div>
+			{(index + 1) % 2 === 0 && (
+				<div className={cn("absolute", "inset-0", "bg-tertiary/25")} />
+			)}
+			<div className={cn("text-primary group-hover:text-white")}>
+				{caseStudy.name}
+			</div>
+		</Link>
 	);
 }
