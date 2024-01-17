@@ -38,8 +38,10 @@ export const placeholder: MilkdownPlugin = (ctx) => {
 				doc.firstChild?.content.size === 0 &&
 				doc.firstChild?.type.name === "paragraph"
 			) {
+				// view.dom.innerHTML = placeholder;
 				view.dom.setAttribute("data-placeholder", placeholder);
 			} else {
+				// view.dom.innerHTML = "";
 				view.dom.removeAttribute("data-placeholder");
 			}
 		};
@@ -48,6 +50,9 @@ export const placeholder: MilkdownPlugin = (ctx) => {
 			...prosePlugins,
 			new Plugin({
 				key,
+				// @note this was commented out in the source
+				// https://github.com/HexMox/milkdown-plugin-placeholder/blob/main/src/index.ts
+
 				// props: {
 				//   decorations(state) {
 				//     const doc = state.doc
