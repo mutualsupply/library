@@ -120,8 +120,8 @@ div[data-milkdown-root] {
 
 .milkdown {
   flex-grow: 1;
-  min-height: 0px;
-  height: 0px;
+  min-height: 350px;
+  height: 350px;
 }
 
 

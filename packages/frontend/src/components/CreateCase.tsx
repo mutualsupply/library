@@ -130,7 +130,7 @@ export default function CreateCasePage({ draft }: CreateCaseProps) {
 	return (
 		<div
 			className={cn(
-				"grow flex flex-col 3xl:flex-row justify-center items-center",
+				"grow flex flex-col 3xl:flex-row justify-center items-center pb-[56px]",
 			)}
 		>
 			<div

@@ -6,7 +6,15 @@ import { Badge } from "./ui/badge";
 export default function Footer() {
 	return (
 		<div
-			className={cn("flex", "justify-center", "bg-white", "p-4")}
+			className={cn(
+				"flex",
+				"justify-center",
+				"bg-white",
+				"p-4",
+				"fixed",
+				"bottom-0",
+				"w-full",
+			)}
 			style={{ zIndex: 1000 }}
 		>
 			<div className={cn("flex", "items-center", "gap-1")}>
