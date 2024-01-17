@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-interface ICaseStudyStorage {
+interface IMetadata {
   function getSource(uint256 tokenId) external view returns (string memory);
   function getTitle(uint256 tokenId) external view returns (string memory);
   function getSlug(uint256 tokenId) external view returns (string memory);
