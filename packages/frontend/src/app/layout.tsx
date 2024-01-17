@@ -7,7 +7,7 @@ import { isProd } from "../lib/env";
 import "../styles/globals.css";
 
 export const metadata: Metadata = {
-	title: "Mutual Supply",
+	title: "LIBRARY",
 	description: "Mutual Supply",
 	metadataBase: new URL(
 		isProd()

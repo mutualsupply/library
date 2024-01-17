@@ -5,7 +5,7 @@ import { getLocalCases } from "../lib/server";
 import ServerClient from "../lib/serverClient";
 
 export const metadata: Metadata = {
-	title: "Mutual Supply",
+	title: "LIBRARY",
 	description: "Mutual Supply",
 };
 
