@@ -151,6 +151,21 @@ router.post("/github/webhook", async (ctx, next) => {
 	await next();
 });
 
+router.get("/case-study/:slug", async (ctx, next) => {
+	const { slug } = ctx.params;
+	const caseStudy = await prisma.caseStudy.findFirst({
+		where: { slug, submitted: true, approved: true },
+	});
+	if (!caseStudy) {
+		ctx.status = 404;
+		ctx.body = "Case study not found";
+		ctx.app.emit("error", new Error("Case study not found"), ctx);
+		return await next();
+	}
+	ctx.body = caseStudy;
+	await next();
+});
+
 // PRIVATE ENDPOINTS
 router.post("/draft", authMiddleware, async (ctx, next) => {
 	const { caseStudy, user } = ctx.request.body as PostCaseStudyRequestBody;
