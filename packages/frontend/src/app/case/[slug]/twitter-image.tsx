@@ -25,7 +25,16 @@ export default async function Image({
 
 	return new ImageResponse(
 		// ImageResponse JSX element
-		<div>
+		<div
+			style={{
+				display: "flex",
+				position: "relative",
+				width: "100%",
+				height: "100%",
+				alignItems: "center",
+				justifyContent: "center",
+			}}
+		>
 			<div
 				style={{
 					fontSize: 128,
