@@ -1,20 +1,21 @@
 import { ImageResponse } from "next/server";
-import ServerClient from "../../../lib/serverClient";
+import ServerClient from "../../lib/serverClient";
 
-// Route segment config
-export const runtime = "edge";
-
-// Image metadata
-export const alt = "Case Study";
-export const size = {
-	width: 1200,
-	height: 630,
+export const config = {
+	// Route segment config
+	runtime: "edge",
+	// Image metadata
+	alt: "Case Study",
+	size: {
+		width: 1200,
+		height: 630,
+	},
+	contentType: "image/png",
+	revalidate: 0,
 };
 
-export const contentType = "image/png";
-
 // Image generation
-export default async function Image({
+export default async function CaseImage({
 	params: { slug },
 }: { params: { slug: string } }) {
 	// Font
@@ -38,7 +39,7 @@ export default async function Image({
 				color: "#0C89E9",
 				fontFamily: "otBrut",
 				textAlign: "center",
-				backgroundImage: "url('/public/images/bg-pattern.svg')",
+				backgroundImage: "url('/images/bg-pattern.svg')",
 			}}
 		>
 			{caseStudy.content.title}
@@ -47,7 +48,7 @@ export default async function Image({
 		{
 			// For convenience, we can re-use the exported opengraph-image
 			// size config to also set the ImageResponse's width and height.
-			...size,
+			...config.size,
 			fonts: [
 				{
 					name: "otBrut",
@@ -59,5 +60,3 @@ export default async function Image({
 		},
 	);
 }
-
-export const revalidate = 0;
