@@ -38,6 +38,7 @@ export default async function Image({
 				color: "#0C89E9",
 				fontFamily: "otBrut",
 				textAlign: "center",
+				backgroundImage: "url('/public/images/bg-pattern.svg')",
 			}}
 		>
 			{caseStudy.content.title}
