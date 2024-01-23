@@ -84,7 +84,6 @@ export default function RootLayout({
 					"flex",
 					"flex-col",
 					"font-light",
-					"bg-[url('/images/bg-pattern.svg')]",
 					aeonikFono.variable,
 					aspekta.variable,
 					otBrut.variable,

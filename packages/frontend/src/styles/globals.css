@@ -97,6 +97,10 @@
   body, html {
     @apply bg-background text-foreground;    
   }
+
+  body {
+    background-image: url('/images/bg-pattern.svg');
+  }
 }
 
 .ProseMirror {
