@@ -82,6 +82,9 @@ importers:
       '@next/mdx':
         specifier: ^13.4.6
         version: 13.5.6(@mdx-js/loader@2.3.0)(@mdx-js/react@2.3.0)
+      '@next/third-parties':
+        specifier: ^14.1.0
+        version: 14.1.0(next@13.5.6)(react@18.2.0)
       '@privy-io/react-auth':
         specifier: ^1.52.2
         version: 1.52.2(@babel/core@7.23.6)(@types/react@18.2.45)(react-dom@18.2.0)(react-is@18.2.0)(react@18.2.0)(typescript@5.3.3)(zod@3.22.4)
@@ -148,6 +151,9 @@ importers:
       react-hook-form:
         specifier: ^7.45.1
         version: 7.49.2(react@18.2.0)
+      react-hotjar:
+        specifier: ^6.2.0
+        version: 6.2.0
       react-icons:
         specifier: ^4.10.1
         version: 4.12.0(react@18.2.0)
@@ -2901,6 +2907,17 @@ packages:
     requiresBuild: true
     dev: false
     optional: true
+
+  /@next/third-parties@14.1.0(next@13.5.6)(react@18.2.0):
+    resolution: {integrity: sha512-f55SdvQ1WWxi4mb5QqtYQh5wRzbm1XaeP7s39DPn4ks3re+n9VlFccbMxBRHqkE62zAyIKmvkUB2cByT/gugGA==}
+    peerDependencies:
+      next: ^13.0.0 || ^14.0.0
+      react: ^18.2.0
+    dependencies:
+      next: 13.5.6(@babel/core@7.23.6)(react-dom@18.2.0)(react@18.2.0)
+      react: 18.2.0
+      third-party-capital: 1.0.20
+    dev: false
 
   /@noble/curves@1.1.0:
     resolution: {integrity: sha512-091oBExgENk/kGj3AZmtBDMpxQPDtxQABR2B9lb1JbVTs6ytdzZNwvhxQ4MWasRNEzlbEH8jCWFCwhF/Obj5AA==}
@@ -10735,6 +10752,10 @@ packages:
       react: 18.2.0
     dev: false
 
+  /react-hotjar@6.2.0:
+    resolution: {integrity: sha512-uMX2IS5IKt1VkhHPwl2QEAEUmmm6VyxfzlwHLUKTQGZoE/0HWD71iGA7T31PO3KeN9+XUsTJS2P3zHva6TyhrQ==}
+    dev: false
+
   /react-icons@4.12.0(react@18.2.0):
     resolution: {integrity: sha512-IBaDuHiShdZqmfc/TwHu6+d6k2ltNCf3AszxNmjJc1KUfXdEeRJOKyNvLmAHaarhzGmTSVygNdyu8/opXv2gaw==}
     peerDependencies:
@@ -11644,6 +11665,10 @@ packages:
     resolution: {integrity: sha512-RVZSIV5IG10Hk3enotrhvz0T9em6cyHBLkH/YAZuKqd8hRkKhSfCGIcP2KUY0EPxndzANBmNllzWPwak+bheSw==}
     dependencies:
       any-promise: 1.3.0
+
+  /third-party-capital@1.0.20:
+    resolution: {integrity: sha512-oB7yIimd8SuGptespDAZnNkzIz+NWaJCu2RMsbs4Wmp9zSDUM8Nhi3s2OOcqYuv3mN4hitXc8DVx+LyUmbUDiA==}
+    dev: false
 
   /thread-stream@0.15.2:
     resolution: {integrity: sha512-UkEhKIg2pD+fjkHQKyJO3yoIvAP3N6RlNFt2dUhcS1FGvCD1cQa1M/PGknCLFIyZdtJOWQjejp7bdNqmN7zwdA==}

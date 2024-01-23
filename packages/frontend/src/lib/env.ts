@@ -12,6 +12,9 @@ interface Env {
 	NEXT_PUBLIC_APP_ENV: AppEnv;
 	NEXT_PUBLIC_SERVER_BASE_URL: string;
 	NEXT_PUBLIC_PRIVY_APP_ID: string;
+	NEXT_PUBLIC_HJID: number;
+	NEXT_PUBLIC_HJSV: number;
+	NEXT_PUBLIC_GAID: string;
 	GITHUB_TOKEN: string;
 	GITHUB_ID: string;
 	GITHUB_SECRET: string;
@@ -34,6 +37,9 @@ const env: Env = {
 	NEXTAUTH_URL: process.env.NEXTAUTH_URL as string,
 	NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET as string,
 	API_KEY: process.env.API_KEY as string,
+	NEXT_PUBLIC_HJID: Number(process.env.NEXT_PUBLIC_HJID as string),
+	NEXT_PUBLIC_HJSV: Number(process.env.NEXT_PUBLIC_HJSV as string),
+	NEXT_PUBLIC_GAID: process.env.NEXT_PUBLIC_GAID as string,
 };
 
 const frontendKeys = objectKeys(env).filter((key) =>

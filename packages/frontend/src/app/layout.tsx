@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import localFont from "next/font/local";
 import { cn } from "utils";
+import Analytics from "../components/Analytics";
 import Footer from "../components/Footer";
 import Providers from "../components/Providers";
 import { isProd } from "../lib/env";
@@ -90,6 +91,7 @@ export default function RootLayout({
 					splineSans.variable,
 				)}
 			>
+				<Analytics />
 				<Providers>
 					<div className={cn("flex-grow flex flex-col")}>{children}</div>
 					<Footer />
