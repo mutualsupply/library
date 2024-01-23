@@ -21,6 +21,9 @@ export default async function Image({
 	const otBrut = fetch(
 		new URL("/public/fonts/OTBrut-Regular.otf", import.meta.url),
 	).then((res) => res.arrayBuffer());
+	const image = fetch(
+		new URL("/public/images/bg-pattern.svg", import.meta.url),
+	).then((res) => res.arrayBuffer());
 
 	const caseStudy = await ServerClient.getCaseBySlug(slug);
 
@@ -38,6 +41,7 @@ export default async function Image({
 				color: "#0C89E9",
 				fontFamily: "otBrut",
 				textAlign: "center",
+				backgroundImage: `url(${image})`,
 			}}
 		>
 			{caseStudy.content.title}
