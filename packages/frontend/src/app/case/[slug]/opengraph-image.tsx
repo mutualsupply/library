@@ -23,7 +23,7 @@ export default async function Image({
 	).then((res) => res.arrayBuffer());
 	const image = fetch(
 		new URL(
-			"https://dev.research.mutual.supply/images/bg-pattern.svg",
+			"https://dev.research.mutual.supply/images/bg-pattern.png",
 			import.meta.url,
 		),
 	).then((res) => res.arrayBuffer());
