@@ -22,7 +22,10 @@ export default async function Image({
 		new URL("/public/fonts/OTBrut-Regular.otf", import.meta.url),
 	).then((res) => res.arrayBuffer());
 	const image = fetch(
-		new URL("/public/images/bg-pattern.svg", import.meta.url),
+		new URL(
+			"https://dev.research.mutual.supply/images/bg-pattern.svg",
+			import.meta.url,
+		),
 	).then((res) => res.arrayBuffer());
 
 	const caseStudy = await ServerClient.getCaseBySlug(slug);
