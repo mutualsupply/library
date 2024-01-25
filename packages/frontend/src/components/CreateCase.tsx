@@ -319,6 +319,9 @@ export default function CreateCasePage({ draft }: CreateCaseProps) {
 								</div>
 								<div className={cn("col-span-4 flex flex-col")}>
 									<MilkdownEditor
+										placeholder={
+											"Some tips:\n\n🔗 Select any text to create a link.\n\n📸 Add images by drag n drop into this editor.\n\n⏰ Running out of time? Save drafts & access them later.\n\n🎨 Apps like Notion, Obsidian & Google Docs use markdown (.md), and so do we. That means your text formatting will carry over with copy + paste."
+										}
 										defaultValue={draft?.content?.markdown}
 										onChange={setMarkdown}
 									/>

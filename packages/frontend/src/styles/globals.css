@@ -132,13 +132,15 @@ div[data-milkdown-root] {
 }
 
 .ProseMirror[data-placeholder]::before {
-  color: #a9a9a9;
+  color: #47AAF6;
   position: absolute;
   content: attr(data-placeholder);
   pointer-events: none;
   font-size: 16px;
+  white-space: pre-wrap;
   /* Using default height value of p element in chrome */
-  line-height: 28px;
+  font-family: var(--font-aspekta);
+  line-height: 24px; /* 150% */
 }
 
 /* Select placeholder color */
