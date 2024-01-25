@@ -32,7 +32,7 @@ const Submit = () => {
 	const closeLogin = () => setAccordionValue("");
 	const { data } = useUser();
 	return (
-		<div className={cn("flex flex-col md:gap-6")}>
+		<div className={cn("grow flex flex-col md:gap-6")}>
 			<div className={cn("md:max-w-[320px] w-full")}>
 				<Accordion
 					value={accordionValue}
@@ -176,7 +176,11 @@ const Submit = () => {
 				</Accordion>
 			</div>
 
-			<div className={cn("grow flex justify-center items-start mt-6 md:mt-56")}>
+			<div
+				className={cn(
+					"grow flex justify-center md:items-center items-start mt-4 md:mt-0",
+				)}
+			>
 				<div className={cn("max-w-[800px] w-full border border-dashed p-4")}>
 					<div
 						className={cn(
