@@ -7,7 +7,7 @@ on:
       - 'packages/server/**'
 jobs:
   deploy:
-    name: Deploy Staging API
+    name: Deploy Production API
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
