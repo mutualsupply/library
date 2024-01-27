@@ -3,6 +3,7 @@ import {
 	CreateNewCaseStudyResponse,
 	DBCaseStudy,
 	PostCaseStudyBody,
+	UserResponse,
 } from "./interfaces";
 
 export type GithubPullResponse =
@@ -14,24 +15,6 @@ export async function getPulls(): Promise<GithubPullResponse> {
 		throw new Error("Failed to fetch pulls");
 	}
 	return res.json();
-}
-
-export async function getDrafts(): Promise<Array<DBCaseStudy>> {
-	const res = await fetch("/api/draft", {
-		method: "GET",
-		credentials: "include",
-		headers: {
-			"Content-Type": "application/json",
-		},
-	});
-	if (!res.ok) {
-		throw new Error("Failed to fetch drafts");
-	}
-	return res.json();
-}
-
-export async function getDraft(id: number): Promise<DBCaseStudy | undefined> {
-	return getDrafts().then((drafts) => drafts.find((d) => d.id === id));
 }
 
 export async function submitCaseStudy(
@@ -76,6 +59,17 @@ export async function updateDraft(
 	if (!res.ok) {
 		console.error("Could not create save draft", await res.text());
 		throw new Error("Could not save draft");
+	}
+	return res.json();
+}
+
+export async function getUser(): Promise<UserResponse> {
+	const res = await fetch("/api/user", {
+		method: "GET",
+		credentials: "include",
+	});
+	if (!res.ok) {
+		throw new Error("Failed to fetch drafts");
 	}
 	return res.json();
 }

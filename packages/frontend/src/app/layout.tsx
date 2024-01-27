@@ -1,14 +1,22 @@
 import { Metadata } from "next";
 import localFont from "next/font/local";
 import { cn } from "utils";
+import Analytics from "../components/Analytics";
 import Footer from "../components/Footer";
 import Providers from "../components/Providers";
+import { isProd } from "../lib/env";
 import "../styles/globals.css";
 
 export const metadata: Metadata = {
-	title: "Mutual Supply",
+	title: "LIBRARY",
 	description: "Mutual Supply",
+	metadataBase: new URL(
+		isProd()
+			? "https://research.mutual.supply"
+			: "https://dev.research.mutual.supply",
+	),
 };
+
 const aeonikFono = localFont({
 	src: [
 		{
@@ -47,7 +55,7 @@ const aspekta = localFont({
 });
 
 const otBrut = localFont({
-	src: "../../public/fonts/OTBrut-Regular.woff2",
+	src: "../../public/fonts/OTBrut-Regular.otf",
 	variable: "--font-ot-brut",
 	style: "normal",
 });
@@ -83,6 +91,7 @@ export default function RootLayout({
 					splineSans.variable,
 				)}
 			>
+				<Analytics />
 				<Providers>
 					<div className={cn("flex-grow flex flex-col")}>{children}</div>
 					<Footer />

@@ -10,85 +10,6 @@ import {
 import { DBCaseStudy } from "../lib/interfaces";
 import { Button } from "./ui/button";
 
-export function StatusIndicator({
-	caseStudy,
-	showButton = true,
-}: StatusIndicatorProps) {
-	const { submitted, approved } = caseStudy;
-	let status = Status.Approved;
-
-	if (!submitted) {
-		status = Status.Draft;
-	} else if (approved === null) {
-		status = Status.Submitted;
-	} else {
-		status = Status.Rejected;
-	}
-
-	const text = StatusMap[status].text;
-	const background = StatusMap[status].color;
-
-	const renderButton = useCallback((status: Status, draft: DBCaseStudy) => {
-		if (status === Status.Draft) {
-			return (
-				<Link href={`/${NEW_CASE_PAGE_NAME}/${draft.id}`}>
-					<Button
-						size="pill"
-						className={cn(
-							"bg-primary text-white font-aspekta text-xs w-16 py-1",
-						)}
-					>
-						Edit
-					</Button>
-				</Link>
-			);
-		}
-
-		if (status === Status.Submitted) {
-			return (
-				<Link
-					href={`https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/pull/${draft.githubBranchName}`}
-				>
-					<Button
-						size="pill"
-						className={cn(
-							"bg-background text-black border-black border-dashed font-aspekta text-xs w-16 py-1",
-						)}
-					>
-						View
-					</Button>
-				</Link>
-			);
-		}
-
-		if (status === Status.Approved) {
-			return <Link href={`/case/${draft.slug}`}>Edit</Link>;
-		}
-
-		if (status === Status.Rejected) {
-			return <span>😓</span>;
-		}
-	}, []);
-
-	return (
-		<div className={cn("grid grid-cols-2 space-x-1")}>
-			<span className={cn("text-xs flex items-center")}>
-				<div className={cn("inline-flex items-center gap-1")}>
-					<span
-						className={cn("w-2 h-2 rounded-full inline-block")}
-						style={{ background }}
-					/>
-					<span className={cn("text-xs font-aspekta")}>{text}</span>
-				</div>
-			</span>
-			{showButton && (
-				<span className={cn("flex items-center")}>
-					{renderButton(status, caseStudy)}
-				</span>
-			)}
-		</div>
-	);
-}
 export enum Status {
 	Draft = "draft",
 	Submitted = "submitted",
@@ -117,4 +38,100 @@ export const StatusMap = {
 export interface StatusIndicatorProps {
 	caseStudy: DBCaseStudy;
 	showButton?: boolean;
+}
+
+export function StatusIndicator({
+	caseStudy,
+	showButton = true,
+}: StatusIndicatorProps) {
+	const { submitted, approved } = caseStudy;
+	let status = Status.Approved;
+
+	if (!submitted) {
+		status = Status.Draft;
+	} else if (approved === null) {
+		status = Status.Submitted;
+	} else if (approved === true) {
+		status = Status.Approved;
+	} else {
+		status = Status.Rejected;
+	}
+
+	const text = StatusMap[status].text;
+	const background = StatusMap[status].color;
+
+	const renderButton = useCallback((status: Status, draft: DBCaseStudy) => {
+		if (status === Status.Draft) {
+			return (
+				<Link href={`/${NEW_CASE_PAGE_NAME}/${draft.id}`}>
+					<Button
+						size="pill"
+						className={cn(
+							"bg-primary text-white font-aspekta text-xs w-16 py-1",
+						)}
+					>
+						Edit
+					</Button>
+				</Link>
+			);
+		}
+
+		if (status === Status.Submitted) {
+			return (
+				<ViewLink
+					href={`https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/pull/${draft.githubBranchName}`}
+				/>
+			);
+		}
+
+		if (status === Status.Approved) {
+			return <ViewLink href={`/case/${draft.slug}`} />;
+		}
+
+		if (status === Status.Rejected) {
+			return <ViewLink href={`/${NEW_CASE_PAGE_NAME}/${draft.id}`} />;
+		}
+	}, []);
+
+	return (
+		<div
+			className={cn(
+				"xs:max-w-[150px] w-full flex justify-between items-center",
+			)}
+		>
+			<span className={cn("text-xs flex items-center")}>
+				<div className={cn("inline-flex items-center gap-1")}>
+					<span
+						className={cn("w-2 h-2 rounded-full inline-block")}
+						style={{ background }}
+					/>
+					<span className={cn("text-xs font-aspekta")}>{text}</span>
+				</div>
+			</span>
+			{showButton && (
+				<span className={cn("flex items-center")}>
+					{renderButton(status, caseStudy)}
+				</span>
+			)}
+		</div>
+	);
+}
+
+interface ViewLinkProps {
+	href: string;
+}
+
+function ViewLink({ href }: ViewLinkProps) {
+	return (
+		<Link href={href}>
+			<Button
+				size="pill"
+				className={cn(
+					"bg-background text-black border-black border-dashed font-aspekta text-xs w-16 py-1",
+				)}
+			>
+				View
+			</Button>
+		</Link>
+	);
 }

@@ -2,6 +2,9 @@ import { z } from "zod";
 
 const MAX_TITLE_LENGTH = 200;
 
+const urlRegex =
+	/^(https?:\/\/)?(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)(\/.*)?$/i;
+
 export const caseStudyFormSchema = z.object({
 	title: z
 		.string()
@@ -14,9 +17,10 @@ export const caseStudyFormSchema = z.object({
 		message: "Email please!",
 	}),
 	category: z.string().min(1, { message: "Don't forget a category" }),
-	experienceUrl: z.string().url({
-		message: "Must be a valid URL",
-	}),
+	experienceUrl: z
+		.string()
+		.min(1, { message: "Don't forget proof of experience" })
+		.regex(urlRegex, "Invalid URL"),
 	organization: z.string().optional(),
 });
 

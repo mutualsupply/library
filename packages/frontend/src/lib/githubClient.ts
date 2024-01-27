@@ -3,7 +3,8 @@ import env, { isProd } from "./env";
 import { CaseStudy, GithubRefreshResponse } from "./interfaces";
 
 class GithubClass {
-	private readonly baseUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}`;
+	private readonly baseUrl =
+		`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}`;
 
 	async createPr(accessToken: string, caseStudy: CaseStudy, head: string) {
 		let body = `${caseStudy.title} by ${caseStudy.email}`;
@@ -61,6 +62,23 @@ class GithubClass {
 		}
 		console.log("Successfully refreshed token");
 		return json;
+	}
+
+	async getPulls() {
+		const res = await fetch(`${this.baseUrl}/pulls`, {
+			method: "GET",
+			headers: {
+				Accept: "application/vnd.github+json",
+				Authorization: `Bearer ${env.GITHUB_TOKEN}`,
+				"X-GitHub-Api-Version": "2022-11-28",
+			},
+		});
+		if (!res.ok) {
+			console.error(await res.text());
+			throw new Error("Could not get pull requests");
+		}
+		const data = await res.json();
+		return data;
 	}
 }
 

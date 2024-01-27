@@ -6,8 +6,7 @@ import { CaseSource, CaseWithMetadata } from "../lib/interfaces";
 import { categorySelectItems } from "./CreateCase";
 import LabelFilter from "./LabelFilter";
 import { BackLink, Link } from "./Links";
-import RemoteMDX from "./RemoteMDX";
-import Website from "./icons/Website";
+import RemoteMDX, { Banner } from "./RemoteMDX";
 
 interface CaseProps {
 	cases: Array<CaseWithMetadata>;
@@ -49,15 +48,27 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
 		<>
 			<div className={cn("mb-5", "flex", "items-center", "gap-8")}>
 				<BackLink href={"/"}>Back to Index</BackLink>
-				<LabelFilter
-					items={categorySelectItems}
-					selected={selectedCategory}
-					onClick={onLabelFilterClick}
-					onClearClick={() => setSelectedCategory([])}
-				/>
+				<div className={cn("hidden", "lg:block")}>
+					<LabelFilter
+						items={categorySelectItems}
+						selected={selectedCategory}
+						onClick={onLabelFilterClick}
+						onClearClick={() => setSelectedCategory([])}
+					/>
+				</div>
 			</div>
-			<div className={cn("grid", "grid-cols-12", "grow", "gap-10")}>
-				<div className={cn("col-span-2", "flex", "flex-col", "gap-2")}>
+			<div className={cn("flex", "grow", "gap-10", "mt-12")}>
+				<div
+					className={cn(
+						"max-w-[320px]",
+						"w-full",
+						"flex-col",
+						"gap-2",
+						"hidden lg:flex",
+						"pr-6",
+						"pl-4",
+					)}
+				>
 					{objectKeys(casesByFirstLetter).map((firstLetter, index) => (
 						<div key={`letter-${firstLetter}-${index}`}>
 							<span
@@ -99,53 +110,45 @@ export default function CasePage({ cases, caseStudy }: CaseProps) {
 					className={cn(
 						"max-w-full",
 						"prose",
-						"col-span-10",
+						"lg:col-span-10",
+						"col-span-12",
 						"relative",
 						"grow",
-						"grid",
-						"grid-cols-12",
+						"flex",
+						"flex-col",
+						"min-h-0",
 					)}
 				>
 					<div
-						className={cn("z-10", "relative", "p-8", "col-span-9")}
-						id="remote-markdown"
-					>
-						<RemoteMDX serialized={caseStudy.serialized} />
-						<div
-							className={cn(
-								"absolute top-[110px] border border-dashed border-black w-full rounded-xl p-2 inline-flex items-center justify-between bg-background",
-							)}
-						>
-							<span>
-								Written by {caseStudy.name}{" "}
-								{caseStudy.organization
-									? `about ${caseStudy.organization} `
-									: ""}
-								on{" "}
-								{new Date(caseStudy.createdAt).toLocaleDateString("en-US", {
-									year: "numeric",
-									month: "long",
-									day: "numeric",
-								})}
-							</span>
-							<span>
-								<Link href={caseStudy.experienceUrl}>
-									<Website className={cn("text-primary w-6")} />
-								</Link>
-							</span>
-						</div>
-					</div>
-					<div
 						className={cn(
 							"absolute",
-							"inset-0",
+							"-right-[14px]",
+							// Note: these values correspond to layout padding
 							"w-[calc(100%+32px)]",
-							"h-[calc(100%+32px)]",
+							"h-[calc(100%+16px)]",
 							"bg-gradient-to-t",
 							"from-tertiary/50",
 							"to-transparent",
+							"hidden",
+							"lg:block",
 						)}
 					/>
+					<div
+						className={cn(
+							"z-10",
+							"relative",
+							"overflow-y-scroll",
+							"h-0",
+							"grow",
+							"pr-4",
+							"max-w-[780px]",
+						)}
+					>
+						<RemoteMDX
+							serialized={caseStudy.serialized}
+							banner={<Banner caseStudy={caseStudy} />}
+						/>
+					</div>
 				</div>
 			</div>
 		</>

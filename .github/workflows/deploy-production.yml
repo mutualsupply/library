@@ -1,0 +1,21 @@
+name: Deploy Production
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/server/**'
+jobs:
+  deploy:
+    name: Deploy Staging API
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+        with: 
+          version: '0.1.135'
+      - name: Deploy
+        working-directory: packages/server
+        run: ./deploy-prod.sh
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN_PRODUCTION }}

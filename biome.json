@@ -19,7 +19,9 @@
 			"tsconfig.json",
 			"tsconfig.*.json",
 			"generated.ts",
-			"pnpm-lock.yaml"
+			"pnpm-lock.yaml",
+			"./packages/frontend/.next",
+			"./packages/chain"
 		]
 	}
 }

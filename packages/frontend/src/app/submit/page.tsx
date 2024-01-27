@@ -18,7 +18,8 @@ import {
 	AccordionItem,
 	AccordionTrigger,
 } from "../../components/ui/accordion";
-import useDrafts from "../../hooks/useDrafts";
+import { Separator } from "../../components/ui/separator";
+import useUser from "../../hooks/useUser";
 import { NEW_CASE_PAGE_NAME } from "../../lib/constants";
 
 const Submit = () => {
@@ -29,9 +30,9 @@ const Submit = () => {
 	const [accordionValue, setAccordionValue] = useState<string>("");
 	const openLogin = () => setAccordionValue("login");
 	const closeLogin = () => setAccordionValue("");
-	const { data: drafts } = useDrafts();
+	const { data } = useUser();
 	return (
-		<div className={cn("flex flex-col md:flex-row md:gap-6")}>
+		<div className={cn("grow flex flex-col md:gap-6")}>
 			<div className={cn("md:max-w-[320px] w-full")}>
 				<Accordion
 					value={accordionValue}
@@ -54,10 +55,19 @@ const Submit = () => {
 						</AccordionTrigger>
 						<AccordionContent>
 							<div className={cn("font-aspekta")}>
-								<div className={cn("text-sm", "font-medium", "font-aspekta")}>
+								<div
+									className={cn(
+										"text-base",
+										"font-medium",
+										"font-aspekta",
+										"text-purple",
+									)}
+								>
 									Github (required)
 								</div>
-								<div>Submit + save drafts</div>
+								<div className={cn("text-[#505049] mt-1")}>
+									Submit + save drafts
+								</div>
 								<div>
 									{!isLoggedIn && (
 										<Button
@@ -73,7 +83,7 @@ const Submit = () => {
 													}
 												});
 											}}
-											className={cn("flex items-center gap-2 mt-2 w-full")}
+											className={cn("flex items-center gap-2 mt-4 w-full")}
 										>
 											<Github /> <span className={cn("text-sm")}>Sign in</span>
 										</Button>
@@ -82,7 +92,7 @@ const Submit = () => {
 										<div>
 											<Button
 												variant={"purple"}
-												className={cn("flex items-center gap-2 w-full")}
+												className={cn("flex items-center gap-2 w-full mt-2")}
 											>
 												<div
 													className={cn("inline-flex", "gap-1", "items-center")}
@@ -118,18 +128,22 @@ const Submit = () => {
 									)}
 								</div>
 
-								<div className={cn("mt-4")}>
-									<div className={cn("text-sm", "font-medium")}>
+								<Separator className={cn("my-6 border-dashed")} />
+
+								<div>
+									<div className={cn("text-base", "font-medium", "text-red")}>
 										Optimism (optional)
 									</div>
-									<div>Receive on-chain credit for your work</div>
+									<div className={cn("text-[#505049] mt-1")}>
+										Receive on-chain credit for your work
+									</div>
 								</div>
 							</div>
 							{!authenticated && (
 								<div>
 									<Button
 										className={cn(
-											"text-red flex items-center gap-2 mt-2 w-full",
+											"text-red flex items-center gap-2 mt-4 w-full border-solid",
 										)}
 										variant="op"
 										onClick={() => login()}
@@ -162,13 +176,21 @@ const Submit = () => {
 				</Accordion>
 			</div>
 
-			<div className={cn("grow flex justify-center items-start mt-6 md:mt-56")}>
+			<div
+				className={cn(
+					"grow flex justify-center md:items-center items-start mt-4 md:mt-0",
+				)}
+			>
 				<div className={cn("max-w-[800px] w-full border border-dashed p-4")}>
-					<div className={cn("flex justify-between items-center")}>
+					<div
+						className={cn(
+							"flex flex-col xs:flex-row xs:justify-between xs:items-center gap-4",
+						)}
+					>
 						<span className={cn("font-otBrut text-primary flex gap-2")}>
 							<span className={cn("text-2xl")}>Thoughts</span>
-							{drafts && drafts.length > 0 && (
-								<span className={cn("text-base")}>{drafts.length}</span>
+							{data?.cases && data?.cases.length > 0 && (
+								<span className={cn("text-base")}>{data?.cases.length}</span>
 							)}
 						</span>
 						<Button
@@ -191,13 +213,13 @@ const Submit = () => {
 						</Button>
 					</div>
 
-					{drafts && drafts.length > 0 && (
+					{data?.cases && data?.cases.length > 0 && (
 						<div className={cn("mt-6 max-h-72 overflow-y-scroll")}>
-							{drafts.map((draft, index) => (
+							{data?.cases.map((draft, index) => (
 								<div
 									key={`draft-${draft.id}`}
 									className={cn(
-										"font-aspekta flex items-center justify-between px-3 py-2",
+										"font-aspekta flex flex-col xs:flex-row xs:items-center xs:justify-between px-3 py-2 gap-y-2",
 										{ "bg-tertiary/30": index % 2 === 0 },
 									)}
 								>

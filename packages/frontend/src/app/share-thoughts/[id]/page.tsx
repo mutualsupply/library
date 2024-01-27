@@ -24,3 +24,5 @@ export default async function CreateIDPage({
 	}
 	return <CreateCasePage draft={draft} />;
 }
+
+export const dynamic = "force-dynamic";

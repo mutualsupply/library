@@ -1,17 +1,29 @@
-import { cn } from "utils";
+import { Metadata } from "next";
 import CasePage from "../../../components/CasePage";
 import HeaderLayout from "../../../components/layout/HeaderLayout";
-import { getCaseFromSlug, getCases } from "../../../lib/server";
+import { getCaseFromSlug, getLocalCases } from "../../../lib/server";
 
-export default async function Page({ params }: { params: { slug: string } }) {
+interface Params {
+	params: { slug: string };
+}
+
+export default async function Page({ params }: Params) {
 	const slug = params.slug;
-	const cases = getCases();
+	const cases = getLocalCases();
 	const caseStudy = await getCaseFromSlug(slug);
 	return (
 		<HeaderLayout>
-			<div className={cn("grow", "flex", "flex-col")}>
-				<CasePage caseStudy={caseStudy} cases={cases} />
-			</div>
+			<CasePage caseStudy={caseStudy} cases={cases} />
 		</HeaderLayout>
 	);
+}
+
+// or Dynamic metadata
+export async function generateMetadata({ params }: Params): Promise<Metadata> {
+	const slug = params.slug;
+	const caseStudy = await getCaseFromSlug(slug);
+	return {
+		title: caseStudy.title,
+		description: `by: ${caseStudy.name}`,
+	};
 }

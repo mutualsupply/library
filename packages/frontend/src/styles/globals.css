@@ -43,7 +43,7 @@
 
     --red: 4, 86%, 58%;
 
-    --purple: 265, 83%, 63%;
+    --purple: 266, 100%, 64%;
 
     --black: 60, 12%, 8%;
   }
@@ -84,7 +84,9 @@
 
     --red: 353, 100%, 51%;
 
-    --purple: 265, 83%, 63%;
+    --purple: 266, 100%, 64%;
+
+    --black: 60, 12%, 8%;
   }
 }
  
@@ -106,9 +108,22 @@
   overflow-y: auto;
 }
 
-div[data-milkdown-root], .milkdown {
+/* div[data-milkdown-root], .milkdown {
   height: 100%;
+} */
+
+div[data-milkdown-root] {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
+
+.milkdown {
+  flex-grow: 1;
+  min-height: 350px;
+  height: 350px;
+}
+
 
 .milkdown.fullscreen {
   position: fixed;
@@ -117,15 +132,22 @@ div[data-milkdown-root], .milkdown {
 }
 
 .ProseMirror[data-placeholder]::before {
-  color: #a9a9a9;
+  color: #47AAF6;
   position: absolute;
   content: attr(data-placeholder);
   pointer-events: none;
   font-size: 16px;
+  white-space: pre-wrap;
   /* Using default height value of p element in chrome */
-  line-height: 28px;
+  font-family: var(--font-aspekta);
+  line-height: 24px; /* 150% */
 }
 
-#remote-markdown > h1 {
-  margin-bottom: 100px;
+/* Select placeholder color */
+#SelectTrigger[data-placeholder] {
+  color: #737373
+}
+
+.prose :where(ol > li):not(:where([class~="not-prose"],[class~="not-prose"] *))::marker {
+  color: #0C89E9;
 }

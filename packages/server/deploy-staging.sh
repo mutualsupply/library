@@ -1,3 +1,3 @@
 set -eu
 
-fly deploy --config fly.staging.toml
+flyctl deploy --config fly.staging.toml --remote-only

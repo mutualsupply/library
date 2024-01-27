@@ -1,5 +1,6 @@
 import { InputHTMLAttributes } from "react";
 import { useFormContext } from "react-hook-form";
+import { cn } from "utils";
 import {
 	FormControl,
 	FormDescription,
@@ -29,6 +30,7 @@ const TextInput = ({
 	variant,
 }: TextInputProps) => {
 	const form = useFormContext();
+	const error = form.formState.errors[name];
 	return (
 		<FormField
 			control={form.control}
@@ -47,6 +49,7 @@ const TextInput = ({
 							placeholder={placeholder}
 							size={size}
 							variant={variant}
+							className={cn(error && "border-red")}
 							{...field}
 						/>
 					</FormControl>

@@ -17,11 +17,13 @@ export const BackLink = ({
 				"inline-flex",
 				"items-center",
 				"gap-1",
-				"text-sm",
+				"text-base",
 				"border-b",
 				"no-underline",
 				"text-primary",
 				"border-primary",
+				"font-aspekta",
+				"font-medium",
 			)}
 		>
 			<ArrowLeftIcon /> {children}

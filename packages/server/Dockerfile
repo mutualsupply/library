@@ -6,19 +6,12 @@ RUN apk add --no-cache git
 
 COPY . .
 
-ADD id_ed25519 /root/.ssh/id_ed25519
-ADD id_ed25519.pub /root/.ssh/id_ed25519.pub
-RUN chmod 400 /root/.ssh/id_ed25519
-RUN chmod 400 /root/.ssh/id_ed25519.pub
-
+# SSH known hosts for committing to github
 ADD known_hosts /root/.ssh/known_hosts
 ADD known_hosts ~/.ssh/known_hosts
 
-RUN chmod 400 ~/.ssh/id_ed25519
-RUN chmod 400 ~/.ssh/id_ed25519.pub
-
 RUN git config --global user.name "Mutual Supply"
-RUN git config --global user.email "calebcarithers@me.com"
+RUN git config --global user.email "computer@mutual.supply"
 
 RUN pnpm install
 RUN pnpx prisma generate
