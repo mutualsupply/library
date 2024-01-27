@@ -72,7 +72,7 @@ app.listen(env.PORT, () => {
 
 // PUBLIC ENDPOINTS
 router.get("/", async (ctx, next) => {
-	ctx.body = { message: "👓" };
+	ctx.body = { message: "mutual" };
 	await next();
 });
 
