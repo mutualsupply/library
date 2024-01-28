@@ -23,8 +23,15 @@ export function HomePage({ cases }: HomeProps) {
 		}
 	};
 
+	const featuredCases = useMemo(() => {
+		return cases.filter((c) => c.featured);
+	}, [cases]);
+	const nonFeaturedCases = useMemo(() => {
+		return cases.filter((c) => !c.featured);
+	}, [cases]);
+
 	const filteredData = useMemo(() => {
-		const labelFilteredData = cases.filter((d) => {
+		const labelFilteredData = nonFeaturedCases.filter((d) => {
 			if (selectedLabel.length > 0) {
 				return selectedLabel.some((label) => d.category.includes(label));
 			}
@@ -35,14 +42,7 @@ export function HomePage({ cases }: HomeProps) {
 			search ? search.join("") : "",
 			"title",
 		);
-	}, [selectedLabel, search, cases]);
-
-	const featuredCases = useMemo(() => {
-		return cases.filter((c) => c.featured);
-	}, [cases]);
-	const nonFeaturedCases = useMemo(() => {
-		return cases.filter((c) => !c.featured);
-	}, [cases]);
+	}, [selectedLabel, search, nonFeaturedCases]);
 
 	return (
 		<>
@@ -81,7 +81,7 @@ export function HomePage({ cases }: HomeProps) {
 						caseStudy={caseStudy}
 					/>
 				))}
-				{nonFeaturedCases.map((caseStudy, index) => (
+				{filteredData.map((caseStudy, index) => (
 					<CaseStudyItem
 						key={`featured-case-study-${index}`}
 						index={index}
