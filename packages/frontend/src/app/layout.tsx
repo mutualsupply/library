@@ -15,6 +15,12 @@ export const metadata: Metadata = {
 			? "https://research.mutual.supply"
 			: "https://dev.research.mutual.supply",
 	),
+	viewport: {
+		width: "device-width",
+		initialScale: 1,
+		maximumScale: 1,
+		userScalable: false,
+	},
 };
 
 const aeonikFono = localFont({

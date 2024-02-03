@@ -34,7 +34,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 		ref,
 	) => {
 		return (
-			<span className={cn("relative")}>
+			<span className={cn("relative block")}>
 				{leftOfInput && (
 					<span className={cn("absolute left-3 top-1/2 -translate-y-1/2")}>
 						{leftOfInput}
