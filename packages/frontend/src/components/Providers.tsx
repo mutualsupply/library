@@ -16,7 +16,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 				appId={env.NEXT_PUBLIC_PRIVY_APP_ID}
 				onSuccess={handleLogin}
 				config={{
-					loginMethods: ["github", "wallet"],
+					loginMethods: ["wallet"],
 					appearance: {
 						theme: "light",
 						accentColor: "#0e89e8",

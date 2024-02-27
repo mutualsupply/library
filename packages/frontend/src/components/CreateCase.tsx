@@ -261,14 +261,28 @@ export default function CreateCasePage({ draft }: CreateCaseProps) {
 									)}
 								>
 									<div className={cn("font-otBrut text-3xl text-primary")}>
-										Lorem ipsum dolor set
+										Preserve your thoughts
 									</div>
 									<div className={cn("font-aspekta text-sm mt-4")}>
-										This is truly an almighty mountain. In your world you have
-										total and absolute power. Every highlight needs it's own
-										personal shadow. This is your world, whatever makes you
-										happy you can put in it. Go crazy. Let's give him a friend
-										too. Everybody needs a friend. You can get away with a lot.
+										Thoughts about online culture or design– from short musings
+										to research articles. All thoughts go through a submission
+										process before being accepted into LIBRARY. If you choose to
+										connect an Ethereum address, your thoughts become{" "}
+										<Link
+											href="https://www.mutual.supply/library#how-it-works"
+											target="_blank"
+											rel="noopener noreferrer"
+											className={cn("text-primary", "underline")}
+										>
+											composable on the blockchain.
+										</Link>
+									</div>
+									<div className={cn("font-aspekta text-sm mt-4")}>
+										Thoughts about online culture or design - from short musings
+										to research articles. All thoughts are reviewed by MUTUAL
+										before being accepted into LIBRARY. If you choose to connect
+										an Ethereum address, your thoughts become composable on the
+										blockchain.
 									</div>
 									<div className={cn("flex flex-col space-y-4 mt-10")}>
 										<TextInput
@@ -285,13 +299,6 @@ export default function CreateCasePage({ draft }: CreateCaseProps) {
 											size="lg"
 											variant="solid"
 										/>
-										<SelectInput
-											name="category"
-											label="Choose a category"
-											description="We are actively working on adding more categories 🙏🏽"
-											placeholder="Choose a category"
-											items={categorySelectItems}
-										/>
 										<TextInput
 											type="email"
 											name="email"
@@ -300,20 +307,28 @@ export default function CreateCasePage({ draft }: CreateCaseProps) {
 											size="lg"
 											variant="solid"
 										/>
-										<TextInput
-											name="experienceUrl"
-											label="Proof of Experience"
-											description="Share a link to where this lives online. A website / app / prototype / screen recording, etc."
-											placeholder="www.mutual.supply"
-											size="lg"
-											variant="solid"
+										<SelectInput
+											name="category"
+											label="Choose a category"
+											description="We are actively working on adding more categories 🙏🏽"
+											placeholder="Choose a category"
+											items={categorySelectItems}
 										/>
 										<TextInput
 											name="organization"
-											label="Name of organization (if applicable)"
-											placeholder="MUTUAL"
+											label="What are you writing about?"
+											description="For example, a name of a company, like 'MUTUAL' or a topic like 'the xxxxx'"
+											placeholder="For example, a name of a company, like 'MUTUAL' or a topic like 'the xxxxx'"
 											variant="solid"
 											size="lg"
+										/>
+										<TextInput
+											name="experienceUrl"
+											label="External context"
+											description="Share a relevant link to what you're writing about. A website / app / prototype / screen recording, etc."
+											placeholder="www.mutual.supply"
+											size="lg"
+											variant="solid"
 										/>
 									</div>
 								</div>
