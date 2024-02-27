@@ -10,7 +10,7 @@ primary_region = "dfw"
   image = "ghcr.io/superfly/fly-log-shipper:latest"
 
 [env]
-  SUBJECT = "logs.staging-mutual-supply.>"
+  SUBJECT = "logs.*mutual-supply.>"
 
 [[services]]
   http_checks = []
