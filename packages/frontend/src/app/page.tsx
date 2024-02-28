@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { HomePage } from "../components/HomePage";
 import HeaderLayout from "../components/layout/HeaderLayout";
+import { CaseWithMetadata } from "../lib/interfaces";
 import { getLocalCases } from "../lib/server";
 import ServerClient from "../lib/serverClient";
 
@@ -10,7 +11,10 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-	const localCases = getLocalCases();
+	let localCases: Array<CaseWithMetadata> = [];
+	try {
+		localCases = getLocalCases();
+	} catch (_) {}
 	const remoteCases = await ServerClient.getCases();
 	const featuredSlugs = remoteCases
 		.filter((c) => c.featured)

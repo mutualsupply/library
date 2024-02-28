@@ -18,7 +18,10 @@ function getAllCaseFileNames() {
 }
 
 function getAbsolutePathToMarkdown() {
-	return path.join(process.cwd(), PATH_TO_MARKDOWN);
+	if (fs.existsSync(path.join(process.cwd(), PATH_TO_MARKDOWN))) {
+		return path.join(process.cwd(), PATH_TO_MARKDOWN);
+	}
+	throw new Error("Markdown directory not found");
 }
 
 export function getLocalCases() {
@@ -93,23 +96,21 @@ export function parseMarkdown(source: string): CaseMetadata {
 	const title = getStrongTextStartsWith("Title") as string;
 	const name = getStrongTextStartsWith("Author") as string;
 	const category = getStrongTextStartsWith("Category") as string;
-	const url = getStrongTextStartsWith("Proof of Experience") as string;
+	const url = getStrongTextStartsWith("Context") as string;
 	const start = url.lastIndexOf("(") + 1; // Find the position of the last '(' and add 1 to start after it
 	const end = url.lastIndexOf(")");
-	const experienceUrl = url.substring(start, end); // Extract the substring between the start and end positions
+	const contextUrl = url.substring(start, end); // Extract the substring between the start and end positions
 	const createdAt = getStrongTextStartsWith("Created") as string;
 	const address = getStrongTextStartsWith("Signed by") as Hex | undefined;
-	const organization = getStrongTextStartsWith("Organization") as
-		| string
-		| undefined;
+	const details = getStrongTextStartsWith("Details") as string | undefined;
 	return {
 		title,
 		name,
 		category,
-		experienceUrl,
+		contextUrl,
 		createdAt,
 		address,
-		organization,
+		details,
 	};
 }
 

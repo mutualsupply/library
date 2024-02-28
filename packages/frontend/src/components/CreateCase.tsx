@@ -75,8 +75,8 @@ export default function CreateCasePage({ draft }: CreateCaseProps) {
 			name: session?.user?.name || "",
 			email: session?.user?.email || "",
 			category: "",
-			experienceUrl: "",
-			organization: "",
+			contextUrl: "",
+			details: "",
 		};
 	}
 
@@ -315,18 +315,18 @@ export default function CreateCasePage({ draft }: CreateCaseProps) {
 											items={categorySelectItems}
 										/>
 										<TextInput
-											name="organization"
+											name="details"
 											label="What are you writing about?"
 											description="For example, a name of a company, like 'MUTUAL' or a topic like 'the xxxxx'"
-											placeholder="For example, a name of a company, like 'MUTUAL' or a topic like 'the xxxxx'"
+											placeholder="MUTUAL"
 											variant="solid"
 											size="lg"
 										/>
 										<TextInput
-											name="experienceUrl"
+											name="contextUrl"
 											label="External context"
 											description="Share a relevant link to what you're writing about. A website / app / prototype / screen recording, etc."
-											placeholder="www.mutual.supply"
+											placeholder="www.thankyou.research.mutual.supply"
 											size="lg"
 											variant="solid"
 										/>
@@ -335,7 +335,7 @@ export default function CreateCasePage({ draft }: CreateCaseProps) {
 								<div className={cn("col-span-4 flex flex-col")}>
 									<MilkdownEditor
 										placeholder={
-											"Some tips:\n\n🔗 Select any text to create a link.\n\n📸 Add images by drag n drop into this editor.\n\n⏰ Running out of time? Save drafts & access them later.\n\n🎨 Apps like Notion, Obsidian & Google Docs use markdown (.md), and so do we. That means your text formatting will carry over with copy + paste."
+											"Some tips:\n\n📸 Add images by drag n drop into this editor.\n\n⏰ Running out of time? Save drafts & access them later.\n\n🎨 Apps like Notion, Obsidian & Google Docs use markdown (.md), and so do we. That means your text formatting will carry over with copy + paste."
 										}
 										defaultValue={draft?.content?.markdown}
 										onChange={setMarkdown}

@@ -3,8 +3,8 @@ export interface CaseStudy {
 	name: string;
 	email: string;
 	category: string;
-	experienceUrl: string;
-	organization?: string;
+	contextUrl: string;
+	details?: string;
 	markdown?: string;
 }
 

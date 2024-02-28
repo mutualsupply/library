@@ -9,9 +9,11 @@ export async function POST(
 ) {
 	const id = Number(route.params.id);
 	try {
-		const { session } = await getAuth(req);
+		const {
+			session: { user },
+		} = await getAuth(req);
 		const caseStudy = postCaseStudyBodySchema.parse(await req.json());
-		const draft = await ServerClient.updateDraft(session.user, caseStudy, id);
+		const draft = await ServerClient.updateDraft(user, caseStudy, id);
 		return NextResponse.json(draft);
 	} catch (e) {
 		if (e instanceof UnauthenticatedError) {

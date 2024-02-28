@@ -7,8 +7,8 @@ export interface CaseStudy {
 	name: string;
 	email: string;
 	category: string;
-	experienceUrl: string;
-	organization?: string;
+	contextUrl: string;
+	details?: string;
 	markdown?: string;
 }
 
@@ -39,7 +39,7 @@ export interface DBCaseStudy {
 export interface CaseMetadata
 	extends Pick<
 		CaseStudy,
-		"title" | "name" | "category" | "experienceUrl" | "organization"
+		"title" | "name" | "category" | "contextUrl" | "details"
 	> {
 	createdAt: DateTime;
 	address?: `0x${string}`;

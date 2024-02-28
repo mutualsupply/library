@@ -3,13 +3,12 @@ import env, { isProd } from "./env";
 import { CaseStudy, GithubRefreshResponse } from "./interfaces";
 
 class GithubClass {
-	private readonly baseUrl =
-		`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}`;
+	private readonly baseUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}`;
 
 	async createPr(accessToken: string, caseStudy: CaseStudy, head: string) {
 		let body = `${caseStudy.title} by ${caseStudy.email}`;
-		if (caseStudy.experienceUrl) {
-			body += `\n\n[Experience](${caseStudy.experienceUrl})`;
+		if (caseStudy.contextUrl) {
+			body += `\n\n[Context](${caseStudy.contextUrl})`;
 		}
 		const res = await fetch(`${this.baseUrl}/pulls`, {
 			method: "POST",

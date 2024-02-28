@@ -52,8 +52,8 @@ export function Banner({ caseStudy }: BannerProps) {
 		},
 	);
 	let content = `Written by ${caseStudy.name}`;
-	if (caseStudy.organization) {
-		content += ` about ${caseStudy.organization}`;
+	if (caseStudy.details) {
+		content += ` about ${caseStudy.details}`;
 	}
 	content += ` on ${createdAtFormatted}`;
 	return (
@@ -64,7 +64,7 @@ export function Banner({ caseStudy }: BannerProps) {
 		>
 			<span>{content}</span>
 			<span>
-				<Link href={caseStudy.experienceUrl} isExternal>
+				<Link href={caseStudy.contextUrl} isExternal>
 					<Website className={cn("text-primary w-6")} />
 				</Link>
 			</span>

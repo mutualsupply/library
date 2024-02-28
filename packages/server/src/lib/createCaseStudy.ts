@@ -12,11 +12,9 @@ function createCaseStudy(
 	slug: string,
 	address?: `0x${string}`,
 ) {
-	// Write ssh key
 	run(`echo "${env.ED25519_PRIV}" > /root/.ssh/id_ed25519`);
 	run("chmod 400 /root/.ssh/id_ed25519");
 
-	// Write case study
 	console.log("writing case study submitted by", user.email);
 	const branchName = `${caseStudy.email}/${slug}`;
 	const now = new Date();
@@ -37,12 +35,10 @@ ${caseStudy.markdown ? caseStudy.markdown : ""}
 Title: **${caseStudy.title}**
 Author: **${caseStudy.name}** (${caseStudy.email})
 Category: **${caseStudy.category}**
-Proof of Experience: **[${caseStudy.experienceUrl}](${
-		caseStudy.experienceUrl
-	})**`;
+Context: **[${caseStudy.contextUrl}](${caseStudy.contextUrl})**`;
 
-	if (caseStudy.organization) {
-		markdown += `\nOrganization: **${caseStudy.organization}**`;
+	if (caseStudy.details) {
+		markdown += `\nDetails: **${caseStudy.details}**`;
 	}
 
 	if (address) {
@@ -51,11 +47,9 @@ Proof of Experience: **[${caseStudy.experienceUrl}](${
 
 	markdown += `\nCreated: **${now.toISOString()}**`;
 
-	// Write markdown file
+	run(`mkdir -p ${pathToFrontendPackage}/src/markdown`);
 	run(`echo "${markdown}" > ${pathToFrontendPackage}/src/markdown/${slug}.mdx`);
-	// Create new branch
 	run(`cd ${dirName}/${repoName} && git checkout -b ${branchName}`);
-	// Commit markdown
 	run(
 		`cd ${dirName}/${repoName} && git add ${pathToFrontendPackage}/src/markdown/${slug}.mdx`,
 	);
@@ -65,7 +59,6 @@ Proof of Experience: **[${caseStudy.experienceUrl}](${
 	run(`cd ${dirName}/${repoName} && git push origin -u ${branchName} -f`);
 	run(`rm -rf ${dirName}`);
 
-	// Remove ssh key
 	run("rm -rf /root/.ssh/id_ed25519");
 	return {
 		branchName,

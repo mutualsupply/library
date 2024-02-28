@@ -17,11 +17,11 @@ export const caseStudyFormSchema = z.object({
 		message: "Email please!",
 	}),
 	category: z.string().min(1, { message: "Don't forget a category" }),
-	experienceUrl: z
+	contextUrl: z
 		.string()
-		.min(1, { message: "Don't forget proof of experience" })
+		.min(1, { message: "Don't forget context" })
 		.regex(urlRegex, "Invalid URL"),
-	organization: z.string().optional(),
+	details: z.string().optional(),
 });
 
 export const postCaseStudyBodySchema = caseStudyFormSchema.extend({

@@ -82,6 +82,7 @@ class ServerClientClass {
 		if (!res.ok) {
 			throw new Error("Could not update draft");
 		}
+		return res.json();
 	}
 
 	async getCases(): Promise<Array<DBCaseStudy>> {

@@ -23,6 +23,7 @@ export function HomePage({ cases }: HomeProps) {
 		}
 	};
 
+	const hasCases = useMemo(() => cases.length > 0, [cases]);
 	const featuredCases = useMemo(() => {
 		return cases.filter((c) => c.featured);
 	}, [cases]);
@@ -46,48 +47,59 @@ export function HomePage({ cases }: HomeProps) {
 
 	return (
 		<>
-			<div
-				className={cn(
-					"mb-12",
-					"mt-8",
-					"md:flex",
-					"items-center",
-					"md:justify-end",
-					"lg:justify-between",
-					"gap-8",
-				)}
-			>
-				<div className="hidden lg:block">
-					<LabelFilter
-						items={categorySelectItems}
-						selected={selectedLabel}
-						onClick={onLabelFilterClick}
-						onClearClick={() => setSelectedLabel([])}
+			{hasCases && (
+				<div
+					className={cn(
+						"mb-12",
+						"mt-8",
+						"md:flex",
+						"items-center",
+						"md:justify-end",
+						"lg:justify-between",
+						"gap-8",
+					)}
+				>
+					<div className="hidden lg:block">
+						<LabelFilter
+							items={categorySelectItems}
+							selected={selectedLabel}
+							onClick={onLabelFilterClick}
+							onClearClick={() => setSelectedLabel([])}
+						/>
+					</div>
+					<Input
+						value={search}
+						onChange={(e) => setSearch(e.target.value.split(" "))}
+						placeholder="Search"
+						leftOfInput={<Search className="h-5 w-5" />}
+						className="w-full md:w-96 text-sm"
 					/>
 				</div>
-				<Input
-					value={search}
-					onChange={(e) => setSearch(e.target.value.split(" "))}
-					placeholder="Search"
-					leftOfInput={<Search className="h-5 w-5" />}
-					className="w-full md:w-96 text-sm"
-				/>
-			</div>
-			<div className={cn("flex", "flex-col")}>
-				{featuredCases.map((caseStudy, index) => (
-					<CaseStudyItem
-						key={`featured-case-study-${index}`}
-						index={index}
-						caseStudy={caseStudy}
-					/>
-				))}
-				{filteredData.map((caseStudy, index) => (
-					<CaseStudyItem
-						key={`featured-case-study-${index}`}
-						index={index}
-						caseStudy={caseStudy}
-					/>
-				))}
+			)}
+			<div className={cn("flex", "flex-col", "grow")}>
+				{hasCases && (
+					<>
+						{featuredCases.map((caseStudy, index) => (
+							<CaseStudyItem
+								key={`featured-case-study-${index}`}
+								index={index}
+								caseStudy={caseStudy}
+							/>
+						))}
+						{filteredData.map((caseStudy, index) => (
+							<CaseStudyItem
+								key={`featured-case-study-${index}`}
+								index={index}
+								caseStudy={caseStudy}
+							/>
+						))}
+					</>
+				)}
+				{!hasCases && (
+					<div className={cn("grow", "flex", "justify-center", "items-center")}>
+						No thoughts found
+					</div>
+				)}
 			</div>
 		</>
 	);
